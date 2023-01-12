@@ -1,0 +1,5 @@
+#nodejs
+node_modules
+
+#variables entorno conexion BD Postgres
+.env
