@@ -12,6 +12,7 @@ const usuarioRoutes = require('./routes/usuario.routes');
 const correntistaRoutes = require('./routes/correntista.routes');
 const zonaRoutes = require('./routes/zona.routes');
 const zonadetRoutes = require('./routes/zonadet.routes');
+const formapagoRoutes = require('./routes/formapago.routes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(usuarioRoutes);
 app.use(correntistaRoutes);
 app.use(zonaRoutes);
 app.use(zonadetRoutes);
+app.use(formapagoRoutes);
 
 app.use((err, req, res, next) => {
     return res.json({

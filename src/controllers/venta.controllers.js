@@ -1,5 +1,32 @@
 const pool = require('../db');
 
+const obtenerFechaInicial = (strFechaProceso) => {
+    //click llega normal: yyyy-mm-dd
+    //caso contrario, procesar las partes y ordenarlo formato yyyy-mm-dd
+    let strFechaIni= "";
+    //let datePieces = strFechaProceso.split("-");
+    //const fechaArmada = new Date(datePieces[0],datePieces[1],datePieces[2]); //ok con hora 00:00:00
+    const fechaArmada = new Date(strFechaProceso); //ok con hora 00:00:00
+    let sMes = (fechaArmada.getMonth()+1).toString(); // ok, se aumenta +1, por pinche regla js
+    sMes = sMes.padStart(2,'0');
+    let sAno = (fechaArmada.getFullYear()).toString(); 
+    strFechaIni = sAno + "-" + sMes + "-01";
+
+    return strFechaIni;
+};
+const obtenerFechaInicialAnual = (strFechaProceso) => {
+    //click llega normal: yyyy-mm-dd
+    //caso contrario, procesar las partes y ordenarlo formato yyyy-mm-dd
+    let strFechaIni= "";
+    //let datePieces = strFechaProceso.split("-");
+    //const fechaArmada = new Date(datePieces[0],datePieces[1],datePieces[2]); //ok con hora 00:00:00
+    const fechaArmada = new Date(strFechaProceso); //ok con hora 00:00:00
+    let sAno = (fechaArmada.getFullYear()).toString(); 
+    strFechaIni = sAno + "-" + "01" + "-01";
+
+    return strFechaIni;
+};
+
 const obtenerTodasVentas = async (req,res,next)=> {
     let strSQL;
     strSQL = "select zona_venta";
@@ -28,6 +55,55 @@ const obtenerTodasVentas = async (req,res,next)=> {
 
     //res.send('Listado de todas los zonas');
 };
+
+const obtenerTodasVentasPlan = async (req,res,next)=> {
+    //Version analizado, similar formato excel manejado en administracion
+    let strSQL;
+    let strFechaIni;
+    const {fecha_proceso} = req.params;
+    //calcular fecha inicio, segun fecha proceso
+    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+
+    //console.log(strFechaIni);
+    strSQL = "SELECT mve_venta.zona_venta";
+    strSQL = strSQL + " ,cast(mve_venta_detalle.comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
+    strSQL = strSQL + " ,(mve_venta_detalle.comprobante_original_codigo";
+    strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_serie";
+    strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_numero";
+    strSQL = strSQL + "   || '-' || mve_venta_detalle.item)::varchar(50) as pedido";
+    strSQL = strSQL + " ,(mve_venta.tipo_op || '-' || mve_venta.vendedor)::varchar(50) as tipo_op";
+    //strSQL = strSQL + " ,mve_venta.vendedor";
+    strSQL = strSQL + " ,mve_venta_detalle.ref_razon_social";
+    strSQL = strSQL + " ,mve_venta_detalle.descripcion";
+    strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_codigo";
+    strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_serie";
+    strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_numero";
+    strSQL = strSQL + " ,mve_venta_detalle.elemento";
+    strSQL = strSQL + " ,substr(cast(mve_venta_detalle.fecha_entrega as varchar),1,16)::varchar(50) as fecha_entrega";
+    strSQL = strSQL + " ,mve_venta_detalle.estado";
+    strSQL = strSQL + " FROM";
+    strSQL = strSQL + " mve_venta_detalle INNER JOIN mve_venta";
+    strSQL = strSQL + " ON (mve_venta_detalle.id_empresa = mve_venta.id_empresa and ";
+    strSQL = strSQL + "     mve_venta_detalle.ano = mve_venta.ano and ";
+    strSQL = strSQL + "     mve_venta_detalle.comprobante_original_codigo = mve_venta.comprobante_original_codigo and ";
+    strSQL = strSQL + "     mve_venta_detalle.comprobante_original_serie = mve_venta.comprobante_original_serie and ";
+    strSQL = strSQL + "     mve_venta_detalle.comprobante_original_numero = mve_venta.comprobante_original_numero and ";
+    strSQL = strSQL + "     mve_venta_detalle.elemento = mve_venta.elemento ) ";
+    strSQL = strSQL + " WHERE mve_venta_detalle.comprobante_original_fecemi BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " ORDER BY comprobante_original_fecemi, mve_venta_detalle.ctrl_insercion, mve_venta_detalle.ref_razon_social";
+
+    try {
+        //console.log(strSQL);
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    }
+    catch(error){
+        console.log(error.message);
+    }
+
+    //res.send('Listado de todas los zonas');
+};
+
 const obtenerVenta = async (req,res,next)=> {
     try {
         const {cod,serie,num,elem} = req.params;
@@ -223,7 +299,7 @@ const actualizarVenta = async (req,res,next)=> {
         strSQL = strSQL + " WHERE comprobante_original_codigo = $5";
         strSQL = strSQL + " AND comprobante_original_serie = $6";
         strSQL = strSQL + " AND comprobante_original_numero = $7";
-        strSQL = strSQL + " AND comprobante_original_elemento = $8";
+        strSQL = strSQL + " AND elemento = $8";
  
         const result = await pool.query(strSQL,
         [   
@@ -251,6 +327,7 @@ const actualizarVenta = async (req,res,next)=> {
 
 module.exports = {
     obtenerTodasVentas,
+    obtenerTodasVentasPlan,
     obtenerVenta,
     crearVenta,
     eliminarVenta,

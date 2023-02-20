@@ -26,6 +26,20 @@ const obtenerProducto = async (req,res,next)=> {
         console.log(error.message);
     }
 };
+const obtenerProductoIgv = async (req,res,next)=> {
+    try {
+        const {id} = req.params;
+        const result = await pool.query("select porc_igv from mst_producto where id_producto = $1",[id]);
+
+        if (result.rows.length === 0){
+            res.json({porc_igv:"0.00"});
+        };
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
 
 const crearProducto = async (req,res,next)=> {
     //const {id_usuario,nombres} = req.body
@@ -82,6 +96,7 @@ const actualizarProducto = async (req,res,next)=> {
 module.exports = {
     obtenerTodosProductos,
     obtenerProducto,
+    obtenerProductoIgv,
     crearProducto,
     eliminarProducto,
     actualizarProducto

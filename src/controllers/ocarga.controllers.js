@@ -43,13 +43,27 @@ const obtenerFechaInicial = (strFechaProceso) => {
 
     return strFechaIni;
 };
+const obtenerFechaInicialAnual = (strFechaProceso) => {
+    //click llega normal: yyyy-mm-dd
+    //caso contrario, procesar las partes y ordenarlo formato yyyy-mm-dd
+    let strFechaIni= "";
+    //let datePieces = strFechaProceso.split("-");
+    //const fechaArmada = new Date(datePieces[0],datePieces[1],datePieces[2]); //ok con hora 00:00:00
+    const fechaArmada = new Date(strFechaProceso); //ok con hora 00:00:00
+    let sAno = (fechaArmada.getFullYear()).toString(); 
+    strFechaIni = sAno + "-" + "01" + "-01";
+
+    return strFechaIni;
+};
+
 const obtenerTodasOCargasPlan = async (req,res,next)=> {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
     let strFechaIni;
     const {fecha_proceso} = req.params;
     //calcular fecha inicio, segun fecha proceso
-    strFechaIni = obtenerFechaInicial(fecha_proceso);
+    //strFechaIni = obtenerFechaInicial(fecha_proceso);
+    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
 
     //console.log(strFechaIni);
     strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
@@ -61,18 +75,9 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,operacion";
     strSQL = strSQL + " ,ticket";
     strSQL = strSQL + " ,descripcion";
-    strSQL = strSQL + " ,razon_social";
-    strSQL = strSQL + " ,desag_sacos";
-    strSQL = strSQL + " ,desag_tn";
-    strSQL = strSQL + " ,llega_sacos";
-    strSQL = strSQL + " ,operacion2";
-    strSQL = strSQL + " ,sacos_transb";
-    strSQL = strSQL + " ,sacos_descar";
+    strSQL = strSQL + " ,ref_razon_social";
     strSQL = strSQL + " ,lote_asignado";
-    strSQL = strSQL + " ,sacos_carga";
     strSQL = strSQL + " ,lote_procedencia";
-    strSQL = strSQL + " ,sacos_final";
-    strSQL = strSQL + " ,tara_desag";
 
     strSQL = strSQL + " ,e_peso";
     strSQL = strSQL + " ,e_monto";
@@ -105,17 +110,15 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
 const obtenerOCarga = async (req,res,next)=> {
     try {
         const {ano,numero} = req.params;
-        let strSQL ;
+        let strSQL;
         
         strSQL = "SELECT ";
-        strSQL = strSQL + "  id_empresa";
-        strSQL = strSQL + " ,id_punto_venta";
-        strSQL = strSQL + " ,cast(fecha as varchar)::varchar(50) as fecha";
+        strSQL = strSQL + " cast(fecha as varchar)::varchar(50) as fecha";
         strSQL = strSQL + " ,numero";
-        strSQL = strSQL + " ,registrado";
-        strSQL = strSQL + " FROM mst_ocarga";
+        strSQL = strSQL + " FROM mst_ocarga_detalle";
         strSQL = strSQL + " WHERE ano = $1";
         strSQL = strSQL + " AND numero = $2";
+        strSQL = strSQL + " GROUP BY fecha,numero";
         const result = await pool.query(strSQL,[ano,numero]);
 
         if (result.rows.length === 0)

@@ -1,9 +1,10 @@
 const {Router} = require('express');
 const pool = require('../db');
 const router = Router();
-const {obtenerTodasVentas,obtenerVenta,crearVenta,actualizarVenta,eliminarVenta} = require('../controllers/venta.controllers')
+const {obtenerTodasVentas,obtenerTodasVentasPlan,obtenerVenta,crearVenta,actualizarVenta,eliminarVenta} = require('../controllers/venta.controllers')
 
 router.get('/venta', obtenerTodasVentas);
+router.get('/ventaplan/:fecha_proceso', obtenerTodasVentasPlan); //new
 router.get('/venta/:cod/:serie/:num/:elem', obtenerVenta);
 router.post('/venta', crearVenta);
 router.put('/venta/:cod/:serie/:num/:elem', actualizarVenta);
