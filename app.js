@@ -15,6 +15,7 @@ const zonadetRoutes = require('./src/routes/zonadet.routes');
 const formapagoRoutes = require('./src/routes/formapago.routes');
 
 const app = express();
+const port = process.env.PORT || 4000;
 
 app.use(cors()); //comunica con otro backend
 
@@ -38,5 +39,5 @@ app.use((err, req, res, next) => {
     })
 })
 
-app.listen(4000);
-console.log("Servidor puerto 4000");
+app.listen(port);
+console.log("Servidor puerto ", port);
