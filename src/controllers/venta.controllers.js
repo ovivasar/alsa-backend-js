@@ -186,6 +186,7 @@ const crearVenta = async (req,res,next)=> {
     //console.log(datePieces);
     sSerie = (fechaArmada.getMonth()+1).toString(); // ok, se aumenta +1, por pinche regla js
     sSerie = sSerie.padStart(2,'0');
+    let sAno = (fechaArmada.getFullYear()).toString(); // new 
 
     /*
     const fecha = new Date(); //ok fecha y hora actual
@@ -196,6 +197,7 @@ const crearVenta = async (req,res,next)=> {
     strSQL = "INSERT INTO mve_venta";
     strSQL = strSQL + " (";
     strSQL = strSQL + "  id_empresa";
+    strSQL = strSQL + " ,ano"; //new
     strSQL = strSQL + " ,id_punto_venta";
     strSQL = strSQL + " ,tipo_op";
     strSQL = strSQL + " ,id_zona_venta";
@@ -217,14 +219,15 @@ const crearVenta = async (req,res,next)=> {
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
     strSQL = strSQL + "  $1";
+    strSQL = strSQL + " ,'" + sAno + "'";
     strSQL = strSQL + " ,$2";
     strSQL = strSQL + " ,$3";
     strSQL = strSQL + " ,$4";
     strSQL = strSQL + " ,$5";
     strSQL = strSQL + " ,$6";
     strSQL = strSQL + " ,$7";
-    strSQL = strSQL + ",'" + sCod + "'";
-    strSQL = strSQL + ",'" + sSerie + "'";
+    strSQL = strSQL + " ,'" + sCod + "'";
+    strSQL = strSQL + " ,'" + sSerie + "'";
     strSQL = strSQL + " ,(select * from fve_genera_venta_sf(1,'" + sCod + "','" + sSerie + "'))";
     strSQL = strSQL + ",1"; //elemento
     strSQL = strSQL + " ,$8";
