@@ -1,22 +1,29 @@
 const pool = require('../db');
 
 const obtenerTodasOCargas = async (req,res,next)=> {
+    //Version analizado, similar formato excel manejado en administracion
     let strSQL;
-    strSQL = "select zona_venta";
-    strSQL = strSQL + " ,cast(comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
-    strSQL = strSQL + " ,tipo_op";
-    strSQL = strSQL + " ,(comprobante_original_codigo";
-    strSQL = strSQL + "   || '-' || comprobante_original_serie";
-    strSQL = strSQL + "   || '-' || comprobante_original_numero)::varchar(50) as pedido";
-    strSQL = strSQL + " ,vendedor";
-    strSQL = strSQL + " ,razon_social";
-    strSQL = strSQL + " ,comprobante_original_codigo";
-    strSQL = strSQL + " ,comprobante_original_serie";
-    strSQL = strSQL + " ,comprobante_original_numero";
-    strSQL = strSQL + " ,elemento";
-    strSQL = strSQL + " from";
-    strSQL = strSQL + " mve_venta";
-    strSQL = strSQL + " order by comprobante_original_fecemi, razon_social";
+    let strFechaIni;
+    const {fecha_proceso} = req.params;
+    //calcular fecha inicio, segun fecha proceso
+    //strFechaIni = obtenerFechaInicial(fecha_proceso);
+    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+
+    //console.log(strFechaIni);
+    strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
+    strSQL = strSQL + " ,(ref_cod || '-' || ref_serie || '-' || ref_numero)::varchar(50) as pedido";    
+    strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
+    strSQL = strSQL + " ,numero";
+    strSQL = strSQL + " ,item";
+
+    strSQL = strSQL + " ,registrado";
+    strSQL = strSQL + " ,estado"; //new
+    strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
+    
+    strSQL = strSQL + " FROM";
+    strSQL = strSQL + " mst_ocarga_detalle ";
+    strSQL = strSQL + " WHERE fecha BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " ORDER BY fecha, numero, item";
 
     try {
         const todosReg = await pool.query(strSQL);

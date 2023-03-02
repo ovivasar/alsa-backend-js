@@ -3,8 +3,8 @@ const pool = require('../db');
 const router = Router();
 const {obtenerTodasOCargas,obtenerTodasOCargasPlan,obtenerOCarga,crearOCarga,actualizarOCarga,eliminarOCarga} = require('../controllers/ocarga.controllers')
 
-router.get('/ocarga', obtenerTodasOCargas);
-router.get('/ocargaplan/:fecha_proceso', obtenerTodasOCargasPlan);
+router.get('/ocarga/:fecha_proceso', obtenerTodasOCargas); //formato resumido (ocarga_detalle)
+router.get('/ocargaplan/:fecha_proceso', obtenerTodasOCargasPlan); //formato analizado (ocarga_detalle)
 router.get('/ocarga/:ano/:numero', obtenerOCarga);
 router.post('/ocarga', crearOCarga);
 router.put('/ocarga/:ano/:numero', actualizarOCarga);
