@@ -28,8 +28,13 @@ const obtenerFechaInicialAnual = (strFechaProceso) => {
 };
 
 const obtenerTodasVentas = async (req,res,next)=> {
+    let strFechaIni;
+    const {fecha_proceso} = req.params;
+    //calcular fecha inicio, segun fecha proceso
+    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+
     let strSQL;
-    strSQL = "select zona_venta";
+    strSQL = "SELECT zona_venta";
     strSQL = strSQL + " ,cast(comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
     strSQL = strSQL + " ,tipo_op";
     strSQL = strSQL + " ,(comprobante_original_codigo";
@@ -41,9 +46,10 @@ const obtenerTodasVentas = async (req,res,next)=> {
     strSQL = strSQL + " ,comprobante_original_serie";
     strSQL = strSQL + " ,comprobante_original_numero";
     strSQL = strSQL + " ,elemento";
-    strSQL = strSQL + " from";
+    strSQL = strSQL + " FROM";
     strSQL = strSQL + " mve_venta ";
-    strSQL = strSQL + " order by comprobante_original_fecemi, razon_social";
+    strSQL = strSQL + " WHERE comprobante_original_fecemi BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " ORDER BY comprobante_original_fecemi, razon_social";
 
     try {
         const todosReg = await pool.query(strSQL);

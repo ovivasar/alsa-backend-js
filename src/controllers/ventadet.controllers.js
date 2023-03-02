@@ -206,16 +206,18 @@ const crearVentaDet = async (req,res,next)=> {
     //COD = Procesar zona_venta, para extraer siglas (LCH-LIMA) => LCH
     //SERIE = Procesar comprobante_original_fecemi, para extraer mes (28/10/2022) => 10
 
-    console.log(comprobante_original_fecemi);
+    //console.log(comprobante_original_fecemi);
     //cuidado con edicion manual de la fecha, se registra al reves, pero en caso de click va normal
     let datePieces = comprobante_original_fecemi.split("-");
     const fechaArmada = new Date(datePieces[0],datePieces[1],datePieces[2]); //ok con hora 00:00:00
-    console.log(datePieces);
+    //console.log(datePieces);
+    let sAno = (fechaArmada.getFullYear()).toString(); // new 
 
     strSQL = "INSERT INTO mve_venta_detalle";
     strSQL = strSQL + " (";
     strSQL = strSQL + "  id_empresa";
     strSQL = strSQL + " ,id_punto_venta";
+    strSQL = strSQL + " ,ano"; //new
     strSQL = strSQL + " ,comprobante_original_codigo";
     strSQL = strSQL + " ,comprobante_original_serie";
     strSQL = strSQL + " ,comprobante_original_numero";
@@ -247,10 +249,12 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " (";
     strSQL = strSQL + "  $1";
     strSQL = strSQL + " ,$2";
+    strSQL = strSQL + " ,'" + sAno + "'"; //new
     strSQL = strSQL + " ,$3";
     strSQL = strSQL + " ,$4";
     strSQL = strSQL + " ,$5";
     strSQL = strSQL + ",1"; //elemento
+    //cuidado aqui en esta funcion hay que aumenta el año,. para generar toodo, le aumentamos arriba pero aqui en el item, aun mno lo esta considerando chingados
     strSQL = strSQL + " ,(select * from fve_genera_venta_item(1,'" + comprobante_original_codigo + "','" + comprobante_original_serie + "','" + comprobante_original_numero + "',1))"; //item
     strSQL = strSQL + " ,$6";
     strSQL = strSQL + " ,$7";
