@@ -38,7 +38,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     || '-' || fve_inventario_basico.item";
     strSQL = strSQL + "     )::varchar(500) as pedido,";
     strSQL = strSQL + "     fve_inventario_basico.ref_documento_id,";
-    strSQL = strSQL + "     mad_correntistas.razon_social as ref_razon_social,";
+    //strSQL = strSQL + "     mad_correntistas.razon_social as ref_razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
+    strSQL = strSQL + "     mve_venta_detalle.ref_razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
     strSQL = strSQL + "     fve_inventario_basico.id_producto,";
     strSQL = strSQL + "     mst_producto.nombre,";
     strSQL = strSQL + "     fve_inventario_basico.id_zona_entrega,";
