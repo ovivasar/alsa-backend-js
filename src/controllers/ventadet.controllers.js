@@ -244,6 +244,7 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,cond_venta";
     strSQL = strSQL + " ,cond_entrega";
     strSQL = strSQL + " ,fecha_entrega";
+    strSQL = strSQL + " ,estado"; //new
 
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -277,7 +278,7 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$22";
     strSQL = strSQL + " ,$23";
     strSQL = strSQL + " ,$24";
-    
+    strSQL = strSQL + " ,'PENDIENTE'";//NEW
     strSQL = strSQL + " ) RETURNING *";
     try {
         console.log(strSQL);
