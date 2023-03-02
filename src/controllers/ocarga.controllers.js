@@ -88,6 +88,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,e_estibadores";
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
+    strSQL = strSQL + " ,estado"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
