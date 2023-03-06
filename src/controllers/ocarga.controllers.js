@@ -128,7 +128,7 @@ const obtenerOCarga = async (req,res,next)=> {
         strSQL = strSQL + " FROM mst_ocarga_detalle";
         strSQL = strSQL + " WHERE ano = $1";
         strSQL = strSQL + " AND numero = $2";
-        strSQL = strSQL + " GROUP BY fecha,numero";
+        strSQL = strSQL + " GROUP BY fecha,numero,ref_razon_social,estado";
         const result = await pool.query(strSQL,[ano,numero]);
 
         if (result.rows.length === 0)
