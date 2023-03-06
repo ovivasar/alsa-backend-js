@@ -12,9 +12,8 @@ const obtenerTodasOCargas = async (req,res,next)=> {
     //console.log(strFechaIni);
     strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
     strSQL = strSQL + " ,(ref_cod || '-' || ref_serie || '-' || ref_numero)::varchar(50) as pedido";    
-    strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
     strSQL = strSQL + " ,numero";
-    strSQL = strSQL + " ,item";
+    strSQL = strSQL + " ,ref_razon_social";
 
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,estado"; //new
@@ -23,7 +22,8 @@ const obtenerTodasOCargas = async (req,res,next)=> {
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mst_ocarga_detalle ";
     strSQL = strSQL + " WHERE fecha BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
-    strSQL = strSQL + " ORDER BY fecha, numero, item";
+    strSQL = strSQL + " GROUP BY fecha,ref_cod,ref_serie,ref_numero,ref_razon_social,registrado,estado,ano";
+    strSQL = strSQL + " ORDER BY fecha, numero";
 
     try {
         const todosReg = await pool.query(strSQL);
