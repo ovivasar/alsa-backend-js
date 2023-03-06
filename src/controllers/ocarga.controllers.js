@@ -123,6 +123,7 @@ const obtenerOCarga = async (req,res,next)=> {
         strSQL = "SELECT ";
         strSQL = strSQL + " cast(fecha as varchar)::varchar(50) as fecha";
         strSQL = strSQL + " ,numero";
+        strSQL = strSQL + " ,ref_razon_social";
         strSQL = strSQL + " FROM mst_ocarga_detalle";
         strSQL = strSQL + " WHERE ano = $1";
         strSQL = strSQL + " AND numero = $2";
