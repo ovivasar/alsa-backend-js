@@ -120,6 +120,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,registrado";           //14
     strSQL = strSQL + " ,ctrl_insercion";       //15
     strSQL = strSQL + " ,estado";       //16 neww
+    strSQL = strSQL + " ,e_estibadores";       //17 neww
     
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -153,6 +154,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$14";
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'"; //NEW
+    strSQL = strSQL + " ,'-'"; //NEW estibadores, para no dejar en null al filtro principal
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -255,6 +257,7 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,registrado";           //15
     strSQL = strSQL + " ,ctrl_insercion";       //16
     strSQL = strSQL + " ,estado";       //17 new
+    strSQL = strSQL + " ,e_estibadores";       //18 neww
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -287,6 +290,7 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$15";
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'";
+    strSQL = strSQL + " ,'-'"; //new estibadores, para evitar el null en filtro principal
 
     strSQL = strSQL + " ) RETURNING *";
     try {
