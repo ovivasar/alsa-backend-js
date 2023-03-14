@@ -67,10 +67,10 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
     let strFechaIni;
-    const {fecha_proceso} = req.params;
+    const {fecha_ini,fecha_proceso} = req.params;
     //calcular fecha inicio, segun fecha proceso
     //strFechaIni = obtenerFechaInicial(fecha_proceso);
-    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+    //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
 
     //console.log(strFechaIni);
     strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
@@ -100,7 +100,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mst_ocarga_detalle ";
-    strSQL = strSQL + " WHERE fecha BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     strSQL = strSQL + " ORDER BY fecha, numero, item";
 
     try {
