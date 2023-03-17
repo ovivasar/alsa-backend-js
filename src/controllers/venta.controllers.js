@@ -92,7 +92,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mve_venta_detalle.tr_chofer";
     strSQL = strSQL + " ,mve_venta_detalle.tr_celular";
     strSQL = strSQL + " ,mve_venta_detalle.tr_placa";
-    strSQL = strSQL + " ,mve_venta_detalle.tr_fecha_carga";
+    strSQL = strSQL + " ,cast(mve_venta_detalle.tr_fecha_carga as varchar)::varchar(20) as tr_fecha_carga";
     strSQL = strSQL + " ,mve_venta_detalle.estado";
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mve_venta_detalle INNER JOIN mve_venta";
