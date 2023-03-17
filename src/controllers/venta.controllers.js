@@ -87,6 +87,12 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_numero";
     strSQL = strSQL + " ,mve_venta_detalle.elemento";
     strSQL = strSQL + " ,substr(cast(mve_venta_detalle.fecha_entrega as varchar),1,16)::varchar(50) as fecha_entrega";
+    strSQL = strSQL + " ,mve_venta_detalle.tr_ruc";
+    strSQL = strSQL + " ,mve_venta_detalle.tr_razon_social";
+    strSQL = strSQL + " ,mve_venta_detalle.tr_chofer";
+    strSQL = strSQL + " ,mve_venta_detalle.tr_celular";
+    strSQL = strSQL + " ,mve_venta_detalle.tr_placa";
+    strSQL = strSQL + " ,mve_venta_detalle.tr_fecha_carga";
     strSQL = strSQL + " ,mve_venta_detalle.estado";
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mve_venta_detalle INNER JOIN mve_venta";
