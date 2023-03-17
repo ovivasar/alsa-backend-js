@@ -66,9 +66,10 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
     let strFechaIni;
-    const {fecha_proceso} = req.params;
+    //const {fecha_proceso} = req.params;
+    const {fecha_ini,fecha_proceso} = req.params;
     //calcular fecha inicio, segun fecha proceso
-    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+    //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
 
     //console.log(strFechaIni);
     strSQL = "SELECT mve_venta.zona_venta";
@@ -95,7 +96,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta_detalle.comprobante_original_serie = mve_venta.comprobante_original_serie and ";
     strSQL = strSQL + "     mve_venta_detalle.comprobante_original_numero = mve_venta.comprobante_original_numero and ";
     strSQL = strSQL + "     mve_venta_detalle.elemento = mve_venta.elemento ) ";
-    strSQL = strSQL + " WHERE mve_venta_detalle.comprobante_original_fecemi BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " WHERE mve_venta_detalle.comprobante_original_fecemi BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     strSQL = strSQL + " ORDER BY comprobante_original_fecemi, mve_venta_detalle.ctrl_insercion, mve_venta_detalle.ref_razon_social";
 
     try {
