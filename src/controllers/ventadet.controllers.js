@@ -42,7 +42,7 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta_detalle.ref_razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
     strSQL = strSQL + "     fve_inventario_basico.id_producto,";
     strSQL = strSQL + "     mst_producto.nombre,";
-    strSQL = strSQL + "     mst_producto.id_unidad_medida,"; //new
+    strSQL = strSQL + "     mst_producto.id_unidad_medida as unidad_medida,"; //new
     strSQL = strSQL + "     fve_inventario_basico.id_zona_entrega,";
     strSQL = strSQL + "     mve_zonadet.nombre as zona_entrega,";
     strSQL = strSQL + "     cast(mve_venta_detalle.comprobante_original_fecemi as varchar) as fecha,";
