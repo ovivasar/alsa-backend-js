@@ -78,9 +78,9 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_serie";
     strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_numero";
     strSQL = strSQL + "   || '-' || mve_venta_detalle.item)::varchar(50) as pedido";
-    strSQL = strSQL + " ,(mve_venta.tipo_op || '-' || mve_venta.vendedor)::varchar(50) as tipo_op";
+    strSQL = strSQL + " ,(mve_venta.tipo_op || '-' || mve_venta.vendedor)::varchar(50) as vendedor";
     //strSQL = strSQL + " ,mve_venta.vendedor";
-    strSQL = strSQL + " ,mve_venta_detalle.ref_razon_social";
+    strSQL = strSQL + " ,mve_venta.razon_social"; //mostramos cliente
     strSQL = strSQL + " ,mve_venta_detalle.descripcion";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_serie";
