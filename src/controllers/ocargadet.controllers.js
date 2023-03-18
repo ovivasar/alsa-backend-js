@@ -71,8 +71,9 @@ const crearOCargaDet = async (req,res,next)=> {
         tr_placacargado,    //11 ocarga-fase01
         id_zona_entrega,    //12 ventas referencial, no visible
         zona_entrega,       //13 ventas referencial, no visible
-  
         registrado,         //14
+        unidad_medida,       //15 ventas referencial
+
         pedido              //15
         } = req.body
 
@@ -116,8 +117,9 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,tr_placacargado";      //11
     strSQL = strSQL + " ,id_zona_entrega";      //12
     strSQL = strSQL + " ,zona_entrega";         //13
-    
     strSQL = strSQL + " ,registrado";           //14
+
+    strSQL = strSQL + " ,unidad_medida";       //15 neww
     strSQL = strSQL + " ,ctrl_insercion";       //15
     strSQL = strSQL + " ,estado";       //16 neww
     strSQL = strSQL + " ,e_estibadores";       //17 neww
@@ -152,6 +154,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$13";
 
     strSQL = strSQL + " ,$14";
+    strSQL = strSQL + " ,$15"; //new unidad_medida
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'"; //NEW
     strSQL = strSQL + " ,'-'"; //NEW estibadores, para no dejar en null al filtro principal
@@ -178,7 +181,8 @@ const crearOCargaDet = async (req,res,next)=> {
             id_zona_entrega,    //12
             zona_entrega,       //13
         
-            registrado          //14
+            registrado,          //14
+            unidad_medida       //15
             ]
         );
         res.json(result.rows[0]);
@@ -209,8 +213,8 @@ const agregarOCargaDet = async (req,res,next)=> {
         tr_placacargado,    //12 ocarga-fase01
         id_zona_entrega,    //13 ventas referencial, no visible
         zona_entrega,       //14 ventas referencial, no visible
-        
         registrado,         //15
+        unidad_medida,         //15
         pedido              //16
         } = req.body
 
@@ -253,8 +257,9 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,tr_placacargado";      //12
     strSQL = strSQL + " ,id_zona_entrega";      //13
     strSQL = strSQL + " ,zona_entrega";         //14
-    
     strSQL = strSQL + " ,registrado";           //15
+    strSQL = strSQL + " ,unidad_medida";           //16
+
     strSQL = strSQL + " ,ctrl_insercion";       //16
     strSQL = strSQL + " ,estado";       //17 new
     strSQL = strSQL + " ,e_estibadores";       //18 neww
@@ -286,8 +291,8 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$12";
     strSQL = strSQL + " ,$13";
     strSQL = strSQL + " ,$14";
-
     strSQL = strSQL + " ,$15";
+    strSQL = strSQL + " ,$16"; //new unidad_medida
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'";
     strSQL = strSQL + " ,'-'"; //new estibadores, para evitar el null en filtro principal
@@ -313,8 +318,8 @@ const agregarOCargaDet = async (req,res,next)=> {
             tr_placacargado,    //12
             id_zona_entrega,    //13
             zona_entrega,       //14
-            
-            registrado          //15
+            registrado,          //15
+            unidad_medida          //16
             ]
         );
         res.json(result.rows[0]);
