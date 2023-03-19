@@ -37,8 +37,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     || '-' || fve_inventario_basico.numero";
     strSQL = strSQL + "     || '-' || fve_inventario_basico.item";
     strSQL = strSQL + "     )::varchar(500) as pedido,";
-    strSQL = strSQL + "     mve_venta.documento_id,";
-    strSQL = strSQL + "     mve_venta.razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
+    strSQL = strSQL + "     mve_venta.documento_id as ref_documento_id,";
+    strSQL = strSQL + "     mve_venta.razon_social as ref_razon_social,"; //usamos: (ref_) porque en ocarga se maneja esos nombres
     strSQL = strSQL + "     fve_inventario_basico.id_producto,";
     strSQL = strSQL + "     mst_producto.nombre,";
     strSQL = strSQL + "     mst_producto.id_unidad_medida as unidad_medida,"; //new
