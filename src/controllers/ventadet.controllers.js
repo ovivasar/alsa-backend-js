@@ -65,7 +65,7 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     on (fve_inventario_basico.cod = mve_venta.comprobante_original_codigo and";
     strSQL = strSQL + "         fve_inventario_basico.serie = mve_venta.comprobante_original_serie and";
     strSQL = strSQL + "         fve_inventario_basico.numero = mve_venta.comprobante_original_numero and";         
-    strSQL = strSQL + "         fve_inventario_basico.item = mve_venta.item)";
+    strSQL = strSQL + "         1 = mve_venta.elemento)";
     
     strSQL = strSQL + "     ) left join mst_producto";
     strSQL = strSQL + "     on (fve_inventario_basico.id_producto = mst_producto.id_producto and";
