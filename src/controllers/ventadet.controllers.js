@@ -37,9 +37,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     || '-' || fve_inventario_basico.numero";
     strSQL = strSQL + "     || '-' || fve_inventario_basico.item";
     strSQL = strSQL + "     )::varchar(500) as pedido,";
-    strSQL = strSQL + "     fve_inventario_basico.ref_documento_id,";
-    //strSQL = strSQL + "     mad_correntistas.razon_social as ref_razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
-    strSQL = strSQL + "     mve_venta_detalle.ref_razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
+    strSQL = strSQL + "     mve_venta.documento_id,";
+    strSQL = strSQL + "     mve_venta.razon_social,"; //esto no permite ver razon social de clientes nuevos (no reg en mad_correntistas plop)
     strSQL = strSQL + "     fve_inventario_basico.id_producto,";
     strSQL = strSQL + "     mst_producto.nombre,";
     strSQL = strSQL + "     mst_producto.id_unidad_medida as unidad_medida,"; //new
@@ -58,13 +57,16 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "         serie varchar(5),";
     strSQL = strSQL + "         numero varchar(10),";
     strSQL = strSQL + "         item integer,";
-    strSQL = strSQL + "         ref_documento_id varchar(20),";
     strSQL = strSQL + "         id_producto varchar(20),";
     strSQL = strSQL + "         id_zona_entrega integer,";
     strSQL = strSQL + "         ingresos numeric(14,3),";
     strSQL = strSQL + "         egresos numeric(14,3)";
-    strSQL = strSQL + "     ) left join mad_correntistas";
-    strSQL = strSQL + "     on (fve_inventario_basico.ref_documento_id = mad_correntistas.documento_id)";
+    strSQL = strSQL + "     ) left join mve_venta";
+    strSQL = strSQL + "     on (fve_inventario_basico.cod = mve_venta.comprobante_original_codigo and";
+    strSQL = strSQL + "         fve_inventario_basico.serie = mve_venta.comprobante_original_serie and";
+    strSQL = strSQL + "         fve_inventario_basico.numero = mve_venta.comprobante_original_numero and";         
+    strSQL = strSQL + "         fve_inventario_basico.item = mve_venta.item)";
+    
     strSQL = strSQL + "     ) left join mst_producto";
     strSQL = strSQL + "     on (fve_inventario_basico.id_producto = mst_producto.id_producto and";
     strSQL = strSQL + "             mst_producto.id_empresa=1	)";
