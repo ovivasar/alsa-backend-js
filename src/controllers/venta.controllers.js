@@ -46,6 +46,7 @@ const obtenerTodasVentas = async (req,res,next)=> {
     strSQL = strSQL + " ,comprobante_original_serie";
     strSQL = strSQL + " ,comprobante_original_numero";
     strSQL = strSQL + " ,elemento";
+    strSQL = strSQL + " ,''::varchar(20) as descripcion";
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mve_venta ";
     strSQL = strSQL + " WHERE comprobante_original_fecemi BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
