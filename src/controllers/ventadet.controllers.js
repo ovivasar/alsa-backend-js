@@ -78,6 +78,7 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "         fve_inventario_basico.numero = mve_venta_detalle.comprobante_original_numero and";         
     strSQL = strSQL + "         fve_inventario_basico.item = mve_venta_detalle.item)";
     strSQL = strSQL + "     where fve_inventario_basico.ingresos-fve_inventario_basico.egresos > 0";
+    console.log(strSQL);
     try {
         const todosReg = await pool.query(strSQL);
         res.json(todosReg.rows);
