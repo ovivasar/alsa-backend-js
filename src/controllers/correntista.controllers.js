@@ -3,7 +3,7 @@ const pool = require('../db');
 const obtenerTodosCorrentistas = async (req,res,next)=> {
     //console.log("select documento_id, razon_social, telefono from mad_correntistas order by razon_social");
     try {
-        const todosReg = await pool.query("select documento_id, razon_social, telefono from mad_correntistas order by id_documento, razon_social");
+        const todosReg = await pool.query("select documento_id, razon_social, codigo, telefono, email from mad_correntistas order by id_documento, razon_social");
         res.json(todosReg.rows);
     }
     catch(error){
@@ -80,9 +80,9 @@ const actualizarCorrentista = async (req,res,next)=> {
                 email,          //06
                 email2,         //07
                 id_vendedor,    //08
-                id_zona_venta,  //09
-                relacionado,    //10
-                base            //11
+                id_zonadet,     //09
+                //relacionado,    //10
+                //base            //11
             } = req.body
 
         strSQL = " UPDATE mad_correntistas SET";
@@ -94,10 +94,10 @@ const actualizarCorrentista = async (req,res,next)=> {
         strSQL = strSQL + " ,email=$6";
         strSQL = strSQL + " ,email2=$7";
         strSQL = strSQL + " ,id_vendedor=$8";
-        strSQL = strSQL + " ,id_zona_venta=$9";
-        strSQL = strSQL + " ,relacionado=$10";
-        strSQL = strSQL + " ,base=$11";
-        strSQL = strSQL + "  WHERE documento_id=$12";
+        strSQL = strSQL + " ,id_zonadet=$9";
+        //strSQL = strSQL + " ,relacionado=$10";
+        //strSQL = strSQL + " ,base=$11";
+        strSQL = strSQL + "  WHERE documento_id=$10";
         const result = await pool.query(strSQL,
         [   
             razon_social,   //01
@@ -108,10 +108,10 @@ const actualizarCorrentista = async (req,res,next)=> {
             email,          //06
             email2,         //07
             id_vendedor,    //08
-            id_zona_venta,  //09
-            relacionado,    //10
-            base,           //11
-            id              //12
+            id_zonadet,     //09
+            //relacionado,    //10
+            //base,           //11
+            id              //10
         ]
         );
 
