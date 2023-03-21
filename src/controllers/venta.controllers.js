@@ -73,20 +73,20 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
 
     //console.log(strFechaIni);
-    strSQL = "SELECT mve_venta.zona_venta";
+    strSQL = "SELECT mve_venta_detalle.zona_entrega";
     strSQL = strSQL + " ,cast(mve_venta_detalle.comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
     strSQL = strSQL + " ,(mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_serie";
     strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_numero";
     strSQL = strSQL + "   || '-' || mve_venta_detalle.item)::varchar(50) as pedido";
-    strSQL = strSQL + " ,(mve_venta.tipo_op || '-' || mve_venta.vendedor)::varchar(50) as vendedor";
-    //strSQL = strSQL + " ,mve_venta.vendedor";
+    strSQL = strSQL + " ,mve_venta.vendedor";
     strSQL = strSQL + " ,mve_venta.razon_social"; //mostramos cliente
     strSQL = strSQL + " ,mve_venta_detalle.descripcion";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_serie";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_numero";
     strSQL = strSQL + " ,mve_venta_detalle.elemento";
+    strSQL = strSQL + " ,mve_venta_detalle.item";
     strSQL = strSQL + " ,substr(cast(mve_venta_detalle.fecha_entrega as varchar),1,16)::varchar(50) as fecha_entrega";
     strSQL = strSQL + " ,mve_venta_detalle.tr_ruc";
     strSQL = strSQL + " ,mve_venta_detalle.tr_razon_social";

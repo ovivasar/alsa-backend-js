@@ -352,10 +352,13 @@ const eliminarVentaDet = async (req,res,next)=> {
         strSQL = strSQL + " AND comprobante_original_serie = $2";
         strSQL = strSQL + " AND comprobante_original_numero = $3";
         strSQL = strSQL + " AND elemento = $4";
-        strSQL = strSQL + " AND item = $5";
-        
-        console.log(strSQL,[cod,serie,num,elem,item]);
-        const result = await pool.query(strSQL,[cod,serie,num,elem,item]);
+        if (item!=null){
+            strSQL = strSQL + " AND item = $5";
+            //console.log(strSQL,[cod,serie,num,elem,item]);
+            const result = await pool.query(strSQL,[cod,serie,num,elem,item]);
+        }else{
+            const result = await pool.query(strSQL,[cod,serie,num,elem]);
+        }
 
         if (result.rowCount === 0)
             return res.status(404).json({

@@ -336,9 +336,13 @@ const eliminarOCargaDet = async (req,res,next)=> {
         strSQL = "DELETE FROM mst_ocarga_detalle ";
         strSQL = strSQL + " WHERE ano = $1";
         strSQL = strSQL + " AND numero = $2";
-        strSQL = strSQL + " AND item = $3";
         
+        if (item!=null){
+        strSQL = strSQL + " AND item = $3";
         const result = await pool.query(strSQL,[ano,numero,item]);
+        }else{
+        const result = await pool.query(strSQL,[ano,numero]);
+        }
 
         if (result.rowCount === 0)
             return res.status(404).json({
@@ -349,7 +353,6 @@ const eliminarOCargaDet = async (req,res,next)=> {
     } catch (error) {
         console.log(error.message);
     }
-
 };
 const actualizarOCargaDet01 = async (req,res,next)=> {
     //Fase 01: Datos Operacion Carga/Descarga
