@@ -3,7 +3,7 @@ const pool = require('../db');
 const obtenerTodosCorrentistas = async (req,res,next)=> {
     //console.log("select documento_id, razon_social, telefono from mad_correntistas order by razon_social");
     try {
-        const todosReg = await pool.query("select documento_id, razon_social, codigo, telefono, email from mad_correntistas order by id_documento, razon_social");
+        const todosReg = await pool.query("select * from mad_correntistas order by id_documento, razon_social");
         res.json(todosReg.rows);
     }
     catch(error){
