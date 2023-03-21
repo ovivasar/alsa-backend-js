@@ -1,9 +1,9 @@
 const pool = require('../db');
 
 const obtenerTodosCorrentistas = async (req,res,next)=> {
-    console.log("select documento_id, razon_social, telefono from mad_correntistas order by razon_social");
+    //console.log("select documento_id, razon_social, telefono from mad_correntistas order by razon_social");
     try {
-        const todosReg = await pool.query("select documento_id, razon_social, telefono from mad_correntistas order by razon_social");
+        const todosReg = await pool.query("select documento_id, razon_social, telefono from mad_correntistas order by id_documento, razon_social");
         res.json(todosReg.rows);
     }
     catch(error){
@@ -69,26 +69,55 @@ const eliminarCorrentista = async (req,res,next)=> {
 
 };
 const actualizarCorrentista = async (req,res,next)=> {
+    let strSQL;
     try {
         const {id} = req.params;
-        const {razon_social,contacto,telefono,email,id_vendedor,relacionado,base} = req.body
- 
-        const result = await pool.query("update mad_correntistas set razon_social=$1,contacto=$2,telefono=$3,email=$4,id_vendedor=$5,relacionado=$6,base=$7 where documento_id=$8",
+        const { razon_social,   //01
+                codigo,         //02
+                contacto,       //03
+                telefono,       //04
+                telefono2,      //05
+                email,          //06
+                email2,         //07
+                id_vendedor,    //08
+                id_zona_venta,  //09
+                relacionado,    //10
+                base            //11
+            } = req.body
+
+        strSQL = " UPDATE mad_correntistas SET";
+        strSQL = strSQL + "  razon_social=$1";
+        strSQL = strSQL + " ,codigo=$2";
+        strSQL = strSQL + " ,contacto=$3";
+        strSQL = strSQL + " ,telefono=$4";
+        strSQL = strSQL + " ,telefono2=$5";
+        strSQL = strSQL + " ,email=$6";
+        strSQL = strSQL + " ,email2=$7";
+        strSQL = strSQL + " ,id_vendedor=$8";
+        strSQL = strSQL + " ,id_zona_venta=$9";
+        strSQL = strSQL + " ,relacionado=$10";
+        strSQL = strSQL + " ,base=$11";
+        strSQL = strSQL + "  WHERE documento_id=$12";
+        const result = await pool.query(strSQL,
         [   
-            razon_social,
-            contacto,
-            telefono,
-            email,
-            id_vendedor,
-            relacionado,
-            base,
-            id
+            razon_social,   //01
+            codigo,         //02
+            contacto,       //03
+            telefono,       //04
+            telefono2,      //05
+            email,          //06
+            email2,         //07
+            id_vendedor,    //08
+            id_zona_venta,  //09
+            relacionado,    //10
+            base,           //11
+            id              //12
         ]
         );
 
         if (result.rowCount === 0)
             return res.status(404).json({
-                message:"Zona no encontrada"
+                message:"Correntista no encontrado"
             });
 
         return res.sendStatus(204);
