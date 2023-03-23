@@ -30,19 +30,34 @@ const obtenerCorrentista = async (req,res,next)=> {
 
 const crearCorrentista = async (req,res,next)=> {
     //const {id_usuario,nombres} = req.body
-    const {documento_id,id_documento,razon_social,contacto,telefono,email,id_vendedor,relacionado,base} = req.body
+    const {
+        documento_id,   //01
+        id_documento,   //02    
+        razon_social,   //03    
+        codigo,         //04
+        contacto,       //05
+        telefono,       //06
+        telefono2,      //07
+        email,          //08
+        email2,         //09
+        id_vendedor,    //10
+        id_zonadet      //11
+    } = req.body
+
     try {
-        const result = await pool.query("INSERT INTO mad_correntistas VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", 
+        const result = await pool.query("INSERT INTO mad_correntistas VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *", 
         [   
-            documento_id,
-            id_documento,
-            razon_social,
-            contacto,
-            telefono,
-            email,
-            id_vendedor,
-            relacionado,
-            base
+        documento_id,   //01
+        id_documento,   //02    
+        razon_social,   //03    
+        codigo,         //04
+        contacto,       //05
+        telefono,       //06
+        telefono2,      //07
+        email,          //08
+        email2,         //09
+        id_vendedor,    //10
+        id_zonadet      //11
         ]
         );
         res.json(result.rows[0]);
