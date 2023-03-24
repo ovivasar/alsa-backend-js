@@ -463,32 +463,32 @@ const actualizarOCargaDet03 = async (req,res,next)=> {
         const {
                 ticket,         //1
                 peso_ticket,    //2
-                guia,           //3
-                guia_traslado,  //4
-                e_peso,         //5
-                e_monto         //6
+                //guia,           //3
+                //guia_traslado,  //4
+                //e_peso,         //5
+                //e_monto         //6
                 } = req.body        
  
         var strSQL;
         strSQL = "UPDATE mst_ocarga_detalle SET ";
         strSQL = strSQL + "  ticket = $1";
         strSQL = strSQL + " ,peso_ticket = $2";
-        strSQL = strSQL + " ,guia = $3";
-        strSQL = strSQL + " ,guia_traslado = $4";
-        strSQL = strSQL + " ,e_peso = $5";
-        strSQL = strSQL + " ,e_monto = $6";
-        strSQL = strSQL + " WHERE ano = $7";
-        strSQL = strSQL + " AND numero = $8";
-        strSQL = strSQL + " AND item = $9";
+        //strSQL = strSQL + " ,guia = $3";
+        //strSQL = strSQL + " ,guia_traslado = $4";
+        //strSQL = strSQL + " ,e_peso = $5";
+        //strSQL = strSQL + " ,e_monto = $6";
+        strSQL = strSQL + " WHERE ano = $3";
+        strSQL = strSQL + " AND numero = $4";
+        strSQL = strSQL + " AND item = $5";
 
         const result = await pool.query(strSQL,
         [   
             ticket,         //1
             peso_ticket,    //2
-            guia,           //3
-            guia_traslado,  //4
-            e_peso,         //5
-            e_monto,         //6
+            //guia,           //3
+            //guia_traslado,  //4
+            //e_peso,         //5
+            //e_monto,         //6
 
             ano,
             numero,
