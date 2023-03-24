@@ -150,6 +150,8 @@ const obtenerVenta = async (req,res,next)=> {
         strSQL = strSQL + " AND mve_venta.comprobante_original_serie = $2";
         strSQL = strSQL + " AND mve_venta.comprobante_original_numero = $3";
         strSQL = strSQL + " AND mve_venta.elemento = $4";
+        console.log(strSQL);
+        
         const result = await pool.query(strSQL,[cod,serie,num,elem]);
 
         if (result.rows.length === 0)
