@@ -124,30 +124,32 @@ const obtenerVenta = async (req,res,next)=> {
         let strSQL ;
         
         strSQL = "SELECT ";
-        strSQL = strSQL + "  id_empresa";
-        strSQL = strSQL + " ,id_punto_venta";
-        strSQL = strSQL + " ,tipo_op";
-        strSQL = strSQL + " ,id_zona_venta";
-        strSQL = strSQL + " ,zona_venta";
-        strSQL = strSQL + " ,id_vendedor";
-        strSQL = strSQL + " ,vendedor";
-        strSQL = strSQL + " ,comprobante_original_codigo";
-        strSQL = strSQL + " ,comprobante_original_serie";
-        strSQL = strSQL + " ,comprobante_original_numero";
-        strSQL = strSQL + " ,elemento";
-        strSQL = strSQL + " ,cast(comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
-        //strSQL = strSQL + " ,comprobante_original_fecemi";
-        strSQL = strSQL + " ,documento_id";
-        strSQL = strSQL + " ,razon_social";
-        strSQL = strSQL + " ,debe";
-        strSQL = strSQL + " ,peso_total";
-        strSQL = strSQL + " ,registrado";
-        strSQL = strSQL + " FROM mve_venta";
+        strSQL = strSQL + "  mve_venta.id_empresa";
+        strSQL = strSQL + " ,mve_venta.id_punto_venta";
+        strSQL = strSQL + " ,mve_venta.tipo_op";
+        strSQL = strSQL + " ,mve_venta.id_zona_venta";
+        strSQL = strSQL + " ,mve_venta.zona_venta";
+        strSQL = strSQL + " ,mve_venta.id_vendedor";
+        strSQL = strSQL + " ,mve_venta.vendedor";
+        strSQL = strSQL + " ,mve_venta.comprobante_original_codigo";
+        strSQL = strSQL + " ,mve_venta.comprobante_original_serie";
+        strSQL = strSQL + " ,mve_venta.comprobante_original_numero";
+        strSQL = strSQL + " ,mve_venta.elemento";
+        strSQL = strSQL + " ,cast(mve_venta.comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
+        strSQL = strSQL + " ,mve_venta.documento_id";
+        strSQL = strSQL + " ,mve_venta.razon_social";
+        strSQL = strSQL + " ,mad_correntistas.codigo"; //new
+        strSQL = strSQL + " ,mve_venta.debe";
+        strSQL = strSQL + " ,mve_venta.peso_total";
+        strSQL = strSQL + " ,mve_venta.registrado";
+        strSQL = strSQL + " FROM mve_venta LEFT JOIN mad_correntistas";
+        strSQL = strSQL + " ON (mve_venta.id_empresa = mad_correntistas.id_empresa and ";
+        strSQL = strSQL + "     mve_venta.documento_id = mad_correntistas.documento_id )";
         
-        strSQL = strSQL + " WHERE comprobante_original_codigo = $1";
-        strSQL = strSQL + " AND comprobante_original_serie = $2";
-        strSQL = strSQL + " AND comprobante_original_numero = $3";
-        strSQL = strSQL + " AND elemento = $4";
+        strSQL = strSQL + " WHERE mve_venta.comprobante_original_codigo = $1";
+        strSQL = strSQL + " AND mve_venta.comprobante_original_serie = $2";
+        strSQL = strSQL + " AND mve_venta.comprobante_original_numero = $3";
+        strSQL = strSQL + " AND mve_venta.elemento = $4";
         const result = await pool.query(strSQL,[cod,serie,num,elem]);
 
         if (result.rows.length === 0)
