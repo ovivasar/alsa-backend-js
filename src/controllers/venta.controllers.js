@@ -143,15 +143,14 @@ const obtenerVenta = async (req,res,next)=> {
         strSQL = strSQL + " ,mve_venta.peso_total";
         strSQL = strSQL + " ,mve_venta.registrado";
         strSQL = strSQL + " FROM mve_venta LEFT JOIN mad_correntistas";
-        strSQL = strSQL + " ON (mve_venta.id_empresa = mad_correntistas.id_empresa and ";
-        strSQL = strSQL + "     mve_venta.documento_id = mad_correntistas.documento_id )";
+        strSQL = strSQL + " ON (mve_venta.documento_id = mad_correntistas.documento_id) ";
         
         strSQL = strSQL + " WHERE mve_venta.comprobante_original_codigo = $1";
         strSQL = strSQL + " AND mve_venta.comprobante_original_serie = $2";
         strSQL = strSQL + " AND mve_venta.comprobante_original_numero = $3";
         strSQL = strSQL + " AND mve_venta.elemento = $4";
         console.log(strSQL);
-        
+
         const result = await pool.query(strSQL,[cod,serie,num,elem]);
 
         if (result.rows.length === 0)
