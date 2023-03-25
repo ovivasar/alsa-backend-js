@@ -78,7 +78,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
     strSQL = strSQL + " ,numero";
     strSQL = strSQL + " ,item";
-    strSQL = strSQL + " ,guia";
+    strSQL = strSQL + " ,guia01";
     strSQL = strSQL + " ,operacion";
     strSQL = strSQL + " ,ticket";
     strSQL = strSQL + " ,descripcion";
@@ -86,8 +86,8 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,lote_asignado";
     strSQL = strSQL + " ,lote_procedencia";
 
-    strSQL = strSQL + " ,e_peso";
-    strSQL = strSQL + " ,e_monto";
+    strSQL = strSQL + " ,e_peso01";
+    strSQL = strSQL + " ,e_monto01";
     strSQL = strSQL + " ,e_razon_social";
     strSQL = strSQL + " ,e_rh";
     strSQL = strSQL + " ,e_hora_ini";
