@@ -29,9 +29,10 @@ const obtenerFechaInicialAnual = (strFechaProceso) => {
 
 const obtenerTodasVentas = async (req,res,next)=> {
     let strFechaIni;
-    const {fecha_proceso} = req.params;
+    //const {fecha_proceso} = req.params;
     //calcular fecha inicio, segun fecha proceso
-    strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+    //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+    const {fecha_ini,fecha_proceso} = req.params;
 
     let strSQL;
     strSQL = "SELECT zona_venta";
@@ -49,7 +50,7 @@ const obtenerTodasVentas = async (req,res,next)=> {
     strSQL = strSQL + " ,''::varchar(20) as descripcion";
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mve_venta ";
-    strSQL = strSQL + " WHERE comprobante_original_fecemi BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " WHERE comprobante_original_fecemi BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     strSQL = strSQL + " ORDER BY comprobante_original_fecemi, razon_social";
 
     try {
