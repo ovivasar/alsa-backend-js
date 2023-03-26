@@ -294,22 +294,22 @@ const eliminarVenta = async (req,res,next)=> {
         strSQL = strSQL + " AND comprobante_original_numero = $3";
         strSQL = strSQL + " AND elemento = $4";
         result = await pool.query(strSQL,[cod,serie,num,elem]);
-        if (result.rowCount === 0)
+        /*if (result.rowCount === 0)
             return res.status(404).json({
                 message:"Detalle no encontrado"
             });
-
+*/
         strSQL = "DELETE FROM mve_venta ";
         strSQL = strSQL + " WHERE comprobante_original_codigo = $1";
         strSQL = strSQL + " AND comprobante_original_serie = $2";
         strSQL = strSQL + " AND comprobante_original_numero = $3";
         strSQL = strSQL + " AND elemento = $4";
         result2 = await pool.query(strSQL,[cod,serie,num,elem]);
-        if (result2.rowCount === 0)
+        /*if (result2.rowCount === 0)
             return res.status(404).json({
                 message:"Venta no encontrada"
             });
-
+*/
         return res.sendStatus(204);
     } catch (error) {
         console.log(error.message);
