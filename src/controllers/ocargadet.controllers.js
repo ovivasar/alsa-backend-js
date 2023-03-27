@@ -463,32 +463,75 @@ const actualizarOCargaDet03 = async (req,res,next)=> {
         const {
                 ticket,         //1
                 peso_ticket,    //2
-                //guia,           //3
-                //guia_traslado,  //4
-                //e_peso,         //5
-                //e_monto         //6
+
+                guia01,           //3
+                guia_traslado01,  //4
+                guia_sacos01,     //5
+                e_peso01,         //6
+                e_monto01,         //7
+
+                guia02,           //8
+                guia_traslado02,  //9
+                guia_sacos02,     //10
+                e_peso02,         //11
+                e_monto02,         //12
+
+                guia03,           //13
+                guia_traslado03,  //14
+                guia_sacos03,     //15
+                e_peso03,         //16
+                e_monto03         //17
                 } = req.body        
  
         var strSQL;
         strSQL = "UPDATE mst_ocarga_detalle SET ";
         strSQL = strSQL + "  ticket = $1";
         strSQL = strSQL + " ,peso_ticket = $2";
-        //strSQL = strSQL + " ,guia = $3";
-        //strSQL = strSQL + " ,guia_traslado = $4";
-        //strSQL = strSQL + " ,e_peso = $5";
-        //strSQL = strSQL + " ,e_monto = $6";
-        strSQL = strSQL + " WHERE ano = $3";
-        strSQL = strSQL + " AND numero = $4";
-        strSQL = strSQL + " AND item = $5";
+
+        strSQL = strSQL + " ,guia01 = $3";
+        strSQL = strSQL + " ,guia_traslado01 = $4";
+        strSQL = strSQL + " ,guia_sacos01 = $5";
+        strSQL = strSQL + " ,e_peso01 = $6";
+        strSQL = strSQL + " ,e_monto01 = $7";
+
+        strSQL = strSQL + " ,guia02 = $8";
+        strSQL = strSQL + " ,guia_traslado02 = $9";
+        strSQL = strSQL + " ,guia_sacos02 = $10";
+        strSQL = strSQL + " ,e_peso02 = $11";
+        strSQL = strSQL + " ,e_monto02 = $12";
+
+        strSQL = strSQL + " ,guia03 = $13";
+        strSQL = strSQL + " ,guia_traslado03 = $14";
+        strSQL = strSQL + " ,guia_sacos03 = $15";
+        strSQL = strSQL + " ,e_peso03 = $16";
+        strSQL = strSQL + " ,e_monto03 = $17";
+
+        strSQL = strSQL + " WHERE ano = $18";
+        strSQL = strSQL + " AND numero = $19";
+        strSQL = strSQL + " AND item = $20";
 
         const result = await pool.query(strSQL,
         [   
             ticket,         //1
             peso_ticket,    //2
-            //guia,           //3
-            //guia_traslado,  //4
-            //e_peso,         //5
-            //e_monto,         //6
+
+            guia01,           //3
+            guia_traslado01,  //4
+            guia_sacos01,  //5
+            e_peso01,         //6
+            e_monto01,         //7
+
+            guia02,           //8
+            guia_traslado02,  //9
+            guia_sacos02,  //10
+            e_peso02,         //11
+            e_monto02,         //12
+
+            guia03,           //13
+            guia_traslado03,  //14
+            guia_sacos03,  //15
+            e_peso03,         //16
+            e_monto03,         //17
 
             ano,
             numero,
