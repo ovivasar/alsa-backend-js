@@ -46,6 +46,7 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     mve_zonadet.nombre as zona_entrega,";
     strSQL = strSQL + "     cast(mve_venta_detalle.comprobante_original_fecemi as varchar) as fecha,";
     strSQL = strSQL + "     (fve_inventario_basico.ingresos-fve_inventario_basico.egresos)::numeric(14,3) as saldo,";
+    strSQL = strSQL + "     cast(mve_venta_detalle.tr_fecha_carga as varchar) as carga,";
     strSQL = strSQL + "     mve_venta_detalle.tr_placa";
     strSQL = strSQL + "     from ";
     strSQL = strSQL + "     (";
