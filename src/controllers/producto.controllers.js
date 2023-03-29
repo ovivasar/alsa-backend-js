@@ -44,7 +44,7 @@ const obtenerProductoIgv = async (req,res,next)=> {
 const crearProducto = async (req,res,next)=> {
     const {id_producto,nombre,id_unidad_medida} = req.body
     try {
-        const result = await pool.query("INSERT INTO mst_producto(id_producto,nombre,id_unidad_medida) VALUES ($1,$2,$3) RETURNING *", 
+        const result = await pool.query("INSERT INTO mst_producto(id_empresa,id_producto,nombre,id_unidad_medida) VALUES ('1',$1,$2,$3) RETURNING *", 
         [   
             id_producto,
             nombre,
