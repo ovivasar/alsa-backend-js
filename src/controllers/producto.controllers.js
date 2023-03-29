@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const obtenerTodosProductos = async (req,res,next)=> {
     try {
-        const todosRegistros = await pool.query("select id_producto, nombre from mst_producto order by id_producto");
+        const todosRegistros = await pool.query("select id_producto, nombre, id_unidad_medida from mst_producto order by id_producto");
         res.json(todosRegistros.rows);
     }
     catch(error){
@@ -42,14 +42,13 @@ const obtenerProductoIgv = async (req,res,next)=> {
 };
 
 const crearProducto = async (req,res,next)=> {
-    //const {id_usuario,nombres} = req.body
-    const {nombre,descripcion,siglas} = req.body
+    const {id_producto,nombre,id_unidad_medida} = req.body
     try {
-        const result = await pool.query("INSERT INTO mst_producto(nombre,descripcion,siglas) VALUES ($1,$2,$3) RETURNING *", 
+        const result = await pool.query("INSERT INTO mst_producto(id_producto,nombre,id_unidad_medida) VALUES ($1,$2,$3) RETURNING *", 
         [   
+            id_producto,
             nombre,
-            descripcion,
-            siglas
+            id_unidad_medida
         ]
         );
         res.json(result.rows[0]);
@@ -78,9 +77,9 @@ const eliminarProducto = async (req,res,next)=> {
 const actualizarProducto = async (req,res,next)=> {
     try {
         const {id} = req.params;
-        const {nombre,descripcion,siglas} = req.body
+        const {nombre,id_unidad_medida} = req.body
  
-        const result = await pool.query("update mst_producto set nombre=$1,descripcion=$2,siglas=$3 where id_zona=$4",[nombre,descripcion,siglas,id]);
+        const result = await pool.query("update mst_producto set nombre=$1,id_unidad_medida=$2 where id_producto=$3",[nombre,id_unidad_medida,id]);
 
         if (result.rowCount === 0)
             return res.status(404).json({
