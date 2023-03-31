@@ -27,11 +27,11 @@ const obtenerZona = async (req,res,next)=> {
 };
 
 const crearZona = async (req,res,next)=> {
-    //const {id_usuario,nombres} = req.body
-    const {nombre,descripcion,siglas} = req.body
+    const {id_zona,nombre,descripcion,siglas} = req.body
     try {
-        const result = await pool.query("INSERT INTO mve_zona(nombre,descripcion,siglas) VALUES ($1,$2,$3) RETURNING *", 
+        const result = await pool.query("INSERT INTO mve_zona(id_zona,nombre,descripcion,siglas) VALUES ($1,$2,$3,$4) RETURNING *", 
         [   
+            id_zona,
             nombre,
             descripcion,
             siglas
