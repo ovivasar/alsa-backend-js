@@ -33,10 +33,11 @@ const obtenerZonaDet = async (req,res,next)=> {
 };
 
 const crearZonaDet = async (req,res,next)=> {
-    const {nombre,descripcion,siglas} = req.body
+    const {id_zonadet,nombre,descripcion,siglas} = req.body
     try {
-        const result = await pool.query("INSERT INTO mve_zonadet (nombre,descripcion,siglas) VALUES ($1,$2,$3) RETURNING *", 
-        [   nombre,
+        const result = await pool.query("INSERT INTO mve_zonadet (id_zonadet,nombre,descripcion,siglas) VALUES ($1,$2,$3,$4) RETURNING *", 
+        [   id_zonadet,
+            nombre,
             descripcion,
             siglas
         ]
