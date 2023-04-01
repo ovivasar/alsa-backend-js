@@ -51,7 +51,7 @@ const obtenerTodasVentas = async (req,res,next)=> {
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mve_venta ";
     strSQL = strSQL + " WHERE comprobante_original_fecemi BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
-    strSQL = strSQL + " ORDER BY comprobante_original_fecemi, razon_social";
+    strSQL = strSQL + " ORDER BY comprobante_original_fecemi DESC, razon_social ASC";
 
     try {
         const todosReg = await pool.query(strSQL);
@@ -105,7 +105,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta_detalle.comprobante_original_numero = mve_venta.comprobante_original_numero and ";
     strSQL = strSQL + "     mve_venta_detalle.elemento = mve_venta.elemento ) ";
     strSQL = strSQL + " WHERE mve_venta_detalle.comprobante_original_fecemi BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
-    strSQL = strSQL + " ORDER BY comprobante_original_fecemi, mve_venta_detalle.ctrl_insercion, mve_venta_detalle.ref_razon_social";
+    strSQL = strSQL + " ORDER BY comprobante_original_fecemi DESC, mve_venta_detalle.ctrl_insercion DESC, mve_venta_detalle.ref_razon_social";
 
     try {
         //console.log(strSQL);
@@ -150,7 +150,7 @@ const obtenerVenta = async (req,res,next)=> {
         strSQL = strSQL + " AND mve_venta.comprobante_original_serie = $2";
         strSQL = strSQL + " AND mve_venta.comprobante_original_numero = $3";
         strSQL = strSQL + " AND mve_venta.elemento = $4";
-        console.log(strSQL);
+        //console.log(strSQL);
 
         const result = await pool.query(strSQL,[cod,serie,num,elem]);
 
@@ -202,7 +202,10 @@ const crearVenta = async (req,res,next)=> {
     let datePieces = comprobante_original_fecemi.split("-");
     const fechaArmada = new Date(datePieces[0],datePieces[1],datePieces[2]); //ok con hora 00:00:00
     //console.log(datePieces);
-    sSerie = (fechaArmada.getMonth()+1).toString(); // ok, se aumenta +1, por pinche regla js
+    //console.log("getMonth(): ",fechaArmada.getMonth());
+
+    //sSerie = (fechaArmada.getMonth()+1).toString(); // ok, se aumenta +1, por pinche regla js
+    sSerie = (fechaArmada.getMonth()).toString(); // ok, pero para este caso no necesita
     sSerie = sSerie.padStart(2,'0');
     let sAno = (fechaArmada.getFullYear()).toString(); // new 
 
@@ -257,7 +260,7 @@ const crearVenta = async (req,res,next)=> {
     strSQL = strSQL + " ,$13";
     strSQL = strSQL + " ) RETURNING *";
     try {
-        console.log(strSQL);
+        //console.log(strSQL);
         const result = await pool.query(strSQL, 
         [   
             id_empresa,        //1

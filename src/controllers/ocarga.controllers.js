@@ -23,7 +23,7 @@ const obtenerTodasOCargas = async (req,res,next)=> {
     strSQL = strSQL + " mst_ocarga_detalle ";
     strSQL = strSQL + " WHERE fecha BETWEEN '" + strFechaIni + "' and '" + fecha_proceso + "'";
     strSQL = strSQL + " GROUP BY fecha,ref_cod,ref_serie,ref_numero,numero,ref_razon_social,registrado,estado,ano";
-    strSQL = strSQL + " ORDER BY fecha, numero";
+    strSQL = strSQL + " ORDER BY fecha DESC, numero DESC";
 
     try {
         const todosReg = await pool.query(strSQL);
@@ -101,7 +101,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mst_ocarga_detalle ";
     strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
-    strSQL = strSQL + " ORDER BY fecha, numero, item";
+    strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
 
     try {
         //console.log(strSQL);

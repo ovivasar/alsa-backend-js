@@ -16,7 +16,7 @@ const obtenerTodasVentasDet = async (req,res,next)=> {
     strSQL = strSQL + " ,elemento";
     strSQL = strSQL + " from";
     strSQL = strSQL + " mve_venta_det ";
-    strSQL = strSQL + " order by comprobante_original_fecemi, razon_social";
+    strSQL = strSQL + " order by comprobante_original_fecemi DESC, razon_social ASC";
 
     try {
         const todosReg = await pool.query(strSQL);
@@ -102,7 +102,7 @@ const obtenerVentaDet = async (req,res,next)=> {
         strSQL = strSQL + " AND comprobante_original_numero = $3";
         strSQL = strSQL + " AND elemento = $4";
         strSQL = strSQL + " ORDER BY item";
-        console.log(strSQL,[cod,serie,num,elem]);
+        //console.log(strSQL,[cod,serie,num,elem]);
         
         const result = await pool.query(strSQL,[cod,serie,num,elem]);
         
