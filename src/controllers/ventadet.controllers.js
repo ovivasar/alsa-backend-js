@@ -207,7 +207,8 @@ const crearVentaDet = async (req,res,next)=> {
         formapago,          //21
         cond_venta,          //22
         cond_entrega,          //23
-        fecha_entrega2          //24
+        fecha_entrega2,          //24
+        moneda          //25 new
         } = req.body
     //COD = Procesar zona_venta, para extraer siglas (LCH-LIMA) => LCH
     //SERIE = Procesar comprobante_original_fecemi, para extraer mes (28/10/2022) => 10
@@ -249,7 +250,9 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,cond_venta";
     strSQL = strSQL + " ,cond_entrega";
     strSQL = strSQL + " ,fecha_entrega";
-    strSQL = strSQL + " ,estado"; //new
+    strSQL = strSQL + " ,moneda"; //new
+
+    strSQL = strSQL + " ,estado";
 
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -283,31 +286,11 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$22";
     strSQL = strSQL + " ,$23";
     strSQL = strSQL + " ,$24";
+    strSQL = strSQL + " ,$25"; //new moneda (S/ ó USD)
     strSQL = strSQL + " ,'PENDIENTE'";//NEW
     strSQL = strSQL + " ) RETURNING *";
     try {
-        console.log(strSQL);
-        console.log(        [   
-            id_empresa,         //01
-            id_punto_venta,     //02
-            comprobante_original_codigo, //03
-            comprobante_original_serie,  //04
-            comprobante_original_numero, //05
-            ref_documento_id,   //06
-            ref_razon_social,   //07
-            id_zona_entrega,    //08
-            zona_entrega,       //09
-            id_producto,            //10
-            descripcion,        //11
-            comprobante_original_fecemi, //12
-            precio_unitario,    //13
-            porc_igv,           //14
-            cantidad,           //15
-            ref_observacion,  //16
-            registrado          //17
-        ]
-        );
-
+        //console.log(strSQL);
         const result = await pool.query(strSQL, 
         [   
             id_empresa,         //01
@@ -334,7 +317,8 @@ const crearVentaDet = async (req,res,next)=> {
             formapago,          //21
             cond_venta,         //22
             cond_entrega,       //23
-            fecha_entrega2      //24
+            fecha_entrega2,     //24
+            moneda              //25 new moneda
         ]
         );
         res.json(result.rows[0]);
