@@ -41,7 +41,7 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta.razon_social as ref_razon_social,"; //usamos: (ref_) porque en ocarga se maneja esos nombres
     strSQL = strSQL + "     fve_inventario_basico.id_producto,";
     strSQL = strSQL + "     mst_producto.nombre,";
-    strSQL = strSQL + "     mst_producto.id_unidad_medida as unidad_medida,"; //new
+    strSQL = strSQL + "     mve_venta_detalle.unidad_medida,"; //new
     strSQL = strSQL + "     fve_inventario_basico.id_zona_entrega,";
     strSQL = strSQL + "     mve_zonadet.nombre as zona_entrega,";
     strSQL = strSQL + "     cast(mve_venta_detalle.comprobante_original_fecemi as varchar) as fecha,";
