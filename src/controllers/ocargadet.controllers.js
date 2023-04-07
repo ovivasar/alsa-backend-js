@@ -550,6 +550,43 @@ const actualizarOCargaDet03 = async (req,res,next)=> {
     }
 };
 
+const actualizarOCargaTicket = async (req,res,next)=> {
+    try {
+        const {ano,numero} = req.params;
+        const {
+                ticket,         //1
+                peso_ticket    //2
+                } = req.body        
+ 
+        var strSQL;
+        strSQL = "UPDATE mst_ocarga_detalle SET ";
+        strSQL = strSQL + "  ticket = $1";
+        strSQL = strSQL + " ,peso_ticket = $2";
+
+        strSQL = strSQL + " WHERE ano = $3";
+        strSQL = strSQL + " AND numero = $4";
+
+        const result = await pool.query(strSQL,
+        [   
+            ticket,         //1
+            peso_ticket,    //2
+
+            ano,
+            numero
+        ]
+        );
+
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message:"Detalle Orden de Carga no encontrada"
+            });
+
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 module.exports = {
     obtenerTodasOCargasDet,
     obtenerOCargaDet,
@@ -558,5 +595,6 @@ module.exports = {
     eliminarOCargaDet,
     actualizarOCargaDet01,
     actualizarOCargaDet02,
-    actualizarOCargaDet03
+    actualizarOCargaDet03,
+    actualizarOCargaTicket
  }; 
