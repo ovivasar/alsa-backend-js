@@ -123,12 +123,13 @@ const obtenerOCarga = async (req,res,next)=> {
         strSQL = "SELECT ";
         strSQL = strSQL + " cast(fecha as varchar)::varchar(50) as fecha";
         strSQL = strSQL + " ,numero";
-        strSQL = strSQL + " ,ref_razon_social";
+        strSQL = strSQL + " ,ticket";
+        strSQL = strSQL + " ,peso_ticket";
         strSQL = strSQL + " ,estado";
         strSQL = strSQL + " FROM mst_ocarga_detalle";
         strSQL = strSQL + " WHERE ano = $1";
         strSQL = strSQL + " AND numero = $2";
-        strSQL = strSQL + " GROUP BY fecha,numero,ref_razon_social,estado";
+        strSQL = strSQL + " GROUP BY fecha,numero,ticket,peso_ticket,estado";
         const result = await pool.query(strSQL,[ano,numero]);
 
         if (result.rows.length === 0)
