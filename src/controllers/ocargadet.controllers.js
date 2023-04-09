@@ -555,21 +555,24 @@ const actualizarOCargaTicket = async (req,res,next)=> {
         const {ano,numero} = req.params;
         const {
                 ticket,         //1
-                peso_ticket    //2
+                peso_ticket,    //2
+                sacos_ticket    //3
                 } = req.body        
  
         var strSQL;
         strSQL = "UPDATE mst_ocarga_detalle SET ";
         strSQL = strSQL + "  ticket = $1";
         strSQL = strSQL + " ,peso_ticket = $2";
+        strSQL = strSQL + " ,sacos_ticket = $3";
 
-        strSQL = strSQL + " WHERE ano = $3";
-        strSQL = strSQL + " AND numero = $4";
+        strSQL = strSQL + " WHERE ano = $4";
+        strSQL = strSQL + " AND numero = $5";
 
         const result = await pool.query(strSQL,
         [   
             ticket,         //1
             peso_ticket,    //2
+            sacos_ticket,    //3
 
             ano,
             numero
