@@ -590,6 +590,40 @@ const actualizarOCargaTicket = async (req,res,next)=> {
     }
 };
 
+const obtenerTodasGuiasPendientes = async (req,res,next)=> {
+    let strSQL;
+    const {fecha} = req.params;
+
+    strSQL = "select ano, numero, guia01 as guia, sum(e_monto01) as e_monto, '01' as grupo from mst_ocarga_detalle";
+    strSQL = strSQL + " where e_rh is null";
+    strSQL = strSQL + " and fecha ='" + fecha + "'";
+    strSQL = strSQL + " group by ano, numero, guia01";
+
+    strSQL = strSQL + " union all";
+
+    strSQL = strSQL + " select ano, numero, guia02 as guia, sum(e_monto02) as e_monto, '02' as grupo from mst_ocarga_detalle";
+    strSQL = strSQL + " where e_rh is null";
+    strSQL = strSQL + " and fecha ='" + fecha + "'";
+    strSQL = strSQL + " group by ano, numero, guia02";
+
+    strSQL = strSQL + " union all";
+
+    strSQL = strSQL + " select ano, numero, guia03 as guia, sum(e_monto03) as e_monto, '03' as grupo from mst_ocarga_detalle";
+    strSQL = strSQL + " where e_rh is null";
+    strSQL = strSQL + " and fecha ='" + fecha + "'";
+    strSQL = strSQL + " group by ano, numero, guia03";
+
+    try {
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    }
+    catch(error){
+        console.log(error.message);
+    }
+    //res.send('Listado de todas los zonas');
+};
+
+
 module.exports = {
     obtenerTodasOCargasDet,
     obtenerOCargaDet,
@@ -599,5 +633,6 @@ module.exports = {
     actualizarOCargaDet01,
     actualizarOCargaDet02,
     actualizarOCargaDet03,
-    actualizarOCargaTicket
+    actualizarOCargaTicket,
+    obtenerTodasGuiasPendientes
  }; 

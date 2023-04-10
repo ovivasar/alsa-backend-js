@@ -1,10 +1,11 @@
 const {Router} = require('express');
 const pool = require('../db');
 const router = Router();
-const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet} = require('../controllers/ocargadet.controllers')
+const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,obtenerTodasGuiasPendientes} = require('../controllers/ocargadet.controllers')
 
 router.get('/ocargadet/:ano/:numero', obtenerTodasOCargasDet);
 router.get('/ocargadet/:ano/:numero/:item', obtenerOCargaDet); //caso: general + estibaje
+router.get('/ocargadetguiaspendientes/:fecha', obtenerTodasGuiasPendientes); //caso: mostrar guias pendientes pago
 router.post('/ocargadet', crearOCargaDet); //caso: general por default
 router.post('/ocargadetadd', agregarOCargaDet); //caso: AGREGADO NEW
 
