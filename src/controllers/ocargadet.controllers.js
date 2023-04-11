@@ -600,7 +600,7 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     strSQL = "select ano, numero, guia01 as guia, sum(e_monto01) as e_monto, '01' as grupo from mst_ocarga_detalle";
     strSQL = strSQL + " where e_rh is null";
     strSQL = strSQL + " and not guia01 is null";
-    strSQL = strSQL + " and fecha ='" + fecha + "'";
+    strSQL = strSQL + " and fecha between '" + fecha + "' and '" + fecha + "'";
     strSQL = strSQL + " group by ano, numero, guia01";
 
     strSQL = strSQL + " union all";
@@ -608,7 +608,7 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     strSQL = strSQL + " select ano, numero, guia02 as guia, sum(e_monto02) as e_monto, '02' as grupo from mst_ocarga_detalle";
     strSQL = strSQL + " where e_rh is null";
     strSQL = strSQL + " and not guia02 is null";
-    strSQL = strSQL + " and fecha ='" + fecha + "'";
+    strSQL = strSQL + " and fecha between '" + fecha + "' and '" + fecha + "'";
     strSQL = strSQL + " group by ano, numero, guia02";
 
     strSQL = strSQL + " union all";
@@ -616,13 +616,13 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     strSQL = strSQL + " select ano, numero, guia03 as guia, sum(e_monto03) as e_monto, '03' as grupo from mst_ocarga_detalle";
     strSQL = strSQL + " where e_rh is null";
     strSQL = strSQL + " and not guia03 is null";
-    strSQL = strSQL + " and fecha ='" + fecha + "'";
+    strSQL = strSQL + " and fecha between '" + fecha + "' and '" + fecha + "'";
     strSQL = strSQL + " group by ano, numero, guia03";
 
     console.log(strSQL);
 
     try {
-        const todosReg = await pool.query(strSQL);
+        const todosReg = await pool.query(strSQL,[fecha]);
         res.json(todosReg.rows);
     }
     catch(error){
