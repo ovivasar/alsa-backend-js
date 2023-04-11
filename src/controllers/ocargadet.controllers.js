@@ -593,6 +593,7 @@ const actualizarOCargaTicket = async (req,res,next)=> {
 const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     let strSQL;
     const {fecha} = req.params;
+    console.log(fecha);
 
     strSQL = "select ano, numero, guia01 as guia, sum(e_monto01) as e_monto, '01' as grupo from mst_ocarga_detalle";
     strSQL = strSQL + " where e_rh is null";
@@ -614,6 +615,7 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     strSQL = strSQL + " group by ano, numero, guia03";
 
     console.log(strSQL);
+
     try {
         const todosReg = await pool.query(strSQL);
         res.json(todosReg.rows);
