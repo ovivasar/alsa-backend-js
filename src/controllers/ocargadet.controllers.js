@@ -613,6 +613,7 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     strSQL = strSQL + " and fecha ='" + fecha + "'";
     strSQL = strSQL + " group by ano, numero, guia03";
 
+    console.log(strSQL);
     try {
         const todosReg = await pool.query(strSQL);
         res.json(todosReg.rows);
