@@ -592,6 +592,8 @@ const actualizarOCargaTicket = async (req,res,next)=> {
 
 const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     let strSQL;
+    console.log("asasdasd");
+
     const {fecha} = req.params;
     console.log(fecha);
 
