@@ -87,11 +87,17 @@ const crearOCargaDet = async (req,res,next)=> {
     sAno = (fechaArmada.getFullYear()).toString(); // ok, se aumenta +1, por pinche regla js
     //console.log(sAno);
 
-    let pedidoPieces = pedido.split("-");
-    const sRefCod=pedidoPieces[0];
-    const sRefSerie=pedidoPieces[1];
-    const sRefNumero=pedidoPieces[2];
-    const sRefItem=pedidoPieces[3];
+    var sRefCod="";
+    var sRefSerie="";
+    var sRefNumero="";
+    var sRefItem="";
+    if (pedido!=null){
+        let pedidoPieces = pedido.split("-");
+        sRefCod=pedidoPieces[0];
+        sRefSerie=pedidoPieces[1];
+        sRefNumero=pedidoPieces[2];
+        sRefItem=pedidoPieces[3];
+    }
 
     strSQL = "INSERT INTO mst_ocarga_detalle";
     strSQL = strSQL + " (";
