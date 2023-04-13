@@ -163,7 +163,12 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$9";
     strSQL = strSQL + " ,$10";
     strSQL = strSQL + " ,$11";
-    strSQL = strSQL + " ,$12";
+    if (id_zona_entrega=="") {
+        strSQL = strSQL + " ,null";
+    }else{
+        strSQL = strSQL + " ,$12";
+    }
+    
     strSQL = strSQL + " ,$13";
 
     strSQL = strSQL + " ,$14";
