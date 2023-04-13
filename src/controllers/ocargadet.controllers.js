@@ -140,8 +140,12 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,'" + sRefCod + "'";
     strSQL = strSQL + " ,'" + sRefSerie + "'";
     strSQL = strSQL + " ,'" + sRefNumero + "'";
+    if (typeof sRefItem === "number") {
     strSQL = strSQL + " ,'" + sRefItem + "'";
-    
+    }else{
+    strSQL = strSQL + " ,null";
+    }
+
     strSQL = strSQL + " ,$4";
     strSQL = strSQL + " ,$5";
     strSQL = strSQL + " ,$6";
