@@ -77,6 +77,7 @@ const crearOCargaDet = async (req,res,next)=> {
         pedido              //15
         } = req.body
 
+    const idZonaEntrega = id_zona_entrega === "" ? null : id_zona_entrega;
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
     //cuidado con edicion manual de la fecha, se registra al reves, pero en caso de click va normal
     //console.log(fecha2);
@@ -163,14 +164,8 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$9";
     strSQL = strSQL + " ,$10";
     strSQL = strSQL + " ,$11";
-    if (id_zona_entrega=="") {
-        strSQL = strSQL + " ,null::integer";
-    }else{
-        strSQL = strSQL + " ,$12::integer";
-    }
-    
+    strSQL = strSQL + " ,$12";
     strSQL = strSQL + " ,$13";
-
     strSQL = strSQL + " ,$14";
     strSQL = strSQL + " ,$15"; //new unidad_medida
     strSQL = strSQL + " ,current_timestamp";
@@ -196,7 +191,8 @@ const crearOCargaDet = async (req,res,next)=> {
             operacion,          //9
             tr_placa,           //10
             tr_placacargado,    //11
-            id_zona_entrega,    //12
+            //id_zona_entrega,    //12
+            idZonaEntrega,   //cambiooooo
             zona_entrega,       //13
         
             registrado,          //14
