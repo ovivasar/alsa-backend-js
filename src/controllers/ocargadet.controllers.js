@@ -91,7 +91,8 @@ const crearOCargaDet = async (req,res,next)=> {
     var sRefSerie="";
     var sRefNumero="";
     var sRefItem="";
-    if (pedido!=null){
+
+    if ("pedido" in req.body) {
         let pedidoPieces = pedido.split("-");
         sRefCod=pedidoPieces[0];
         sRefSerie=pedidoPieces[1];
