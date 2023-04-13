@@ -93,11 +93,13 @@ const crearOCargaDet = async (req,res,next)=> {
     var sRefItem="";
 
     if ("pedido" in req.body) {
-        let pedidoPieces = pedido.split("-");
-        sRefCod=pedidoPieces[0];
-        sRefSerie=pedidoPieces[1];
-        sRefNumero=pedidoPieces[2];
-        sRefItem=pedidoPieces[3];
+        if (pedido!=""){
+            let pedidoPieces = pedido.split("-");
+            sRefCod=pedidoPieces[0];
+            sRefSerie=pedidoPieces[1];
+            sRefNumero=pedidoPieces[2];
+            sRefItem=pedidoPieces[3];
+        }
     }
 
     strSQL = "INSERT INTO mst_ocarga_detalle";
