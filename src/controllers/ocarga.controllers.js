@@ -14,9 +14,9 @@ const obtenerTodasOCargas = async (req,res,next)=> {
     strSQL = strSQL + " ,(ref_cod || '-' || ref_serie || '-' || ref_numero)::varchar(50) as pedido";    
     strSQL = strSQL + " ,numero";
     strSQL = strSQL + " ,ref_razon_social";
-
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,estado"; //new
+    strSQL = strSQL + " ,'0'::char(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
@@ -96,11 +96,64 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,estado"; //new
+    strSQL = strSQL + " ,'0'::char(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mst_ocarga_detalle ";
     strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
+
+    try {
+        //console.log(strSQL);
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    }
+    catch(error){
+        console.log(error.message);
+    }
+
+    //res.send('Listado de todas los zonas');
+};
+const obtenerTodasOCargasPlanTransb = async (req,res,next)=> {
+    //Version analizado, similar formato excel manejado en administracion
+    let strSQL;
+    const {fecha_proceso} = req.params;
+    //calcular fecha inicio, segun fecha proceso
+    //strFechaIni = obtenerFechaInicial(fecha_proceso);
+    //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
+
+    //console.log(strFechaIni);
+    strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
+    strSQL = strSQL + " ,(ref_cod || '-' || ref_serie || '-' || ref_numero)::varchar(50) as pedido";    
+    strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
+    strSQL = strSQL + " ,numero";
+    strSQL = strSQL + " ,item";
+    strSQL = strSQL + " ,guia01";
+    strSQL = strSQL + " ,operacion";
+    strSQL = strSQL + " ,ticket";
+    strSQL = strSQL + " ,descripcion";
+    strSQL = strSQL + " ,ref_razon_social";
+    strSQL = strSQL + " ,lote_asignado";
+    strSQL = strSQL + " ,lote_procedencia";
+
+    strSQL = strSQL + " ,e_peso01";
+    strSQL = strSQL + " ,e_monto01";
+    strSQL = strSQL + " ,e_razon_social";
+    strSQL = strSQL + " ,e_rh";
+    strSQL = strSQL + " ,e_hora_ini";
+    strSQL = strSQL + " ,e_hora_fin";
+    strSQL = strSQL + " ,e_estibadores";
+    strSQL = strSQL + " ,e_observacion";
+    strSQL = strSQL + " ,registrado";
+    strSQL = strSQL + " ,estado"; //new
+    strSQL = strSQL + " ,'1'::char(1) tb"; //new
+    strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
+    
+    strSQL = strSQL + " FROM";
+    strSQL = strSQL + " mst_ocarga_detalle ";
+    strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_proceso + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " AND operacion like 'TRANSBORDO'";
     strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
 
     try {
@@ -253,6 +306,7 @@ const actualizarOCarga = async (req,res,next)=> {
 module.exports = {
     obtenerTodasOCargas,
     obtenerTodasOCargasPlan,
+    obtenerTodasOCargasPlanTransb,
     obtenerOCarga,
     crearOCarga,
     eliminarOCarga,
