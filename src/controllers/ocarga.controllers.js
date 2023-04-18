@@ -16,7 +16,7 @@ const obtenerTodasOCargas = async (req,res,next)=> {
     strSQL = strSQL + " ,ref_razon_social";
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,estado"; //new
-    strSQL = strSQL + " ,'0'::char(1) tb"; //new
+    strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
@@ -96,7 +96,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,estado"; //new
-    strSQL = strSQL + " ,'0'::char(1) tb"; //new
+    strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
@@ -147,7 +147,7 @@ const obtenerTodasOCargasPlanTransb = async (req,res,next)=> {
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,estado"; //new
-    strSQL = strSQL + " ,'1'::char(1) tb"; //new
+    strSQL = strSQL + " ,'1'::varchar(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
