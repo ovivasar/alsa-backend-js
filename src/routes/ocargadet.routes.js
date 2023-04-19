@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const pool = require('../db');
 const router = Router();
-const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,obtenerTodasGuiasPendientes} = require('../controllers/ocargadet.controllers')
+const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,actualizarOCargaTicketTraslado,obtenerTodasGuiasPendientes} = require('../controllers/ocargadet.controllers')
 
 router.get('/ocargadet/:ano/:numero', obtenerTodasOCargasDet);
 router.get('/ocargadet/:ano/:numero/:item', obtenerOCargaDet); //caso: general + estibaje
@@ -13,6 +13,7 @@ router.put('/ocargadet01/:ano/:numero/:item', actualizarOCargaDet01); //caso: da
 router.put('/ocargadet02/:ano/:numero/:item', actualizarOCargaDet02); //caso: datos generales
 router.put('/ocargadet03/:ano/:numero/:item', actualizarOCargaDet03); //caso: datos generales
 router.put('/ocargaticket/:ano/:numero', actualizarOCargaTicket); //caso: datos de ticket compartidos
+router.put('/ocargatickettraslado/:ano/:numero/:item', actualizarOCargaTicketTraslado); //caso: datos de ticket traslado
 router.delete('/ocargadet/:ano/:numero/:item', eliminarOCargaDet);
 
 module.exports = router;

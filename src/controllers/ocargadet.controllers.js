@@ -575,6 +575,7 @@ const actualizarOCargaDet03 = async (req,res,next)=> {
 };
 
 const actualizarOCargaTicket = async (req,res,next)=> {
+    //Actualizacion para todos los items
     try {
         const {ano,numero} = req.params;
         const {
@@ -614,12 +615,50 @@ const actualizarOCargaTicket = async (req,res,next)=> {
     }
 };
 
+const actualizarOCargaTicketTraslado = async (req,res,next)=> {
+    try {
+        const {ano,numero,item} = req.params;
+        const {
+                ticket_tras,         //1
+                peso_ticket_tras,    //2
+                sacos_ticket_tras    //3
+                } = req.body        
+ 
+        var strSQL;
+        strSQL = "UPDATE mst_ocarga_detalle SET ";
+        strSQL = strSQL + "  ticket_tras = $1";
+        strSQL = strSQL + " ,peso_ticket_tras = $2";
+        strSQL = strSQL + " ,sacos_ticket_tras = $3";
+
+        strSQL = strSQL + " WHERE ano = $4";
+        strSQL = strSQL + " AND numero = $5";
+        strSQL = strSQL + " AND item = $6";
+
+        const result = await pool.query(strSQL,
+        [   
+            ticket_tras,         //1
+            peso_ticket_tras,    //2
+            sacos_ticket_tras,    //3
+            ano,
+            numero,
+            item
+        ]
+        );
+
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message:"Detalle Orden de Carga no encontrada"
+            });
+
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     let strSQL;
-    console.log("asasdasd");
-
     const {fecha} = req.params;
-    console.log(fecha);
 
     strSQL = "select ano, numero, guia01 as guia, sum(e_monto01) as e_monto, '01' as grupo from mst_ocarga_detalle";
     strSQL = strSQL + " where e_rh is null";
@@ -665,5 +704,6 @@ module.exports = {
     actualizarOCargaDet02,
     actualizarOCargaDet03,
     actualizarOCargaTicket,
+    actualizarOCargaTicketTraslado,
     obtenerTodasGuiasPendientes
  }; 
