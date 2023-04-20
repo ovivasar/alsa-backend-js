@@ -305,7 +305,11 @@ const agregarOCargaDet = async (req,res,next)=> {
     if (typeof sRefItem === "number") {
         strSQL = strSQL + " ,'" + sRefItem + "'";
     }else{
-        strSQL = strSQL + " ,null";
+        if (sRefItem != null) {
+            strSQL = strSQL + " ,'" + sRefItem + "'";
+        }else {
+            strSQL = strSQL + " ,null";
+        }
     }
     
     strSQL = strSQL + " ,$5";
@@ -713,7 +717,11 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     if (typeof sRefItem === "number") {
         strSQL = strSQL + " ,'" + sRefItem + "'";
     }else{
-        strSQL = strSQL + " ,null";
+        if (sRefItem != null) {
+            strSQL = strSQL + " ,'" + sRefItem + "'";
+        }else {
+            strSQL = strSQL + " ,null";
+        }
     }
     
     strSQL = strSQL + " ,$5";
