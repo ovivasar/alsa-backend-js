@@ -320,9 +320,9 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$10";
     strSQL = strSQL + " ,$11";
     strSQL = strSQL + " ,$12";
-    strSQL = strSQL + " ,$13";
-    strSQL = strSQL + " ,$14";
-    strSQL = strSQL + " ,$15";
+    strSQL = strSQL + " ,$13"; //id_zona
+    strSQL = strSQL + " ,$14";  //entrega
+    strSQL = strSQL + " ,$15"; //registrado
     strSQL = strSQL + " ,$16"; //new unidad_medida
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'";
@@ -632,22 +632,15 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
         //ano: calculado de la fecha
         numero,         //4
         //item: calculado funcion postgres
-        ref_documento_id,   //5
-        ref_razon_social,   //6
-        id_producto,        //7
-        descripcion,        //8
-        cantidad,           //9
-        operacion,          //10 ocarga-fase01
-        tr_placa,           //11
-        tr_placacargado,    //12 ocarga-fase01
-        id_zona_entrega,    //13 ventas referencial, no visible
-        zona_entrega,       //14 ventas referencial, no visible
-        registrado,         //15
-        unidad_medida,      //16
-        pedido,             // no se inserta
-        ticket_tras,        //17
-        peso_ticket_tras,   //18
-        sacos_ticket_tras   //19
+        id_producto,        //5
+        descripcion,        //6
+        cantidad,           //7
+        operacion,          //8 descarguio
+        registrado,         //9
+        unidad_medida,      //10
+        ticket_tras,        //11
+        peso_ticket_tras,   //12
+        sacos_ticket_tras   //13
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -659,52 +652,29 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     sAno = (fechaArmada.getFullYear()).toString(); // ok, se aumenta +1, por pinche regla js
     //console.log(sAno); 
 
-    var sRefCod="";
-    var sRefSerie="";
-    var sRefNumero="";
-    var sRefItem="";
-    if ("pedido" in req.body) {
-        let pedidoPieces = pedido.split("-");
-        sRefCod=pedidoPieces[0];
-        sRefSerie=pedidoPieces[1];
-        sRefNumero=pedidoPieces[2];
-        sRefItem=pedidoPieces[3];
-    }
-
     strSQL = "INSERT INTO mst_ocarga_detalle";
     strSQL = strSQL + " (";
     strSQL = strSQL + "  id_empresa";       //1
     strSQL = strSQL + " ,id_punto_venta";   //2
     strSQL = strSQL + " ,fecha";            //3
-    strSQL = strSQL + " ,ano";          //calculado de fecha
+    strSQL = strSQL + " ,ano";              //calculado de fecha
     strSQL = strSQL + " ,numero";           //4 NEWWW
-    strSQL = strSQL + " ,item";         //calculado funcion postgres
+    strSQL = strSQL + " ,item";             //calculado funcion postgres
     ///////////////////////////////////////////////////
-    strSQL = strSQL + " ,ref_cod";      //ref pedido 4 col
-    strSQL = strSQL + " ,ref_serie";    //ref pedido 4 col
-    strSQL = strSQL + " ,ref_numero";   //ref pedido 4 col
-    strSQL = strSQL + " ,ref_item";     //ref pedido 4 col
-    ////////////////////////////////////////////////////
-    strSQL = strSQL + " ,ref_documento_id";     //5
-    strSQL = strSQL + " ,ref_razon_social";     //6
-    strSQL = strSQL + " ,id_producto";          //7
-    strSQL = strSQL + " ,descripcion";          //8
-    strSQL = strSQL + " ,cantidad";             //9
-    strSQL = strSQL + " ,operacion";            //10
-    strSQL = strSQL + " ,tr_placa";             //11
-    strSQL = strSQL + " ,tr_placacargado";      //12
-    strSQL = strSQL + " ,id_zona_entrega";      //13
-    strSQL = strSQL + " ,zona_entrega";         //14
-    strSQL = strSQL + " ,registrado";           //15
-    strSQL = strSQL + " ,unidad_medida";        //16
+    strSQL = strSQL + " ,id_producto";          //5
+    strSQL = strSQL + " ,descripcion";          //6
+    strSQL = strSQL + " ,cantidad";             //7
+    strSQL = strSQL + " ,operacion";            //8
+    strSQL = strSQL + " ,registrado";           //9
+    strSQL = strSQL + " ,unidad_medida";        //10
 
     strSQL = strSQL + " ,ctrl_insercion";       //
     strSQL = strSQL + " ,estado";               //
     strSQL = strSQL + " ,e_estibadores";        //
 
-    strSQL = strSQL + " ,ticket_tras";       //17
-    strSQL = strSQL + " ,peso_ticket_tras";  //18
-    strSQL = strSQL + " ,sacos_ticket_tras"; //19
+    strSQL = strSQL + " ,ticket_tras";       //11
+    strSQL = strSQL + " ,peso_ticket_tras";  //12
+    strSQL = strSQL + " ,sacos_ticket_tras"; //13
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -715,40 +685,19 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     
     strSQL = strSQL + " ,$4"; //numero
     strSQL = strSQL + " ,(select * from fst_genera_ocarga_item($1,'" + sAno + "','" + numero + "'))";
-    //cuidado 2 modos: 
-    //1ero: parametros fecha, item = 1 
-    //2do: parametros ano, numero, item = genera
-    strSQL = strSQL + " ,'" + sRefCod + "'";
-    strSQL = strSQL + " ,'" + sRefSerie + "'";
-    strSQL = strSQL + " ,'" + sRefNumero + "'";
-    if (typeof sRefItem === "number") {
-        strSQL = strSQL + " ,'" + sRefItem + "'";
-    }else{
-        if (sRefItem != null) {
-            strSQL = strSQL + " ,'" + sRefItem + "'";
-        }else {
-            strSQL = strSQL + " ,null";
-        }
-    }
     
     strSQL = strSQL + " ,$5";
     strSQL = strSQL + " ,$6";
     strSQL = strSQL + " ,$7";
     strSQL = strSQL + " ,$8";
     strSQL = strSQL + " ,$9";
-    strSQL = strSQL + " ,$10";
-    strSQL = strSQL + " ,$11";
-    strSQL = strSQL + " ,$12";
-    strSQL = strSQL + " ,$13";
-    strSQL = strSQL + " ,$14";
-    strSQL = strSQL + " ,$15";
-    strSQL = strSQL + " ,$16"; //unidad_medida
+    strSQL = strSQL + " ,$10"; //unidad_medida
     strSQL = strSQL + " ,current_timestamp";
-    strSQL = strSQL + " ,'PENDIENTE'";
+    strSQL = strSQL + " ,'ATENDIDO'";
     strSQL = strSQL + " ,'-'"; //estibadores, para evitar el null en filtro principal
-    strSQL = strSQL + " ,$17"; //new ticket_tras
-    strSQL = strSQL + " ,$18"; //new peso_ticket_tras
-    strSQL = strSQL + " ,$19"; //new sacos_ticket_tras
+    strSQL = strSQL + " ,$11"; //new ticket_tras
+    strSQL = strSQL + " ,$12"; //new peso_ticket_tras
+    strSQL = strSQL + " ,$13"; //new sacos_ticket_tras
     strSQL = strSQL + " ) RETURNING *";
     try {
         console.log(strSQL);
@@ -760,21 +709,15 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
             //ano: calculado de la fecha
             numero,          //4
             //item: calculado funcion postgres
-            ref_documento_id,   //5
-            ref_razon_social,   //6
-            id_producto,        //7
-            descripcion,        //8
-            cantidad,           //9
-            operacion,          //10
-            tr_placa,           //11
-            tr_placacargado,    //12
-            id_zona_entrega,    //13
-            zona_entrega,       //14
-            registrado,          //15
-            unidad_medida,          //16
-            ticket_tras,        //17 new
-            peso_ticket_tras,   //18 new
-            sacos_ticket_tras   //19 new
+            id_producto,        //5
+            descripcion,        //6
+            cantidad,           //7
+            operacion,          //8
+            registrado,          //9
+            unidad_medida,          //10
+            ticket_tras,        //11 new
+            peso_ticket_tras,   //12 new
+            sacos_ticket_tras   //13 new
             ]
         );
         res.json(result.rows[0]);
