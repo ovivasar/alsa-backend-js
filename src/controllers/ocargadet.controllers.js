@@ -643,8 +643,11 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
         id_zona_entrega,    //13 ventas referencial, no visible
         zona_entrega,       //14 ventas referencial, no visible
         registrado,         //15
-        unidad_medida,         //15
-        pedido              //16
+        unidad_medida,      //16
+        pedido,             // no se inserta
+        ticket_tras,        //17
+        peso_ticket_tras,   //18
+        sacos_ticket_tras   //19
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -693,11 +696,15 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     strSQL = strSQL + " ,id_zona_entrega";      //13
     strSQL = strSQL + " ,zona_entrega";         //14
     strSQL = strSQL + " ,registrado";           //15
-    strSQL = strSQL + " ,unidad_medida";           //16
+    strSQL = strSQL + " ,unidad_medida";        //16
 
-    strSQL = strSQL + " ,ctrl_insercion";       //16
-    strSQL = strSQL + " ,estado";       //17 new
-    strSQL = strSQL + " ,e_estibadores";       //18 neww
+    strSQL = strSQL + " ,ctrl_insercion";       //
+    strSQL = strSQL + " ,estado";               //
+    strSQL = strSQL + " ,e_estibadores";        //
+
+    strSQL = strSQL + " ,ticket_tras";       //17
+    strSQL = strSQL + " ,peso_ticket_tras";  //18
+    strSQL = strSQL + " ,sacos_ticket_tras"; //19
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -735,11 +742,13 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     strSQL = strSQL + " ,$13";
     strSQL = strSQL + " ,$14";
     strSQL = strSQL + " ,$15";
-    strSQL = strSQL + " ,$16"; //new unidad_medida
+    strSQL = strSQL + " ,$16"; //unidad_medida
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'";
-    strSQL = strSQL + " ,'-'"; //new estibadores, para evitar el null en filtro principal
-
+    strSQL = strSQL + " ,'-'"; //estibadores, para evitar el null en filtro principal
+    strSQL = strSQL + " ,$17"; //new ticket_tras
+    strSQL = strSQL + " ,$18"; //new peso_ticket_tras
+    strSQL = strSQL + " ,$19"; //new sacos_ticket_tras
     strSQL = strSQL + " ) RETURNING *";
     try {
         console.log(strSQL);
@@ -762,7 +771,10 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
             id_zona_entrega,    //13
             zona_entrega,       //14
             registrado,          //15
-            unidad_medida          //16
+            unidad_medida,          //16
+            ticket_tras,        //17 new
+            peso_ticket_tras,   //18 new
+            sacos_ticket_tras   //19 new
             ]
         );
         res.json(result.rows[0]);
