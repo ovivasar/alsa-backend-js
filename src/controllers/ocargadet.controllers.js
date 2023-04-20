@@ -619,8 +619,8 @@ const actualizarOCargaTicket = async (req,res,next)=> {
 const actualizarOCargaTicketTraslado = async (req,res,next)=> {
     let strSQL;
     var sAno;
-    const {ano,numero,item} = req.params;
-    const client = await pool.connect();
+    //const {ano,numero,item} = req.params;
+    //const client = await pool.connect();
 
     const {
         id_empresa,     //1
@@ -744,13 +744,13 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
     strSQL = strSQL + " ) RETURNING *";
     try {
         //console.log(strSQL);
-        const result = await client.query(strSQL, 
+        const result = await pool.query(strSQL, 
         [   
             id_empresa,      //1
             id_punto_venta,  //2
             fecha2,          //3
             //ano: calculado de la fecha
-            numero,          //4
+            numerob,          //4
             //item: calculado funcion postgres
             ref_documento_id,   //5
             ref_razon_social,   //6
