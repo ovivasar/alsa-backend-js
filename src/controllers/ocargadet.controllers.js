@@ -614,7 +614,7 @@ const actualizarOCargaTicket = async (req,res,next)=> {
     }
 };
 
-const actualizarOCargaTicketTraslado = async (req,res,next)=> {
+const agregarOCargaTicketTraslado = async (req,res,next)=> {
     let strSQL;
     var sAno;
     //const {ano,numero,item} = req.params;
@@ -774,8 +774,8 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
     }
 };
 
-    //Seccion Update
-    /*try {
+const actualizarOCargaTicketTraslado = async (req,res,next)=> {
+    try {
         const {ano,numero,item} = req.params;
         const {
                 ticket_tras,         //1
@@ -811,7 +811,9 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
         return res.sendStatus(204);
     } catch (error) {
         console.log(error.message);
-    }*/
+    }
+};
+
 
 const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     let strSQL;
@@ -861,6 +863,7 @@ module.exports = {
     actualizarOCargaDet02,
     actualizarOCargaDet03,
     actualizarOCargaTicket,
+    agregarOCargaTicketTraslado,
     actualizarOCargaTicketTraslado,
     obtenerTodasGuiasPendientes
  }; 
