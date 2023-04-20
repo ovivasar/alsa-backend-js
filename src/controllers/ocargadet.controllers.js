@@ -230,6 +230,7 @@ const agregarOCargaDet = async (req,res,next)=> {
         registrado,         //15
         unidad_medida,         //15
         pedido              //16
+
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -616,7 +617,193 @@ const actualizarOCargaTicket = async (req,res,next)=> {
 };
 
 const actualizarOCargaTicketTraslado = async (req,res,next)=> {
+    let strSQL;
+    var sAno;
+    const {ano,numero,item} = req.params;
+    const client = await pool.connect();
+
+    const {
+        id_empresa,     //1
+        id_punto_venta, //2
+        fecha2,         //3
+        //ano: calculado de la fecha
+        numerob,         //4  campo numero del body
+        //item: calculado funcion postgres
+        ref_documento_id,   //5
+        ref_razon_social,   //6
+        id_producto,        //7
+        descripcion,        //8
+        cantidad,           //9
+        operacion,          //10 ocarga-fase01
+        tr_placa,           //11
+        tr_placacargado,    //12 ocarga-fase01
+        id_zona_entrega,    //13 ventas referencial, no visible
+        zona_entrega,       //14 ventas referencial, no visible
+        registrado,         //15
+        unidad_medida,      //16
+        pedido,             //17
+        ticket_tras,         //18 new
+        peso_ticket_tras,    //19 new 
+        sacos_ticket_tras    //20 new
+        } = req.body
+
+    //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
+    //cuidado con edicion manual de la fecha, se registra al reves, pero en caso de click va normal
+    console.log(fecha2);
+    let datePieces = fecha2.split("-");
+    const fechaArmada = new Date(datePieces[0],(datePieces[1]-1),datePieces[2]); //ok con hora 00:00:00
+    //console.log(fechaArmada);
+    sAno = (fechaArmada.getFullYear()).toString(); // ok, se aumenta +1, por pinche regla js
+    //console.log(sAno); 
+
+    var sRefCod="";
+    var sRefSerie="";
+    var sRefNumero="";
+    var sRefItem="";
+    if ("pedido" in req.body) {
+        let pedidoPieces = pedido.split("-");
+        sRefCod=pedidoPieces[0];
+        sRefSerie=pedidoPieces[1];
+        sRefNumero=pedidoPieces[2];
+        sRefItem=pedidoPieces[3];
+    }
+
+    strSQL = "INSERT INTO mst_ocarga_detalle";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + "  id_empresa";       //1
+    strSQL = strSQL + " ,id_punto_venta";   //2
+    strSQL = strSQL + " ,fecha";            //3
+    strSQL = strSQL + " ,ano";          //calculado de fecha
+    strSQL = strSQL + " ,numero";           //4 NEWWW
+    strSQL = strSQL + " ,item";         //calculado funcion postgres
+    ///////////////////////////////////////////////////
+    strSQL = strSQL + " ,ref_cod";      //ref pedido 4 col
+    strSQL = strSQL + " ,ref_serie";    //ref pedido 4 col
+    strSQL = strSQL + " ,ref_numero";   //ref pedido 4 col
+    strSQL = strSQL + " ,ref_item";     //ref pedido 4 col
+    ////////////////////////////////////////////////////
+    strSQL = strSQL + " ,ref_documento_id";     //5
+    strSQL = strSQL + " ,ref_razon_social";     //6
+    strSQL = strSQL + " ,id_producto";          //7
+    strSQL = strSQL + " ,descripcion";          //8
+    strSQL = strSQL + " ,cantidad";             //9
+    strSQL = strSQL + " ,operacion";            //10
+    strSQL = strSQL + " ,tr_placa";             //11
+    strSQL = strSQL + " ,tr_placacargado";      //12
+    strSQL = strSQL + " ,id_zona_entrega";      //13
+    strSQL = strSQL + " ,zona_entrega";         //14
+    strSQL = strSQL + " ,registrado";           //15
+    strSQL = strSQL + " ,unidad_medida";        //16
+    strSQL = strSQL + " ,ctrl_insercion";       //
+    strSQL = strSQL + " ,estado";            // 
+    strSQL = strSQL + " ,e_estibadores";     //
+    strSQL = strSQL + " ,ticket_tras";       //17 newww
+    strSQL = strSQL + " ,peso_ticket_tras";  //18 newww
+    strSQL = strSQL + " ,sacos_ticket_tras"; //19 newww
+    strSQL = strSQL + " )";
+    strSQL = strSQL + " VALUES";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + "  $1";
+    strSQL = strSQL + " ,$2";
+    strSQL = strSQL + " ,$3";
+    strSQL = strSQL + " ,'" + sAno + "'";
+    
+    strSQL = strSQL + " ,$4"; //numero
+    strSQL = strSQL + " ,(select * from fst_genera_ocarga_item($1,'" + sAno + "','" + numero + "'))";
+    //cuidado 2 modos: 
+    //1ero: parametros fecha, item = 1 
+    //2do: parametros ano, numero, item = genera
+    strSQL = strSQL + " ,'" + sRefCod + "'";
+    strSQL = strSQL + " ,'" + sRefSerie + "'";
+    strSQL = strSQL + " ,'" + sRefNumero + "'";
+    if (typeof sRefItem === "number") {
+        strSQL = strSQL + " ,'" + sRefItem + "'";
+    }else{
+        strSQL = strSQL + " ,null";
+    }
+    
+    strSQL = strSQL + " ,$5";
+    strSQL = strSQL + " ,$6";
+    strSQL = strSQL + " ,$7";
+    strSQL = strSQL + " ,$8";
+    strSQL = strSQL + " ,$9";
+    strSQL = strSQL + " ,$10";
+    strSQL = strSQL + " ,$11";
+    strSQL = strSQL + " ,$12";
+    strSQL = strSQL + " ,$13";
+    strSQL = strSQL + " ,$14";
+    strSQL = strSQL + " ,$15";
+    strSQL = strSQL + " ,$16"; //unidad_medida
+    strSQL = strSQL + " ,current_timestamp";
+    strSQL = strSQL + " ,'PENDIENTE'";
+    strSQL = strSQL + " ,'-'"; //new estibadores, para evitar el null en filtro principal
+    
+    strSQL = strSQL + " ,$17"; //new ticket_tras
+    strSQL = strSQL + " ,$18"; //new peso_ticket_tras
+    strSQL = strSQL + " ,$19"; //new sacos_ticket_tras
+    strSQL = strSQL + " ) RETURNING *";
     try {
+        //console.log(strSQL);
+        const result = await client.query(strSQL, 
+        [   
+            id_empresa,      //1
+            id_punto_venta,  //2
+            fecha2,          //3
+            //ano: calculado de la fecha
+            numero,          //4
+            //item: calculado funcion postgres
+            ref_documento_id,   //5
+            ref_razon_social,   //6
+            id_producto,        //7
+            descripcion,        //8
+            cantidad,           //9
+            operacion,          //10
+            tr_placa,           //11
+            tr_placacargado,    //12
+            id_zona_entrega,    //13
+            zona_entrega,       //14
+            registrado,          //15
+            unidad_medida,       //16
+            ticket_tras,         //17 new
+            peso_ticket_tras,    //18 new 
+            sacos_ticket_tras    //19 new
+            ]
+        );
+        res.json(result.rows[0]);
+        
+        ///////////////////////////////////////////////////////////////////////////
+        /////////////////////seccion actualizar////////////////////////////////////
+        strSQL = "UPDATE mst_ocarga_detalle SET ";
+        strSQL = strSQL + "  ticket_tras = $1";
+        strSQL = strSQL + " ,peso_ticket_tras = $2";
+        strSQL = strSQL + " ,sacos_ticket_tras = $3";
+        strSQL = strSQL + " WHERE ano = $4";
+        strSQL = strSQL + " AND numero = $5";
+        strSQL = strSQL + " AND item = $6";
+
+        result = await client.query(strSQL,
+        [   
+            ticket_tras,         //1
+            peso_ticket_tras,    //2
+            sacos_ticket_tras,    //3
+            ano,
+            numero,
+            item
+        ]
+        );
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message:"Detalle Orden de Carga no encontrada"
+            });
+        return res.sendStatus(204);
+        ///////////////////////////////////////////////////////////////////////////
+    }catch(error){
+        //res.json({error:error.message});
+        next(error)
+    }
+
+    //Seccion Update
+    /*try {
         const {ano,numero,item} = req.params;
         const {
                 ticket_tras,         //1
@@ -624,7 +811,6 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
                 sacos_ticket_tras    //3
                 } = req.body        
  
-        var strSQL;
         strSQL = "UPDATE mst_ocarga_detalle SET ";
         strSQL = strSQL + "  ticket_tras = $1";
         strSQL = strSQL + " ,peso_ticket_tras = $2";
@@ -653,7 +839,7 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
         return res.sendStatus(204);
     } catch (error) {
         console.log(error.message);
-    }
+    }*/
 };
 
 const obtenerTodasGuiasPendientes = async (req,res,next)=> {
