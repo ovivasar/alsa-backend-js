@@ -773,7 +773,7 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
         
         ///////////////////////////////////////////////////////////////////////////
         /////////////////////seccion actualizar////////////////////////////////////
-        strSQL = "UPDATE mst_ocarga_detalle SET ";
+        /*strSQL = "UPDATE mst_ocarga_detalle SET ";
         strSQL = strSQL + "  ticket_tras = $1";
         strSQL = strSQL + " ,peso_ticket_tras = $2";
         strSQL = strSQL + " ,sacos_ticket_tras = $3";
@@ -795,7 +795,7 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
             return res.status(404).json({
                 message:"Detalle Orden de Carga no encontrada"
             });
-        return res.sendStatus(204);
+        return res.sendStatus(204);*/
         ///////////////////////////////////////////////////////////////////////////
     }catch(error){
         //res.json({error:error.message});

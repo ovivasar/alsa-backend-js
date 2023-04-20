@@ -13,7 +13,8 @@ router.put('/ocargadet01/:ano/:numero/:item', actualizarOCargaDet01); //caso: da
 router.put('/ocargadet02/:ano/:numero/:item', actualizarOCargaDet02); //caso: datos generales
 router.put('/ocargadet03/:ano/:numero/:item', actualizarOCargaDet03); //caso: datos generales
 router.put('/ocargaticket/:ano/:numero', actualizarOCargaTicket); //caso: datos de ticket compartidos
-router.post('/ocargatickettraslado/:ano/:numero/:item', actualizarOCargaTicketTraslado); //caso: datos de ticket traslado
+//router.post('/ocargatickettraslado/:ano/:numero/:item', actualizarOCargaTicketTraslado); //caso: datos de ticket traslado
+router.post('/ocargatickettraslado', actualizarOCargaTicketTraslado); //caso: datos de ticket traslado
 router.delete('/ocargadet/:ano/:numero/:item', eliminarOCargaDet);
 
 module.exports = router;
