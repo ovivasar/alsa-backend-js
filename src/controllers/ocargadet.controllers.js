@@ -216,7 +216,6 @@ const agregarOCargaDet = async (req,res,next)=> {
         //ano: calculado de la fecha
         numero,         //4
         //item: calculado funcion postgres
-       
         ref_documento_id,   //5
         ref_razon_social,   //6
         id_producto,        //7
@@ -230,7 +229,6 @@ const agregarOCargaDet = async (req,res,next)=> {
         registrado,         //15
         unidad_medida,         //15
         pedido              //16
-
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -620,7 +618,6 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
     let strSQL;
     var sAno;
     //const {ano,numero,item} = req.params;
-    //const client = await pool.connect();
 
     const {
         id_empresa,     //1
@@ -743,7 +740,7 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
     strSQL = strSQL + " ,$19"; //new sacos_ticket_tras
     strSQL = strSQL + " ) RETURNING *";
     try {
-        //console.log(strSQL);
+        console.log(strSQL);
         const result = await pool.query(strSQL, 
         [   
             id_empresa,      //1
@@ -770,37 +767,12 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
             ]
         );
         res.json(result.rows[0]);
-        
-        ///////////////////////////////////////////////////////////////////////////
-        /////////////////////seccion actualizar////////////////////////////////////
-        /*strSQL = "UPDATE mst_ocarga_detalle SET ";
-        strSQL = strSQL + "  ticket_tras = $1";
-        strSQL = strSQL + " ,peso_ticket_tras = $2";
-        strSQL = strSQL + " ,sacos_ticket_tras = $3";
-        strSQL = strSQL + " WHERE ano = $4";
-        strSQL = strSQL + " AND numero = $5";
-        strSQL = strSQL + " AND item = $6";
-
-        result = await client.query(strSQL,
-        [   
-            ticket_tras,         //1
-            peso_ticket_tras,    //2
-            sacos_ticket_tras,    //3
-            ano,
-            numero,
-            item
-        ]
-        );
-        if (result.rowCount === 0)
-            return res.status(404).json({
-                message:"Detalle Orden de Carga no encontrada"
-            });
-        return res.sendStatus(204);*/
         ///////////////////////////////////////////////////////////////////////////
     }catch(error){
         //res.json({error:error.message});
         next(error)
     }
+};
 
     //Seccion Update
     /*try {
@@ -840,7 +812,6 @@ const actualizarOCargaTicketTraslado = async (req,res,next)=> {
     } catch (error) {
         console.log(error.message);
     }*/
-};
 
 const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     let strSQL;
