@@ -77,18 +77,23 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,(ref_cod || '-' || ref_serie || '-' || ref_numero)::varchar(50) as pedido";    
     strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
     strSQL = strSQL + " ,numero";
+    strSQL = strSQL + " ,estado"; //new
+    strSQL = strSQL + " ,ref_razon_social";
     strSQL = strSQL + " ,item";
-    strSQL = strSQL + " ,guia01";
-    strSQL = strSQL + " ,operacion";
-    strSQL = strSQL + " ,ticket";
     strSQL = strSQL + " ,cantidad";     //new
     strSQL = strSQL + " ,unidad_medida";     //new
-    strSQL = strSQL + " ,sacos_real";   //new
     strSQL = strSQL + " ,descripcion";
-    strSQL = strSQL + " ,ref_razon_social";
+    strSQL = strSQL + " ,operacion";
+    strSQL = strSQL + " ,sacos_real";   //new
     strSQL = strSQL + " ,lote_asignado";
     strSQL = strSQL + " ,lote_procedencia";
-
+    strSQL = strSQL + " ,ticket";
+    strSQL = strSQL + " ,peso_ticket";
+    strSQL = strSQL + " ,sacos_ticket";
+    strSQL = strSQL + " ,ticket_tras";
+    strSQL = strSQL + " ,peso_ticket_tras";
+    strSQL = strSQL + " ,sacos_ticket_tras";
+    strSQL = strSQL + " ,guia01";
     strSQL = strSQL + " ,e_peso01";
     strSQL = strSQL + " ,e_monto01";
     strSQL = strSQL + " ,e_razon_social";
@@ -98,7 +103,6 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,e_estibadores";
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
-    strSQL = strSQL + " ,estado"; //new
     strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
