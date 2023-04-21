@@ -82,6 +82,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,operacion";
     strSQL = strSQL + " ,ticket";
     strSQL = strSQL + " ,cantidad";     //new
+    strSQL = strSQL + " ,unidad_medida";     //new
     strSQL = strSQL + " ,sacos_real";   //new
     strSQL = strSQL + " ,descripcion";
     strSQL = strSQL + " ,ref_razon_social";
@@ -135,6 +136,7 @@ const obtenerTodasOCargasPlanTransb = async (req,res,next)=> {
     strSQL = strSQL + " ,operacion";
     strSQL = strSQL + " ,ticket";
     strSQL = strSQL + " ,cantidad";     //new
+    strSQL = strSQL + " ,unidad_medida";     //new
     strSQL = strSQL + " ,sacos_real";   //new
     strSQL = strSQL + " ,descripcion";
     strSQL = strSQL + " ,ref_razon_social";
