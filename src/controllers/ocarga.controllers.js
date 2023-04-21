@@ -161,7 +161,7 @@ const obtenerTodasOCargasPlanTransb = async (req,res,next)=> {
     strSQL = strSQL + " ,e_estibadores";
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
-    strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
+    strSQL = strSQL + " ,'1'::varchar(1) tb"; //new
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
