@@ -640,7 +640,8 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
         unidad_medida,      //10
         ticket_tras,        //11
         peso_ticket_tras,   //12
-        sacos_ticket_tras   //13
+        sacos_ticket_tras,   //13
+        tr_placacargado   //14
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -675,6 +676,7 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     strSQL = strSQL + " ,ticket_tras";       //11
     strSQL = strSQL + " ,peso_ticket_tras";  //12
     strSQL = strSQL + " ,sacos_ticket_tras"; //13
+    strSQL = strSQL + " ,tr_placacargado"; //14
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -698,6 +700,7 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
     strSQL = strSQL + " ,$11"; //new ticket_tras
     strSQL = strSQL + " ,$12"; //new peso_ticket_tras
     strSQL = strSQL + " ,$13"; //new sacos_ticket_tras
+    strSQL = strSQL + " ,$14"; //new sacos_ticket_tras
     strSQL = strSQL + " ) RETURNING *";
     try {
         console.log(strSQL);
@@ -717,7 +720,8 @@ const agregarOCargaTicketTraslado = async (req,res,next)=> {
             unidad_medida,          //10
             ticket_tras,        //11 new
             peso_ticket_tras,   //12 new
-            sacos_ticket_tras   //13 new
+            sacos_ticket_tras,   //13 new
+            tr_placacargado   //14
             ]
         );
         res.json(result.rows[0]);
