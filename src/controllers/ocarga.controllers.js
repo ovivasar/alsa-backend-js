@@ -113,7 +113,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
 
     try {
-        //console.log(strSQL);
+        console.log(strSQL);
         const todosReg = await pool.query(strSQL);
         res.json(todosReg.rows);
     }
