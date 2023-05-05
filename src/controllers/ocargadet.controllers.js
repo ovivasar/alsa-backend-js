@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const obtenerTodasOCargasDet = async (req,res,next)=> {
     let strSQL;
-    const {ano,numero} = req.params;
+    const {ano,numero,tipo} = req.params;
     
     strSQL = "SELECT ";
     strSQL = strSQL + "  mst_ocarga_detalle.*";
@@ -12,10 +12,11 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE ano = $1";
     strSQL = strSQL + " AND numero = $2";
+    strSQL = strSQL + " AND tipo = $3"; //new warning
     strSQL = strSQL + " ORDER BY item";
 
     try {
-        const todosReg = await pool.query(strSQL,[ano,numero]);
+        const todosReg = await pool.query(strSQL,[ano,numero,tipo]);
         res.json(todosReg.rows);
     }
     catch(error){
@@ -72,9 +73,9 @@ const crearOCargaDet = async (req,res,next)=> {
         id_zona_entrega,    //12 ventas referencial, no visible
         zona_entrega,       //13 ventas referencial, no visible
         registrado,         //14
-        unidad_medida,       //15 ventas referencial
-
-        pedido              //15
+        unidad_medida,      //15 ventas referencial
+        tipo,               //16 'P' o 'E'
+        pedido              //
         } = req.body
 
     const idZonaEntrega = id_zona_entrega === "" ? null : id_zona_entrega;
@@ -130,9 +131,10 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,registrado";           //14
 
     strSQL = strSQL + " ,unidad_medida";       //15 neww
-    strSQL = strSQL + " ,ctrl_insercion";       //15
+    strSQL = strSQL + " ,ctrl_insercion";       //
     strSQL = strSQL + " ,estado";       //16 neww
     strSQL = strSQL + " ,e_estibadores";       //17 neww
+    strSQL = strSQL + " ,tipo";       //18 neww
     
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -175,6 +177,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'"; //NEW
     strSQL = strSQL + " ,'-'"; //NEW estibadores, para no dejar en null al filtro principal
+    strSQL = strSQL + " ,$16"; //new unidad_medida
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -200,7 +203,8 @@ const crearOCargaDet = async (req,res,next)=> {
             zona_entrega,       //13
         
             registrado,          //14
-            unidad_medida       //15
+            unidad_medida,       //15
+            tipo                //16 new
             ]
         );
         res.json(result.rows[0]);
@@ -231,8 +235,8 @@ const agregarOCargaDet = async (req,res,next)=> {
         id_zona_entrega,    //13 ventas referencial, no visible
         zona_entrega,       //14 ventas referencial, no visible
         registrado,         //15
-        unidad_medida,         //15
-        pedido              //16
+        unidad_medida,      //16
+        pedido              //17
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -286,6 +290,7 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,ctrl_insercion";       //16
     strSQL = strSQL + " ,estado";       //17 new
     strSQL = strSQL + " ,e_estibadores";       //18 neww
+    strSQL = strSQL + " ,tipo";       //19 neww
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -327,6 +332,7 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'";
     strSQL = strSQL + " ,'-'"; //new estibadores, para evitar el null en filtro principal
+    strSQL = strSQL + " ,$17"; //new tipo
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -350,7 +356,8 @@ const agregarOCargaDet = async (req,res,next)=> {
             id_zona_entrega,    //13
             zona_entrega,       //14
             registrado,          //15
-            unidad_medida          //16
+            unidad_medida,       //16
+            tipo                 //17
             ]
         );
         res.json(result.rows[0]);

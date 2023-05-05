@@ -67,7 +67,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
     let strFechaIni;
-    const {fecha_ini,fecha_proceso} = req.params;
+    const {fecha_ini,fecha_proceso,tipo} = req.params;
     //calcular fecha inicio, segun fecha proceso
     //strFechaIni = obtenerFechaInicial(fecha_proceso);
     //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
@@ -109,6 +109,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mst_ocarga_detalle ";
     strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " AND tipo = '" + tipo + "'";
     strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
 
     try {
