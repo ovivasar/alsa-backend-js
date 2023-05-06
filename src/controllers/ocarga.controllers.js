@@ -104,12 +104,20 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,e_observacion";
     strSQL = strSQL + " ,registrado";
     strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
+    strSQL = strSQL + " ,tipo"; //neww
     strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
     strSQL = strSQL + " mst_ocarga_detalle ";
     strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
-    strSQL = strSQL + " AND tipo = '" + tipo + "'";
+    if (tipo==="P"){
+        strSQL = strSQL + " AND tipo = 'P'";
+    }
+    else{//En caso sea ejecucion: Todos Programados sin ejecutar + Todos los ejecutados
+        strSQL = strSQL + " AND tipo = 'E'";
+        strSQL = strSQL + " OR (tipo = 'P' and ejecuta is null)";
+    }
+    
     strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
 
     try {
