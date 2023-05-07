@@ -367,6 +367,94 @@ const agregarOCargaDet = async (req,res,next)=> {
     }
 };
 
+const agregarOCargaDetEjec = async (req,res,next)=> {
+    let strSQL;
+    const {
+        ano,
+        numero,
+        item,
+        } = req.body
+
+    strSQL = "INSERT INTO mst_ocarga_detalle";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + "  id_empresa";       //1
+    strSQL = strSQL + " ,id_punto_venta";   //2
+    strSQL = strSQL + " ,fecha";            //3
+    strSQL = strSQL + " ,ano";              //4
+    strSQL = strSQL + " ,numero";           //5
+    strSQL = strSQL + " ,item";             //calculado funcion postgres
+    strSQL = strSQL + " ,ref_cod";      
+    strSQL = strSQL + " ,ref_serie";    
+    strSQL = strSQL + " ,ref_numero";   
+    strSQL = strSQL + " ,ref_item";     
+    strSQL = strSQL + " ,ref_documento_id";     //5
+    strSQL = strSQL + " ,ref_razon_social";     //6
+    strSQL = strSQL + " ,id_producto";          //7
+    strSQL = strSQL + " ,descripcion";          //8
+    strSQL = strSQL + " ,cantidad";             //9
+    strSQL = strSQL + " ,operacion";            //10
+    strSQL = strSQL + " ,tr_placa";             //11
+    strSQL = strSQL + " ,tr_placacargado";      //12
+    strSQL = strSQL + " ,id_zona_entrega";      //13
+    strSQL = strSQL + " ,zona_entrega";         //14
+    strSQL = strSQL + " ,registrado";           //15
+    strSQL = strSQL + " ,unidad_medida";         //16
+    strSQL = strSQL + " ,ctrl_insercion";       //16
+    strSQL = strSQL + " ,estado";               //17 new
+    strSQL = strSQL + " ,tipo";                  //19 neww
+    strSQL = strSQL + " ,e_estibadores";                  //19 neww
+    strSQL = strSQL + " )";
+    
+    strSQL = strSQL + " SELECT";
+    strSQL = strSQL + "  id_empresa";       //1
+    strSQL = strSQL + " ,id_punto_venta";   //2
+    strSQL = strSQL + " ,fecha";            //3
+    strSQL = strSQL + " ,ano";              //4
+    strSQL = strSQL + " ,numero";           //5
+    strSQL = strSQL + " ,(select * from fst_genera_ocarga_item(id_empresa,ano,numero))";
+    strSQL = strSQL + " ,item";             //calculado funcion postgres
+    strSQL = strSQL + " ,ref_cod";      
+    strSQL = strSQL + " ,ref_serie";    
+    strSQL = strSQL + " ,ref_numero";   
+    strSQL = strSQL + " ,ref_item";     
+    strSQL = strSQL + " ,ref_documento_id";     //5
+    strSQL = strSQL + " ,ref_razon_social";     //6
+    strSQL = strSQL + " ,id_producto";          //7
+    strSQL = strSQL + " ,descripcion";          //8
+    strSQL = strSQL + " ,cantidad";             //9
+    strSQL = strSQL + " ,operacion";            //10
+    strSQL = strSQL + " ,tr_placa";             //11
+    strSQL = strSQL + " ,tr_placacargado";      //12
+    strSQL = strSQL + " ,id_zona_entrega";      //13
+    strSQL = strSQL + " ,zona_entrega";         //14
+    strSQL = strSQL + " ,registrado";           //15
+    strSQL = strSQL + " ,unidad_medida";         //16
+    strSQL = strSQL + " ,ctrl_insercion";       //16
+    strSQL = strSQL + " ,estado";               //17 new
+    strSQL = strSQL + " ,'E'";                  //tipo = 'E' Ejecucion
+    strSQL = strSQL + " ,e_estibadores";        //19 neww
+
+    strSQL = strSQL + " FROM mst_ocarga_detalle";
+    strSQL = strSQL + " WHERE ano ='" + ano + "'";
+    strSQL = strSQL + " AND numero ='" + numero + "'";
+    strSQL = strSQL + " AND item ='" + item + "'";
+
+    strSQL = strSQL + "  RETURNING *";
+    try {
+        console.log(strSQL);
+        const result = await pool.query(strSQL, 
+        [   ano,
+            numero,          //4
+            item
+        ]
+        );
+        res.json(result.rows[0]);
+    }catch(error){
+        //res.json({error:error.message});
+        next(error)
+    }
+};
+
 const eliminarOCargaDet = async (req,res,next)=> {
     try {
         const {ano,numero,item} = req.params;
@@ -825,6 +913,7 @@ module.exports = {
     obtenerOCargaDet,
     crearOCargaDet,
     agregarOCargaDet,
+    agregarOCargaDetEjec,
     eliminarOCargaDet,
     actualizarOCargaDet01,
     actualizarOCargaDet02,
