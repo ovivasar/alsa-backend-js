@@ -411,8 +411,7 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " ,fecha";            //3
     strSQL = strSQL + " ,ano";              //4
     strSQL = strSQL + " ,numero";           //5
-    strSQL = strSQL + " ,(select * from fst_genera_ocarga_item(id_empresa,ano,numero))";
-    strSQL = strSQL + " ,item";             //calculado funcion postgres
+    strSQL = strSQL + " ,(select * from fst_genera_ocarga_item(id_empresa,ano,numero))"; //item
     strSQL = strSQL + " ,ref_cod";      
     strSQL = strSQL + " ,ref_serie";    
     strSQL = strSQL + " ,ref_numero";   
