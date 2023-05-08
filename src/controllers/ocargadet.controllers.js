@@ -130,11 +130,11 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,zona_entrega";         //13
     strSQL = strSQL + " ,registrado";           //14
 
-    strSQL = strSQL + " ,unidad_medida";       //15 neww
-    strSQL = strSQL + " ,ctrl_insercion";       //
-    strSQL = strSQL + " ,estado";       //16 neww
-    strSQL = strSQL + " ,e_estibadores";       //17 neww
-    strSQL = strSQL + " ,tipo";       //18 neww
+    strSQL = strSQL + " ,unidad_medida";        //15 neww
+    strSQL = strSQL + " ,ctrl_insercion";       // current
+    strSQL = strSQL + " ,estado";               // 'PENDIENTE'
+    strSQL = strSQL + " ,e_estibadores";        // '-'
+    strSQL = strSQL + " ,tipo";                 //16 neww
     
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -174,10 +174,10 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$13";
     strSQL = strSQL + " ,$14";
     strSQL = strSQL + " ,$15"; //new unidad_medida
-    strSQL = strSQL + " ,current_timestamp";
-    strSQL = strSQL + " ,'PENDIENTE'"; //NEW
-    strSQL = strSQL + " ,'-'"; //NEW estibadores, para no dejar en null al filtro principal
-    strSQL = strSQL + " ,$16"; //new unidad_medida
+    strSQL = strSQL + " ,current_timestamp"; //ctrl_insercion
+    strSQL = strSQL + " ,'PENDIENTE'";      //estado NEW
+    strSQL = strSQL + " ,'-'";              //NEW estibadores, para no dejar en null al filtro principal
+    strSQL = strSQL + " ,$16"; //new tipo
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -198,12 +198,10 @@ const crearOCargaDet = async (req,res,next)=> {
             operacion,          //9
             tr_placa,           //10
             tr_placacargado,    //11
-            //id_zona_entrega,    //12
-            idZonaEntrega,   //cambiooooo
+            idZonaEntrega,      //12 cambiooooo
             zona_entrega,       //13
-        
-            registrado,          //14
-            unidad_medida,       //15
+            registrado,         //14
+            unidad_medida,      //15
             tipo                //16 new
             ]
         );
@@ -236,7 +234,8 @@ const agregarOCargaDet = async (req,res,next)=> {
         zona_entrega,       //14 ventas referencial, no visible
         registrado,         //15
         unidad_medida,      //16
-        pedido              //17
+        tipo,               //17  NEW  P=Programacion  E=Ejecucion
+        pedido              //
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -357,7 +356,7 @@ const agregarOCargaDet = async (req,res,next)=> {
             zona_entrega,       //14
             registrado,          //15
             unidad_medida,       //16
-            tipo                 //17
+            tipo                 //17  NEWWW
             ]
         );
         res.json(result.rows[0]);
