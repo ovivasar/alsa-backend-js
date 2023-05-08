@@ -368,12 +368,9 @@ const agregarOCargaDet = async (req,res,next)=> {
 };
 
 const agregarOCargaDetEjec = async (req,res,next)=> {
+    let strSQL0;
     let strSQL;
-    const {
-        ano,
-        numero,
-        item,
-        } = req.body
+    const {ano,numero,item} = req.body
 
     strSQL = "INSERT INTO mst_ocarga_detalle";
     strSQL = strSQL + " (";
@@ -432,26 +429,32 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " ,estado";               //17 new
     strSQL = strSQL + " ,'E'";                  //tipo = 'E' Ejecucion
     strSQL = strSQL + " ,e_estibadores";        //19 neww
-
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE ano ='" + ano + "'";
     strSQL = strSQL + " AND numero ='" + numero + "'";
     strSQL = strSQL + " AND item ='" + item + "'";
-
     strSQL = strSQL + "  RETURNING *";
+
+    strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
+    strSQL0 = strSQL0 + " WHERE ano ='" + ano + "'";
+    strSQL0 = strSQL0 + " AND numero ='" + numero + "'";
+    strSQL0 = strSQL0 + " AND item ='" + item + "'";
+
     try {
+        //Actualizamos el programado, como ejecutado
+        await pool.query(strSQL0,[ano,numero,item]);
+        
+        //Insertamos el ejecutado
         console.log(strSQL);
-        const result = await pool.query(strSQL, 
-        [   ano,
-            numero,          //4
-            item
-        ]
-        );
+        const result = await pool.query(strSQL,[ano,numero,item]);
+        
         res.json(result.rows[0]);
     }catch(error){
         //res.json({error:error.message});
         next(error)
     }
+
+
 };
 
 const eliminarOCargaDet = async (req,res,next)=> {
