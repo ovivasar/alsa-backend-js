@@ -448,8 +448,8 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
         console.log(strSQL);
         const result = await pool.query(strSQL,[ano,numero,item]);
         
-        //res.json(result.rows[0]);
-        return res.sendStatus(204);
+        res.json(result.rows[0]);
+        //return res.sendStatus(204);
     }catch(error){
         //res.json({error:error.message});
         next(error)
