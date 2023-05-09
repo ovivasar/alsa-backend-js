@@ -431,7 +431,7 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE ano = $1";
     strSQL = strSQL + " AND numero = $2";
-    strSQL = strSQL + " AND item $3";
+    strSQL = strSQL + " AND item =,$3";
     //strSQL = strSQL + " RETURNING *";
 
     /*strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
