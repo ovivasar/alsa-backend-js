@@ -429,15 +429,15 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " ,'E'";                  //tipo = 'E' Ejecucion
     strSQL = strSQL + " ,e_estibadores";        //19 neww
     strSQL = strSQL + " FROM mst_ocarga_detalle";
-    strSQL = strSQL + " WHERE ano ='" + ano + "'";
-    strSQL = strSQL + " AND numero ='" + numero + "'";
-    strSQL = strSQL + " AND item ='" + item + "'";
+    strSQL = strSQL + " WHERE ano = $1";
+    strSQL = strSQL + " AND numero = $2";
+    strSQL = strSQL + " AND item $3";
     //strSQL = strSQL + " RETURNING *";
 
-    strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
+    /*strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
     strSQL0 = strSQL0 + " WHERE ano ='" + ano + "'";
     strSQL0 = strSQL0 + " AND numero ='" + numero + "'";
-    strSQL0 = strSQL0 + " AND item ='" + item + "'";
+    strSQL0 = strSQL0 + " AND item ='" + item + "'";*/
 
     try {
         //Actualizamos el programado, como ejecutado
