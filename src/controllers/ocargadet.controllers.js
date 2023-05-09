@@ -432,7 +432,7 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " WHERE ano ='" + ano + "'";
     strSQL = strSQL + " AND numero ='" + numero + "'";
     strSQL = strSQL + " AND item ='" + item + "'";
-    strSQL = strSQL + "  RETURNING *";
+    //strSQL = strSQL + " RETURNING *";
 
     strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
     strSQL0 = strSQL0 + " WHERE ano ='" + ano + "'";
@@ -448,7 +448,8 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
         console.log(strSQL);
         const result = await pool.query(strSQL,[ano,numero,item]);
         
-        res.json(result.rows[0]);
+        //res.json(result.rows[0]);
+        return res.sendStatus(204);
     }catch(error){
         //res.json({error:error.message});
         next(error)
