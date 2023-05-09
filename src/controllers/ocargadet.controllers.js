@@ -441,6 +441,7 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
 
     try {
         //Actualizamos el programado, como ejecutado
+        console.log(strSQL0);
         await pool.query(strSQL0,[ano,numero,item]);
         
         //Insertamos el ejecutado
