@@ -434,15 +434,15 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " AND item = $3";
     strSQL = strSQL + " RETURNING *";
 
-    /*strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
-    strSQL0 = strSQL0 + " WHERE ano ='" + ano + "'";
-    strSQL0 = strSQL0 + " AND numero ='" + numero + "'";
-    strSQL0 = strSQL0 + " AND item ='" + item + "'";*/
+    strSQL0 = "UPDATE mst_ocarga_detalle SET ejecuta = '1'";
+    strSQL0 = strSQL0 + " WHERE ano = $1";
+    strSQL0 = strSQL0 + " AND numero = $2";
+    strSQL0 = strSQL0 + " AND item = $3";
 
     try {
         //Actualizamos el programado, como ejecutado
-        //console.log(strSQL0);
-        //await pool.query(strSQL0,[ano,numero,item]);
+        console.log(strSQL0);
+        await pool.query(strSQL0,[ano,numero,item]);
         
         //Insertamos el ejecutado
         console.log(strSQL);
