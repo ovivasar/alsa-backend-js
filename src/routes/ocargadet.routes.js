@@ -3,7 +3,7 @@ const pool = require('../db');
 const router = Router();
 const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,agregarOCargaTicketTraslado,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,actualizarOCargaTicketTraslado,obtenerTodasGuiasPendientes, agregarOCargaDetEjec} = require('../controllers/ocargadet.controllers')
 
-router.get('/ocargadet/:ano/:numero/:tipo', obtenerTodasOCargasDet);
+router.get('/ocargadet/:ano/:numero', obtenerTodasOCargasDet);
 router.get('/ocargadet/:ano/:numero/:item', obtenerOCargaDet); //caso: general + estibaje
 router.get('/ocargadetguiaspendientes/:fecha', obtenerTodasGuiasPendientes); //caso: mostrar guias pendientes pago
 router.post('/ocargadet', crearOCargaDet); //caso: general por default
