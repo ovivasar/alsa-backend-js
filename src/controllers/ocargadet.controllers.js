@@ -39,6 +39,7 @@ const obtenerOCargaDet = async (req,res,next)=> {
         strSQL = strSQL + " WHERE ano = $1";
         strSQL = strSQL + " AND numero = $2";
         strSQL = strSQL + " AND item = $3";
+        console.log(strSQL);
         const result = await pool.query(strSQL,[ano,numero,item]);
 
         if (result.rows.length === 0)
