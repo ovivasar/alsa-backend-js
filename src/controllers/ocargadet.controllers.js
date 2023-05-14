@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const obtenerTodasOCargasDet = async (req,res,next)=> {
     let strSQL;
-    const {ano,numero,tipo} = req.params;
+    const {ano,numero} = req.params;
     
     strSQL = "SELECT ";
     strSQL = strSQL + "  mst_ocarga_detalle.*";
@@ -12,7 +12,6 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE ano = $1";
     strSQL = strSQL + " AND numero = $2";
-    strSQL = strSQL + " AND tipo = $3"; //new warning
     strSQL = strSQL + " ORDER BY item";
 
     try {
