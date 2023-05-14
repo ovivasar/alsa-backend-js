@@ -12,7 +12,7 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE ano = $1";
     strSQL = strSQL + " AND numero = $2";
-    strSQL = strSQL + " AND tipoo = $3";
+    strSQL = strSQL + " AND tipo = $3";
     strSQL = strSQL + " ORDER BY item";
 
     try {
