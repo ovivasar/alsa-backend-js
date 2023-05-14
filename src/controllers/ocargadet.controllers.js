@@ -15,7 +15,7 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
     strSQL = strSQL + " ORDER BY item";
 
     try {
-        const todosReg = await pool.query(strSQL,[ano,numero,tipo]);
+        const todosReg = await pool.query(strSQL,[ano,numero]);
         res.json(todosReg.rows);
     }
     catch(error){
