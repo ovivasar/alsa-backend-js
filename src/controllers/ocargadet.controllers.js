@@ -30,7 +30,7 @@ const obtenerOCargaDet = async (req,res,next)=> {
     try {
         const {ano,numero,item} = req.params;
         let strSQL ;
-        
+        console.log(ano,numero,item);
         strSQL = "SELECT ";
         strSQL = strSQL + "  mst_ocarga_detalle.*";
         strSQL = strSQL + " ,cast(mst_ocarga_detalle.fecha as varchar)::varchar(50) as fecha2";
