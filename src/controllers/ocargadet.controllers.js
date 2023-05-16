@@ -4,7 +4,7 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
     let strSQL;
     const {ano,numero,tipo} = req.params;
     
-    console.log(ano,numero,tipo);
+    //console.log(ano,numero,tipo);
     strSQL = "SELECT ";
     strSQL = strSQL + "  mst_ocarga_detalle.*";
     strSQL = strSQL + " ,cast(mst_ocarga_detalle.fecha as varchar)::varchar(50) as fecha2";
@@ -15,7 +15,7 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
     strSQL = strSQL + " AND numero = $2";
     strSQL = strSQL + " AND tipo = $3";
     strSQL = strSQL + " ORDER BY item";
-    console.log(strSQL);
+    //console.log(strSQL);
     try {
         const todosReg = await pool.query(strSQL,[ano,numero,tipo]);
         res.json(todosReg.rows);

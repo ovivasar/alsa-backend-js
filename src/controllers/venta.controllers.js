@@ -139,10 +139,14 @@ const obtenerVenta = async (req,res,next)=> {
         strSQL = strSQL + " ,cast(mve_venta.comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
         strSQL = strSQL + " ,mve_venta.documento_id";
         strSQL = strSQL + " ,mve_venta.razon_social";
-        strSQL = strSQL + " ,mad_correntistas.codigo"; //new
+        strSQL = strSQL + " ,mad_correntistas.codigo"; 
         strSQL = strSQL + " ,mve_venta.debe";
         strSQL = strSQL + " ,mve_venta.peso_total";
         strSQL = strSQL + " ,mve_venta.registrado";
+        strSQL = strSQL + " ,mve_venta.id_formapago";   //new
+        strSQL = strSQL + " ,mve_venta.formapago";      //new
+        strSQL = strSQL + " ,mve_venta.cond_venta";     //new
+        strSQL = strSQL + " ,mve_venta.cond_entrega";   //new
         strSQL = strSQL + " FROM mve_venta LEFT JOIN mad_correntistas";
         strSQL = strSQL + " ON (mve_venta.documento_id = mad_correntistas.documento_id) ";
         
@@ -171,19 +175,23 @@ const crearVenta = async (req,res,next)=> {
     var sCod;
     var sSerie;
     const {
-        id_empresa,        //1
-        id_punto_venta,        //1
-        tipo_op,        //1
-        id_zona_venta,  //2
-        zona_venta,     //3
-        id_vendedor,    //4
-        vendedor,       //5
-        comprobante_original_fecemi, //6
-        documento_id,   //7
-        razon_social,   //8
-        debe,           //9
-        peso_total,      //10
-        registrado      //11
+        id_empresa,     //1
+        id_punto_venta, //2
+        tipo_op,        //3
+        id_zona_venta,  //4
+        zona_venta,     //5
+        id_vendedor,    //6
+        vendedor,       //7
+        comprobante_original_fecemi, //8
+        documento_id,   //9
+        razon_social,   //10
+        debe,           //11
+        peso_total,     //12
+        registrado,     //13
+        id_formapago,   //14 new
+        formapago,      //15 new
+        cond_venta,     //16 new
+        cond_entrega    //17 new
         } = req.body
     //COD = Procesar zona_venta, para extraer siglas (LCH-LIMA) => LCH
     //SERIE = Procesar comprobante_original_fecemi, para extraer mes (28/10/2022) => 10
@@ -236,6 +244,10 @@ const crearVenta = async (req,res,next)=> {
     strSQL = strSQL + " ,debe";
     strSQL = strSQL + " ,peso_total";
     strSQL = strSQL + " ,registrado";
+    strSQL = strSQL + " ,id_formapago";     //new
+    strSQL = strSQL + " ,formapago";        //new
+    strSQL = strSQL + " ,cond_venta";       //new
+    strSQL = strSQL + " ,cond_entrega";     //new
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -258,24 +270,32 @@ const crearVenta = async (req,res,next)=> {
     strSQL = strSQL + " ,$11";
     strSQL = strSQL + " ,$12";
     strSQL = strSQL + " ,$13";
+    strSQL = strSQL + " ,$14";  //new
+    strSQL = strSQL + " ,$15";  //new
+    strSQL = strSQL + " ,$16";  //new
+    strSQL = strSQL + " ,$17";  //new
     strSQL = strSQL + " ) RETURNING *";
     try {
         //console.log(strSQL);
         const result = await pool.query(strSQL, 
         [   
-            id_empresa,        //1
-            id_punto_venta,        //1
-            tipo_op,        //1
-            id_zona_venta,  //2
-            zona_venta,     //3
-            id_vendedor,    //4
-            vendedor,       //5
-            comprobante_original_fecemi, //6
-            documento_id,   //7
-            razon_social,   //8
-            debe,           //9
-            peso_total,      //10
-            registrado      //11
+            id_empresa,     //1
+            id_punto_venta, //2
+            tipo_op,        //3
+            id_zona_venta,  //4
+            zona_venta,     //5
+            id_vendedor,    //6
+            vendedor,       //7
+            comprobante_original_fecemi, //8
+            documento_id,   //9
+            razon_social,   //10
+            debe,           //11
+            peso_total,     //12
+            registrado,     //13
+            id_formapago,   //14 new
+            formapago,      //15 new
+            cond_venta,     //16 new
+            cond_entrega    //17 new
         ]
         );
         res.json(result.rows[0]);
@@ -322,30 +342,50 @@ const eliminarVenta = async (req,res,next)=> {
 };
 const actualizarVenta = async (req,res,next)=> {
     try {
+        const { vendedor,       //01
+                id_vendedor,    //02
+                documento_id,   //03
+                razon_social,   //04
+                id_formapago,   //05
+                formapago,      //06
+                cond_venta,     //07
+                cond_entrega    //08
+            } = req.body
+
         const {cod,serie,num,elem} = req.params;
-        const {vendedor,id_vendedor,documento_id,razon_social} = req.body        
- 
+        
         var strSQL;
         strSQL = "UPDATE mve_venta SET ";
         strSQL = strSQL + "  id_vendedor = $1";
         strSQL = strSQL + " ,vendedor = $2";
         strSQL = strSQL + " ,documento_id = $3";
         strSQL = strSQL + " ,razon_social = $4";
-        strSQL = strSQL + " WHERE comprobante_original_codigo = $5";
-        strSQL = strSQL + " AND comprobante_original_serie = $6";
-        strSQL = strSQL + " AND comprobante_original_numero = $7";
-        strSQL = strSQL + " AND elemento = $8";
+        
+        strSQL = strSQL + " ,id_formapago = $5";    //new
+        strSQL = strSQL + " ,formapago = $6";       //new
+        strSQL = strSQL + " ,cond_venta = $7";      //new
+        strSQL = strSQL + " ,cond_entrega = $8";    //new
+
+        strSQL = strSQL + " WHERE comprobante_original_codigo = $9";
+        strSQL = strSQL + " AND comprobante_original_serie = $10";
+        strSQL = strSQL + " AND comprobante_original_numero = $11";
+        strSQL = strSQL + " AND elemento = $12";
  
         const result = await pool.query(strSQL,
         [   
-            id_vendedor,
-            vendedor,            
-            documento_id,
-            razon_social,
-            cod,
-            serie,
-            num,
-            elem
+            id_vendedor,    //01 body
+            vendedor,       //02 body
+            documento_id,   //03 body
+            razon_social,   //04 body
+            id_formapago,   //05 body
+            formapago,      //06 body
+            cond_venta,     //07 body
+            cond_entrega,   //08 body
+
+            cod,            //09 param
+            serie,          //10 param
+            num,            //11 param
+            elem            //12 param
         ]
         );
 
