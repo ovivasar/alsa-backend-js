@@ -187,7 +187,6 @@ const crearVentaDet = async (req,res,next)=> {
         comprobante_original_codigo, //03
         comprobante_original_serie,  //04
         comprobante_original_numero, //05
-
         ref_documento_id,   //06
         ref_razon_social,   //07
         id_zona_entrega,    //08
@@ -200,15 +199,11 @@ const crearVentaDet = async (req,res,next)=> {
         cantidad,           //15
         ref_observacion,  //16
         registrado,          //17
-
         ref_direccion,          //18
         unidad_medida,          //19
-        id_formapago,          //20
-        formapago,          //21
-        cond_venta,          //22
-        cond_entrega,          //23
-        fecha_entrega2,          //24
-        moneda          //25 new
+
+        fecha_entrega2,          //20  24
+        moneda          //21   25 new
         } = req.body
     //COD = Procesar zona_venta, para extraer siglas (LCH-LIMA) => LCH
     //SERIE = Procesar comprobante_original_fecemi, para extraer mes (28/10/2022) => 10
@@ -242,16 +237,11 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,cantidad";
     strSQL = strSQL + " ,ref_observacion";
     strSQL = strSQL + " ,registrado";
-
     strSQL = strSQL + " ,ref_direccion";
     strSQL = strSQL + " ,unidad_medida";
-    strSQL = strSQL + " ,id_formapago";
-    strSQL = strSQL + " ,formapago";
-    strSQL = strSQL + " ,cond_venta";
-    strSQL = strSQL + " ,cond_entrega";
+
     strSQL = strSQL + " ,fecha_entrega";
     strSQL = strSQL + " ,moneda"; //new
-
     strSQL = strSQL + " ,estado";
 
     strSQL = strSQL + " )";
@@ -278,15 +268,11 @@ const crearVentaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$15";
     strSQL = strSQL + " ,$16";
     strSQL = strSQL + " ,$17";
-
     strSQL = strSQL + " ,$18";
     strSQL = strSQL + " ,$19";
+
     strSQL = strSQL + " ,$20";
-    strSQL = strSQL + " ,$21";
-    strSQL = strSQL + " ,$22";
-    strSQL = strSQL + " ,$23";
-    strSQL = strSQL + " ,$24";
-    strSQL = strSQL + " ,$25"; //new moneda (S/ ó USD)
+    strSQL = strSQL + " ,$21"; //new moneda (S/ ó USD)
     strSQL = strSQL + " ,'PENDIENTE'";//NEW
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -310,15 +296,11 @@ const crearVentaDet = async (req,res,next)=> {
             cantidad,           //15
             ref_observacion,    //16
             registrado,          //17
-            
             ref_direccion,      //18
             unidad_medida,      //19
-            id_formapago,       //20
-            formapago,          //21
-            cond_venta,         //22
-            cond_entrega,       //23
-            fecha_entrega2,     //24
-            moneda              //25 new moneda
+            
+            fecha_entrega2,     //20      24
+            moneda              //21      25 new moneda
         ]
         );
         res.json(result.rows[0]);
@@ -360,23 +342,19 @@ const actualizarVentaDet = async (req,res,next)=> {
     try {
         const {cod,serie,num,elem,item} = req.params;
         const { 
-                ref_documento_id,
-                ref_razon_social,
-                id_zona_entrega,
-                zona_entrega,
-                id_producto,
-                descripcion,
-                precio_unitario,
-                porc_igv,
-                cantidad,
-                ref_observacion,
-                ref_direccion,
-                unidad_medida,
-                id_formapago,
-                formapago,
-                cond_venta,
-                cond_entrega,
-                fecha_entrega2
+                ref_documento_id,   //01
+                ref_razon_social,   //02
+                id_zona_entrega,    //03
+                zona_entrega,       //04
+                id_producto,        //05
+                descripcion,        //06
+                precio_unitario,    //07
+                porc_igv,           //08
+                cantidad,           //09
+                ref_observacion,    //10
+                ref_direccion,      //11
+                unidad_medida,      //12
+                fecha_entrega2      //13
             } = req.body        
  
         var strSQL;
@@ -391,47 +369,37 @@ const actualizarVentaDet = async (req,res,next)=> {
         strSQL = strSQL + " ,porc_igv = $8";
         strSQL = strSQL + " ,cantidad = $9";
         strSQL = strSQL + " ,ref_observacion = $10";
-        
         strSQL = strSQL + " ,ref_direccion = $11";
         strSQL = strSQL + " ,unidad_medida = $12";
-        strSQL = strSQL + " ,id_formapago = $13";
-        strSQL = strSQL + " ,formapago = $14";
-        strSQL = strSQL + " ,cond_venta = $15";
-        strSQL = strSQL + " ,cond_entrega = $16";
-        strSQL = strSQL + " ,fecha_entrega = $17";
+        strSQL = strSQL + " ,fecha_entrega = $13";
 
-        strSQL = strSQL + " WHERE comprobante_original_codigo = $18";
-        strSQL = strSQL + " AND comprobante_original_serie = $19";
-        strSQL = strSQL + " AND comprobante_original_numero = $20";
-        strSQL = strSQL + " AND elemento = $21";
-        strSQL = strSQL + " AND item = $22";
+        strSQL = strSQL + " WHERE comprobante_original_codigo = $14";
+        strSQL = strSQL + " AND comprobante_original_serie = $15";
+        strSQL = strSQL + " AND comprobante_original_numero = $16";
+        strSQL = strSQL + " AND elemento = $17";
+        strSQL = strSQL + " AND item = $18";
  
         const result = await pool.query(strSQL,
         [   
-            ref_documento_id,
-            ref_razon_social,
-            id_zona_entrega,
-            zona_entrega,
-            id_producto,
-            descripcion,
-            precio_unitario,
-            porc_igv,
-            cantidad,
-            ref_observacion,
+            ref_documento_id,   //01
+            ref_razon_social,   //02
+            id_zona_entrega,    //03
+            zona_entrega,       //04
+            id_producto,        //05
+            descripcion,        //06
+            precio_unitario,    //07
+            porc_igv,           //08
+            cantidad,           //09
+            ref_observacion,    //10
+            ref_direccion,      //11
+            unidad_medida,      //12
+            fecha_entrega2,     //13
 
-            ref_direccion, //new
-            unidad_medida, //new
-            id_formapago,  //new
-            formapago,     //new
-            cond_venta,    //new
-            cond_entrega,  //new
-            fecha_entrega2, //new
-
-            cod,
-            serie,
-            num,
-            elem,
-            item
+            cod,    //14 param
+            serie,  //15 param
+            num,    //16 param
+            elem,   //17 param
+            item    //18 param
         ]
         );
 
