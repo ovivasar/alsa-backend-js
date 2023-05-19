@@ -912,7 +912,7 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     //res.send('Listado de todas los zonas');
 };
 
-const obtenerOCargaDetPendientes = async (req,res,next)=> {
+const obtenerOCargaDetPendientesEjec = async (req,res,next)=> {
     let strSQL;
     const {ano,numero,documento_id,id_producto} = req.params;
     strSQL = "    select ";
@@ -948,7 +948,7 @@ const obtenerOCargaDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "         egresos numeric(14,3)";
     strSQL = strSQL + "     ) left join mve_venta";
     //ahora
-    
+
     strSQL = strSQL + "     on (fve_inventario_ejecucion.cod = mve_venta.comprobante_original_codigo and";
     strSQL = strSQL + "         fve_inventario_ejecucion.serie = mve_venta.comprobante_original_serie and";
     strSQL = strSQL + "         fve_inventario_ejecucion.numero = mve_venta.comprobante_original_numero and";         
@@ -991,5 +991,5 @@ module.exports = {
     agregarOCargaTicketTraslado,
     actualizarOCargaTicketTraslado,
     obtenerTodasGuiasPendientes,
-    obtenerOCargaDetPendientes
+    obtenerOCargaDetPendientesEjec
  }; 

@@ -6,6 +6,8 @@ const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,a
 router.get('/ocargadettipo/:ano/:numero/:tipo', obtenerTodasOCargasDet); //cambiamos nombre ruta, para evitar confusion tmr
 router.get('/ocargadet/:ano/:numero/:item', obtenerOCargaDet); //caso: general + estibaje
 router.get('/ocargadetguiaspendientes/:fecha', obtenerTodasGuiasPendientes); //caso: mostrar guias pendientes pago
+router.get('/ocargadetpendientesejec/:ano/:numero/:documento_id/:id_producto', obtenerOCargaDetPendientesEjec); //caso: mostrar oc pendientes ejecucion
+
 router.post('/ocargadet', crearOCargaDet); //caso: general por default
 router.post('/ocargadetadd', agregarOCargaDet); //caso: AGREGADO 
 router.post('/ocargadetaddejec', agregarOCargaDetEjec); //caso: AGREGADO NEW
