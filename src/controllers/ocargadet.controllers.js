@@ -914,7 +914,7 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
 
 const obtenerOCargaDetPendientesEjec = async (req,res,next)=> {
     let strSQL;
-    const {ano,numero,documento_id,id_producto} = req.params;
+    const {ano,numero} = req.params;
     strSQL = "    select ";
     strSQL = strSQL + "     (fve_inventario_ejecucion.cod ";
     strSQL = strSQL + "     || '-' || fve_inventario_ejecucion.serie";
@@ -937,7 +937,7 @@ const obtenerOCargaDetPendientesEjec = async (req,res,next)=> {
     strSQL = strSQL + "     (";
     strSQL = strSQL + "     (";
     //fecha formato = yyyy/mm/dd (porfavor) auunque para postgres, le llega ;)
-    strSQL = strSQL + "     fve_inventario_ejecucion(1,'" + ano + "','" + numero + "','" + documento_id + "','" + id_producto + "')";
+    strSQL = strSQL + "     fve_inventario_ejecucion(1,'" + ano + "','" + numero + "')";
     strSQL = strSQL + "     as ( cod varchar(5),";
     strSQL = strSQL + "         serie varchar(5),";
     strSQL = strSQL + "         numero varchar(10),";
