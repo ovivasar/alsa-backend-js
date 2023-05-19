@@ -912,6 +912,72 @@ const obtenerTodasGuiasPendientes = async (req,res,next)=> {
     //res.send('Listado de todas los zonas');
 };
 
+const obtenerOCargaDetPendientes = async (req,res,next)=> {
+    let strSQL;
+    const {ano,numero,documento_id,id_producto} = req.params;
+    strSQL = "    select ";
+    strSQL = strSQL + "     (fve_inventario_ejecucion.cod ";
+    strSQL = strSQL + "     || '-' || fve_inventario_ejecucion.serie";
+    strSQL = strSQL + "     || '-' || fve_inventario_ejecucion.numero";
+    strSQL = strSQL + "     || '-' || fve_inventario_ejecucion.item";
+    strSQL = strSQL + "     )::varchar(500) as pedido,";
+    strSQL = strSQL + "     mve_venta.documento_id as ref_documento_id,";
+    strSQL = strSQL + "     mve_venta.razon_social as ref_razon_social,"; //usamos: (ref_) porque en ocarga se maneja esos nombres
+    strSQL = strSQL + "     fve_inventario_ejecucion.id_producto,";
+    strSQL = strSQL + "     mst_producto.nombre,";
+    strSQL = strSQL + "     mve_venta_detalle.unidad_medida,"; //new
+    strSQL = strSQL + "     fve_inventario_ejecucion.id_zona_entrega,";
+
+    strSQL = strSQL + "     mve_zonadet.nombre as zona_entrega,";
+    strSQL = strSQL + "     cast(mve_venta_detalle.comprobante_original_fecemi as varchar) as fecha,";
+    strSQL = strSQL + "     (fve_inventario_ejecucion.ingresos-fve_inventario_ejecucion.egresos)::numeric(14,3) as saldo,";
+    strSQL = strSQL + "     cast(mve_venta_detalle.tr_fecha_carga as varchar) as carga,";
+    strSQL = strSQL + "     mve_venta_detalle.tr_placa";
+    strSQL = strSQL + "     from ";
+    strSQL = strSQL + "     (";
+    strSQL = strSQL + "     (";
+    strSQL = strSQL + "     (";
+    //fecha formato = yyyy/mm/dd (porfavor) auunque para postgres, le llega ;)
+    strSQL = strSQL + "     fve_inventario_ejecucion(1,'" + ano + "','" + numero + "','" + documento_id + "','" + id_producto + "')";
+    strSQL = strSQL + "     as ( cod varchar(5),";
+    strSQL = strSQL + "         serie varchar(5),";
+    strSQL = strSQL + "         numero varchar(10),";
+    strSQL = strSQL + "         item integer,";
+    strSQL = strSQL + "         id_producto varchar(20),";
+    strSQL = strSQL + "         id_zona_entrega integer,";
+    strSQL = strSQL + "         ingresos numeric(14,3),";
+    strSQL = strSQL + "         egresos numeric(14,3)";
+    strSQL = strSQL + "     ) left join mve_venta";
+
+    
+    strSQL = strSQL + "     on (fve_inventario_ejecucion.cod = mve_venta.comprobante_original_codigo and";
+    strSQL = strSQL + "         fve_inventario_ejecucion.serie = mve_venta.comprobante_original_serie and";
+    strSQL = strSQL + "         fve_inventario_ejecucion.numero = mve_venta.comprobante_original_numero and";         
+    strSQL = strSQL + "         1 = mve_venta.elemento)";
+    
+    strSQL = strSQL + "     ) left join mst_producto";
+    strSQL = strSQL + "     on (fve_inventario_ejecucion.id_producto = mst_producto.id_producto and";
+    strSQL = strSQL + "             mst_producto.id_empresa=1	)";
+    strSQL = strSQL + "     ) inner join mve_zonadet";
+    strSQL = strSQL + "     on (fve_inventario_ejecucion.id_zona_entrega = mve_zonadet.id_zonadet)";
+    strSQL = strSQL + "     ) left join mve_venta_detalle";
+    strSQL = strSQL + "     on (fve_inventario_ejecucion.cod = mve_venta_detalle.comprobante_original_codigo and";
+    strSQL = strSQL + "         fve_inventario_ejecucion.serie = mve_venta_detalle.comprobante_original_serie and";
+    strSQL = strSQL + "         fve_inventario_ejecucion.numero = mve_venta_detalle.comprobante_original_numero and";         
+    strSQL = strSQL + "         fve_inventario_ejecucion.item = mve_venta_detalle.item)";
+    strSQL = strSQL + "     where fve_inventario_ejecucion.ingresos-fve_inventario_ejecucion.egresos > 0";
+    console.log(strSQL);
+    try {
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    }
+    catch(error){
+        console.log(error.message);
+    }
+    //res.send('Listado de todas los zonas');
+};
+
+
 
 module.exports = {
     obtenerTodasOCargasDet,
@@ -927,4 +993,5 @@ module.exports = {
     agregarOCargaTicketTraslado,
     actualizarOCargaTicketTraslado,
     obtenerTodasGuiasPendientes,
+    obtenerOCargaDetPendientes
  }; 
