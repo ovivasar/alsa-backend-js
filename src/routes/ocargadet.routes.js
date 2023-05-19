@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const pool = require('../db');
 const router = Router();
-const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,agregarOCargaTicketTraslado,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,actualizarOCargaTicketTraslado,obtenerTodasGuiasPendientes, agregarOCargaDetEjec} = require('../controllers/ocargadet.controllers')
+const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,agregarOCargaTicketTraslado,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,actualizarOCargaTicketTraslado,obtenerTodasGuiasPendientes, agregarOCargaDetEjec, obtenerOCargaDetPendientesEjec} = require('../controllers/ocargadet.controllers')
 
 router.get('/ocargadettipo/:ano/:numero/:tipo', obtenerTodasOCargasDet); //cambiamos nombre ruta, para evitar confusion tmr
 router.get('/ocargadet/:ano/:numero/:item', obtenerOCargaDet); //caso: general + estibaje
