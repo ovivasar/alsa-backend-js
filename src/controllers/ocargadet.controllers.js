@@ -927,7 +927,6 @@ const obtenerOCargaDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     mst_producto.nombre,";
     strSQL = strSQL + "     mve_venta_detalle.unidad_medida,"; //new
     strSQL = strSQL + "     fve_inventario_ejecucion.id_zona_entrega,";
-
     strSQL = strSQL + "     mve_zonadet.nombre as zona_entrega,";
     strSQL = strSQL + "     cast(mve_venta_detalle.comprobante_original_fecemi as varchar) as fecha,";
     strSQL = strSQL + "     (fve_inventario_ejecucion.ingresos-fve_inventario_ejecucion.egresos)::numeric(14,3) as saldo,";
