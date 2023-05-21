@@ -154,7 +154,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,'" + sRefCod + "'";
     strSQL = strSQL + " ,'" + sRefSerie + "'";
     strSQL = strSQL + " ,'" + sRefNumero + "'";
-    
+    /*
     if (typeof sRefItem === "number") {
         console.log("1er IF");
         strSQL = strSQL + " ,'" + sRefItem + "'";
@@ -166,6 +166,13 @@ const crearOCargaDet = async (req,res,next)=> {
             console.log("3er IF");
             strSQL = strSQL + " ,null";
         }
+    }*/
+    if (sRefItem === "") {
+        console.log("1er IF");
+        strSQL = strSQL + " ,null";
+    }else {
+        console.log("2do IF");
+        strSQL = strSQL + " ,'" + sRefItem + "'";        
     }
 
     strSQL = strSQL + " ,$4";
