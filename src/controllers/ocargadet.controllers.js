@@ -154,24 +154,9 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,'" + sRefCod + "'";
     strSQL = strSQL + " ,'" + sRefSerie + "'";
     strSQL = strSQL + " ,'" + sRefNumero + "'";
-    /*
-    if (typeof sRefItem === "number") {
-        console.log("1er IF");
-        strSQL = strSQL + " ,'" + sRefItem + "'";
-    }else{
-        if (sRefItem != null) {
-            console.log("2do IF");
-            strSQL = strSQL + " ,'" + sRefItem + "'";
-        }else {
-            console.log("3er IF");
-            strSQL = strSQL + " ,null";
-        }
-    }*/
     if (sRefItem === "") {
-        console.log("1er IF");
         strSQL = strSQL + " ,null";
     }else {
-        console.log("2do IF");
         strSQL = strSQL + " ,'" + sRefItem + "'";        
     }
 
@@ -467,8 +452,118 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
         //res.json({error:error.message});
         next(error)
     }
+};
 
+const crearOCargaDetDescarguio = async (req,res,next)=> {
+    let strSQL;
+    var sAno;
+    const {
+        id_empresa,      //1
+        id_punto_venta,  //2
+        fecha2,          //3
+        //ano: calculado de la fecha
+        //numero,        //
+        //item: calculado funcion postgres
+        id_producto,        //4
+        descripcion,        //5
+        cantidad,           //6
+        operacion,          //7 ocarga-fase01
+        registrado,         //8
+        unidad_medida,      //9 ventas referencial
+        tipo,               //10 'P' o 'E'
+        sacos_real,         //11
+        peso_ticket,        //12
+        sacos_ticket        //13
+        } = req.body
 
+    //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
+    //cuidado con edicion manual de la fecha, se registra al reves, pero en caso de click va normal
+    //console.log(fecha2);
+    let datePieces = fecha2.split("-");
+    //console.log(datePieces);
+    const fechaArmada = new Date(datePieces[0],(datePieces[1]-1),datePieces[2]); //ok con hora 00:00:00
+    //console.log(fechaArmada);
+    sAno = (fechaArmada.getFullYear()).toString(); // ok, se aumenta +1, por pinche regla js
+    //console.log(sAno);
+
+    strSQL = "INSERT INTO mst_ocarga_detalle";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + "  id_empresa";       //1
+    strSQL = strSQL + " ,id_punto_venta";   //2
+    strSQL = strSQL + " ,fecha";            //3
+    strSQL = strSQL + " ,ano";      //calculado de fecha
+    strSQL = strSQL + " ,numero";   //funcion postgres
+    strSQL = strSQL + " ,item";     //funcion postgres
+    strSQL = strSQL + " ,id_producto";          //4
+    strSQL = strSQL + " ,descripcion";          //5
+    strSQL = strSQL + " ,cantidad";             //6
+    strSQL = strSQL + " ,operacion";            //7
+    strSQL = strSQL + " ,registrado";           //8
+    strSQL = strSQL + " ,unidad_medida";        //9 neww
+    strSQL = strSQL + " ,ctrl_insercion";       // current
+    strSQL = strSQL + " ,estado";               // 'PENDIENTE'
+    strSQL = strSQL + " ,e_estibadores";        // '-'
+    strSQL = strSQL + " ,tipo";                 //10 neww
+    strSQL = strSQL + " ,sacos_real";                 //11 neww
+    strSQL = strSQL + " ,peso_ticket";                 //12 neww
+    strSQL = strSQL + " ,sacos_ticket";                 //13 neww
+    strSQL = strSQL + " )";
+    strSQL = strSQL + " VALUES";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + "  $1";
+    strSQL = strSQL + " ,$2";
+    strSQL = strSQL + " ,$3";
+    strSQL = strSQL + " ,'" + sAno + "'";
+    
+    strSQL = strSQL + " ,(select * from fst_genera_ocarga($1,'" + sAno + "'))";
+    strSQL = strSQL + " ,1"; //item = 1 por default
+    //cuidado 2 modos: 
+    //1ero: parametros fecha, item = 1 
+    //2do: parametros ano, numero, item = genera
+
+    strSQL = strSQL + " ,$4";
+    strSQL = strSQL + " ,$5";
+    strSQL = strSQL + " ,$6";
+    strSQL = strSQL + " ,$7";
+    strSQL = strSQL + " ,$8";
+    strSQL = strSQL + " ,$9";
+    strSQL = strSQL + " ,current_timestamp"; //ctrl_insercion
+    strSQL = strSQL + " ,'PENDIENTE'";      //estado NEW
+    strSQL = strSQL + " ,'-'";              //NEW estibadores, para no dejar en null al filtro principal
+    strSQL = strSQL + " ,$10"; //new tipo
+
+    strSQL = strSQL + " ,$11"; //sacos_real
+    strSQL = strSQL + " ,$12"; //peso_ticket
+    strSQL = strSQL + " ,$13"; //sacos_ticket
+
+    strSQL = strSQL + " ) RETURNING *";
+    try {
+        console.log(strSQL);
+        const result = await pool.query(strSQL, 
+        [   
+            id_empresa,      //1
+            id_punto_venta,  //2
+            fecha2,          //3
+            //ano: calculado de la fecha
+            //numero,        //
+            //item: calculado funcion postgres
+            id_producto,        //4
+            descripcion,        //5
+            cantidad,           //6
+            operacion,          //7
+            registrado,         //8
+            unidad_medida,      //9
+            tipo,                //10
+            sacos_real,         //11
+            peso_ticket,        //12
+            sacos_ticket        //13
+            ]
+        );
+        res.json(result.rows[0]);
+    }catch(error){
+        //res.json({error:error.message});
+        next(error)
+    }
 };
 
 const eliminarOCargaDet = async (req,res,next)=> {
@@ -992,6 +1087,7 @@ module.exports = {
     obtenerTodasOCargasDet,
     obtenerOCargaDet,
     crearOCargaDet,
+    crearOCargaDetDescarguio,
     agregarOCargaDet,
     agregarOCargaDetEjec,
     eliminarOCargaDet,

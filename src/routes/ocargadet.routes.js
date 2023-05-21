@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const pool = require('../db');
 const router = Router();
-const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,agregarOCargaTicketTraslado,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,actualizarOCargaTicketTraslado,obtenerTodasGuiasPendientes, agregarOCargaDetEjec, obtenerOCargaDetPendientesEjec} = require('../controllers/ocargadet.controllers')
+const {obtenerTodasOCargasDet,obtenerOCargaDet,crearOCargaDet,agregarOCargaDet,agregarOCargaTicketTraslado,actualizarOCargaDet01,actualizarOCargaDet02,actualizarOCargaDet03,actualizarOCargaTicket,eliminarOCargaDet,actualizarOCargaTicketTraslado,obtenerTodasGuiasPendientes, agregarOCargaDetEjec, obtenerOCargaDetPendientesEjec, crearOCargaDetDescarguio} = require('../controllers/ocargadet.controllers')
 
 router.get('/ocargadettipo/:ano/:numero/:tipo', obtenerTodasOCargasDet); //cambiamos nombre ruta, para evitar confusion tmr
 router.get('/ocargadet/:ano/:numero/:item', obtenerOCargaDet); //caso: general + estibaje
@@ -9,8 +9,9 @@ router.get('/ocargadetguiaspendientes/:fecha', obtenerTodasGuiasPendientes); //c
 router.get('/ocargadetpendientesejec/:ano/:numero', obtenerOCargaDetPendientesEjec); //caso: mostrar oc pendientes ejecucion
 
 router.post('/ocargadet', crearOCargaDet); //caso: general por default
+router.post('/ocargadetdescarguio', crearOCargaDetDescarguio); //NEW solo para insertar Descarguio Libre
 router.post('/ocargadetadd', agregarOCargaDet); //caso: AGREGADO 
-router.post('/ocargadetaddejec', agregarOCargaDetEjec); //caso: AGREGADO NEW
+router.post('/ocargadetaddejec', agregarOCargaDetEjec); //caso: AGREGADO Modo Ejecucion
 router.post('/ocargatickettrasladoadd', agregarOCargaTicketTraslado); //caso: datos de ticket traslado
 
 router.put('/ocargadet01/:ano/:numero/:item', actualizarOCargaDet01); //caso: datos generales
