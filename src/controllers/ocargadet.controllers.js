@@ -473,7 +473,8 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
         tipo,               //10 'P' o 'E'
         sacos_real,         //11
         peso_ticket,        //12
-        sacos_ticket        //13
+        sacos_ticket,        //13
+        e_observacion       //14
         } = req.body
 
     //cuando llega con dd/mm/yyyy o dd-mm-yyyy hay que invertir el orden, sino sale invalido
@@ -507,6 +508,7 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
     strSQL = strSQL + " ,sacos_real";                 //11 neww
     strSQL = strSQL + " ,peso_ticket";                 //12 neww
     strSQL = strSQL + " ,sacos_ticket";                 //13 neww
+    strSQL = strSQL + " ,e_observacion";                 //13 neww
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -535,6 +537,7 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
     strSQL = strSQL + " ,$11"; //sacos_real
     strSQL = strSQL + " ,$12"; //peso_ticket
     strSQL = strSQL + " ,$13"; //sacos_ticket
+    strSQL = strSQL + " ,$14"; //observacion new
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -556,7 +559,8 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
             tipo,                //10
             sacos_real,         //11
             peso_ticket,        //12
-            sacos_ticket        //13
+            sacos_ticket,        //13
+            e_observacion       //14 new
             ]
         );
         res.json(result.rows[0]);
