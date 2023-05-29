@@ -509,6 +509,7 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
     strSQL = strSQL + " ,peso_ticket";                 //12 neww
     strSQL = strSQL + " ,sacos_ticket";                 //13 neww
     strSQL = strSQL + " ,e_observacion";                 //13 neww
+    
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
