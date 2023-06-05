@@ -3,7 +3,7 @@ const pool = require('../db');
 const obtenerTodasOCargasDet = async (req,res,next)=> {
     let strSQL;
     const {ano,numero,tipo} = req.params;
-    
+    //Esto selecciona todo los detalles de una Orden x Tipo
     //console.log(ano,numero,tipo);
     strSQL = "SELECT ";
     strSQL = strSQL + "  mst_ocarga_detalle.*";
@@ -29,6 +29,7 @@ const obtenerTodasOCargasDet = async (req,res,next)=> {
 
 const obtenerOCargaDet = async (req,res,next)=> {
     try {
+        //Seleccionamos UN detalle especifico con Item
         const {ano,numero,item} = req.params;
         let strSQL ;
         console.log(ano,numero,item);
