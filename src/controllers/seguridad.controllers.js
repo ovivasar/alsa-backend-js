@@ -83,7 +83,8 @@ const registrarUsuario = async (req,res,next)=> {
             console.log('Usuario nuevo registrado correctamente.');
         }else{
             console.log('El correo ya existe en la tabla.');
-            return;
+            res.json(todosReg.rows);
+            //return;
         }
     }catch(error){
         //res.json({error:error.message});
