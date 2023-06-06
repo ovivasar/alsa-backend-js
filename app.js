@@ -13,6 +13,7 @@ const correntistaRoutes = require('./src/routes/correntista.routes');
 const zonaRoutes = require('./src/routes/zona.routes');
 const zonadetRoutes = require('./src/routes/zonadet.routes');
 const formapagoRoutes = require('./src/routes/formapago.routes');
+const seguridadRoutes = require('./src/routes/seguridad.routes');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -32,6 +33,7 @@ app.use(correntistaRoutes);
 app.use(zonaRoutes);
 app.use(zonadetRoutes);
 app.use(formapagoRoutes);
+app.use(seguridadRoutes);
 
 app.use((err, req, res, next) => {
     return res.json({
