@@ -77,7 +77,7 @@ const registrarUsuario = async (req,res,next)=> {
         var todosReg = await pool.query(strSQL);
         if (todosReg.rows.length === 0) {
             //El correo no existe, insertar nuevo registro
-            const strInsercion = 'INSERT INTO mad_usuarios (id_usuario, nombre) VALUES ($1, $2) RETURNING *';
+            const strInsercion = 'INSERT INTO mad_usuario (id_usuario, nombre) VALUES ($1, $2) RETURNING *';
             todosReg = await pool.query(strInsercion, [id_usuario, nombre]);
             res.json(todosReg.rows[0]);
             console.log('Usuario nuevo registrado correctamente.');
