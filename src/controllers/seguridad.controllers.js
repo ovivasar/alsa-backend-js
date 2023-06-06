@@ -66,6 +66,30 @@ const registrarMenuComando = async (req,res,next)=> {
     }
 };
 
+const registrarUsuario = async (req,res,next)=> {
+    try {
+        //Esta vez usaremos solo parametros para un POST
+        const {id_usuario,nombre} = req.params;
+        let strSQL;
+
+        strSQL = "SELECT id_usuario FROM mad_usuario";
+        strSQL = strSQL + " WHERE id_usuario = '" + id_usuario + "'";
+        var todosReg = await pool.query(strSQL);
+        if (todosReg.rows.length === 0) {
+            //El correo no existe, insertar nuevo registro
+            const strInsercion = 'INSERT INTO mad_usuarios (id_usuario, nombre) VALUES ($1, $2) RETURNING *';
+            todosReg = await pool.query(strInsercion, [id_usuario, nombre]);
+            res.json(todosReg.rows[0]);
+            console.log('Usuario nuevo registrado correctamente.');
+        }else{
+            console.log('El correo ya existe en la tabla.');
+        }
+    }catch(error){
+        //res.json({error:error.message});
+        next(error)
+    }
+};
+
 const eliminarMenuComando = async (req,res,next)=> {
     try {
         const {id_usuario,id_comando} = req.params;
@@ -92,5 +116,6 @@ module.exports = {
     obtenerTodosMenuComandos,
     obtenerTodosMenu,
     registrarMenuComando,
+    registrarUsuario,
     eliminarMenuComando,
  }; 
