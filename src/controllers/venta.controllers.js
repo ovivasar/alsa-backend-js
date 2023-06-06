@@ -276,7 +276,7 @@ const crearVenta = async (req,res,next)=> {
     strSQL = strSQL + " ,$17";  //new
     strSQL = strSQL + " ) RETURNING *";
     try {
-        //console.log(strSQL);
+        console.log(strSQL);
         const result = await pool.query(strSQL, 
         [   
             id_empresa,     //1
