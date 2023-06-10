@@ -33,7 +33,7 @@ const obtenerTodosMenuComandos = async (req,res,next)=> {
         strSQL = strSQL + " WHERE id_menu like '" + id_menu + "%'";
         strSQL = strSQL + " AND id_usuario = '" + id_usuario + "'";
         strSQL = strSQL + " ORDER BY id_comando";
-    
+        console.log(strSQL);
         const todosReg = await pool.query(strSQL);
         res.json(todosReg.rows);
     }
