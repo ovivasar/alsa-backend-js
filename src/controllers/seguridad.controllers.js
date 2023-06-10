@@ -1,6 +1,6 @@
 const pool = require('../db');
 
-const obtenerTodosMenuComandos = async (req,res,next)=> {
+const obtenerTodosMenuComandosVista = async (req,res,next)=> {
     try {
         const {id_usuario,id_menu} = req.params;
         let strSQL;
@@ -24,6 +24,26 @@ const obtenerTodosMenuComandos = async (req,res,next)=> {
 
     //res.send('Listado de todas los zonas');
 };
+const obtenerTodosMenuComandos = async (req,res,next)=> {
+    try {
+        const {id_usuario,id_menu} = req.params;
+        let strSQL;
+        strSQL = "SELECT id_comando,";
+        strSQL = strSQL + " FROM mad_seguridad_comando";
+        strSQL = strSQL + " WHERE id_menu like '" + id_menu + "%'";
+        strSQL = strSQL + " AND id_usuario = '" + id_usuario + "'";
+        strSQL = strSQL + " ORDER BY id_comando";
+    
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    }
+    catch(error){
+        console.log(error.message);
+    }
+
+    //res.send('Listado de todas los zonas');
+};
+
 const obtenerTodosMenu = async (req,res,next)=> {
     try {
         const {id_usuario} = req.params;
@@ -115,6 +135,7 @@ const eliminarMenuComando = async (req,res,next)=> {
 };
 
 module.exports = {
+    obtenerTodosMenuComandosVista,
     obtenerTodosMenuComandos,
     obtenerTodosMenu,
     registrarMenuComando,
