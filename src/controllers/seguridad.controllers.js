@@ -28,7 +28,7 @@ const obtenerTodosMenuComandos = async (req,res,next)=> {
     try {
         const {id_usuario,id_menu} = req.params;
         let strSQL;
-        strSQL = "SELECT id_comando,";
+        strSQL = "SELECT id_comando";
         strSQL = strSQL + " FROM mad_seguridad_comando";
         strSQL = strSQL + " WHERE id_menu like '" + id_menu + "%'";
         strSQL = strSQL + " AND id_usuario = '" + id_usuario + "'";
