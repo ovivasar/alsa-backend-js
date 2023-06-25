@@ -78,7 +78,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
     strSQL = strSQL + " ,numero";
     strSQL = strSQL + " ,estado"; //new
-    strSQL = strSQL + " ,ref_razon_social";
+    strSQL = strSQL + " ,coalesce(ref_razon_social,'-')::varchar(200) as ref_razon_social";
     strSQL = strSQL + " ,item";
     strSQL = strSQL + " ,cantidad";     //new
     strSQL = strSQL + " ,unidad_medida";     //new
