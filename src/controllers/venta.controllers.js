@@ -400,11 +400,40 @@ const actualizarVenta = async (req,res,next)=> {
     }
 };
 
+const anularVenta = async (req,res,next)=> {
+    try {
+        const {cod,serie,num,elem} = req.params;
+        var strSQL;
+        var result;
+        var result2;
+
+        strSQL = "UPDATE mve_venta_detalle SET registrado = 0, estado = 'ANULADO'";
+        strSQL = strSQL + " WHERE comprobante_original_codigo = $1";
+        strSQL = strSQL + " AND comprobante_original_serie = $2";
+        strSQL = strSQL + " AND comprobante_original_numero = $3";
+        strSQL = strSQL + " AND elemento = $4";
+        result = await pool.query(strSQL,[cod,serie,num,elem]);
+
+        strSQL = "UPDATE mve_venta SET registrado = 0";
+        strSQL = strSQL + " WHERE comprobante_original_codigo = $1";
+        strSQL = strSQL + " AND comprobante_original_serie = $2";
+        strSQL = strSQL + " AND comprobante_original_numero = $3";
+        strSQL = strSQL + " AND elemento = $4";
+        result2 = await pool.query(strSQL,[cod,serie,num,elem]);
+
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+};
+
 module.exports = {
     obtenerTodasVentas,
     obtenerTodasVentasPlan,
     obtenerVenta,
     crearVenta,
     eliminarVenta,
-    actualizarVenta
+    actualizarVenta,
+    anularVenta
  }; 

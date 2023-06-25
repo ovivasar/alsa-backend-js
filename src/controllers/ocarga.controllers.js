@@ -74,7 +74,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
 
     //console.log(strFechaIni);
     strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
-    strSQL = strSQL + " ,(ref_cod || '-' || ref_serie || '-' || ref_numero)::varchar(50) as pedido";    
+    strSQL = strSQL + " ,coalesce((ref_cod || '-' || ref_serie || '-' || ref_numero),'-')::varchar(50) as pedido";    
     strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
     strSQL = strSQL + " ,numero";
     strSQL = strSQL + " ,estado"; //new

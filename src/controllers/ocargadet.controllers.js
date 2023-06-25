@@ -510,6 +510,7 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
     strSQL = strSQL + " ,peso_ticket";                 //12 neww
     strSQL = strSQL + " ,sacos_ticket";                 //13 neww
     strSQL = strSQL + " ,e_observacion";                 //13 neww
+    strSQL = strSQL + " ,ref_razon_social";                 //13 neww
     
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -540,6 +541,7 @@ const crearOCargaDetDescarguio = async (req,res,next)=> {
     strSQL = strSQL + " ,$12"; //peso_ticket
     strSQL = strSQL + " ,$13"; //sacos_ticket
     strSQL = strSQL + " ,$14"; //observacion new
+    strSQL = strSQL + " ,'-'"; //ref_razon_social NEW para evitar null
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -597,6 +599,33 @@ const eliminarOCargaDet = async (req,res,next)=> {
         console.log(error.message);
     }
 };
+
+const anularOCargaDet = async (req,res,next)=> {
+    try {
+        const {ano,numero,item} = req.params;
+        var strSQL;
+        strSQL = "UPDATE mst_ocarga_detalle SET registrado = 0, estado = 'ANULADO' ";
+        strSQL = strSQL + " WHERE ano = $1";
+        strSQL = strSQL + " AND numero = $2";
+        
+        if (item!=null){
+        strSQL = strSQL + " AND item = $3";
+        const result = await pool.query(strSQL,[ano,numero,item]);
+        }else{
+        const result = await pool.query(strSQL,[ano,numero]);
+        }
+
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message:"Detalle de Orden de Carga no encontrada"
+            });
+
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 const actualizarOCargaDet01 = async (req,res,next)=> {
     //Fase 01: Datos Operacion Carga/Descarga
     try {
@@ -1087,8 +1116,6 @@ const obtenerOCargaDetPendientesEjec = async (req,res,next)=> {
     //res.send('Listado de todas los zonas');
 };
 
-
-
 module.exports = {
     obtenerTodasOCargasDet,
     obtenerOCargaDet,
@@ -1097,6 +1124,7 @@ module.exports = {
     agregarOCargaDet,
     agregarOCargaDetEjec,
     eliminarOCargaDet,
+    anularOCargaDet, //nuevo
     actualizarOCargaDet01,
     actualizarOCargaDet02,
     actualizarOCargaDet03,
