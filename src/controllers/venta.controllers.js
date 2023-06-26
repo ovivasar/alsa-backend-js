@@ -83,6 +83,12 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mve_venta.vendedor";
     strSQL = strSQL + " ,mve_venta.razon_social"; //mostramos cliente
     strSQL = strSQL + " ,mve_venta_detalle.descripcion";
+    strSQL = strSQL + " ,mve_venta_detalle.ref_documento_id";   //new
+    strSQL = strSQL + " ,mve_venta_detalle.ref_razon_social";   //new
+    strSQL = strSQL + " ,mve_venta_detalle.precio_unitario";    //new
+    strSQL = strSQL + " ,mve_venta_detalle.moneda";             //new
+    strSQL = strSQL + " ,mve_venta_detalle.porc_igv";           //new
+    strSQL = strSQL + " ,mve_venta_detalle.cantidad";           //new
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_serie";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_numero";
