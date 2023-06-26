@@ -74,7 +74,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
 
     //console.log(strFechaIni);
-    strSQL = "SELECT mve_venta_detalle.zona_entrega";
+    strSQL = "SELECT mve_venta.zona_venta";
     strSQL = strSQL + " ,cast(mve_venta_detalle.comprobante_original_fecemi as varchar)::varchar(50) as comprobante_original_fecemi";
     strSQL = strSQL + " ,(mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + "   || '-' || mve_venta_detalle.comprobante_original_serie";
@@ -89,7 +89,8 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mve_venta_detalle.moneda";             //new
     strSQL = strSQL + " ,mve_venta_detalle.porc_igv";           //new
     strSQL = strSQL + " ,mve_venta_detalle.cantidad";           //new
-    strSQL = strSQL + " ,mve_venta_detalle.unidad_medida";           //new
+    strSQL = strSQL + " ,mve_venta_detalle.unidad_medida";      //new
+    strSQL = strSQL + " ,mve_venta_detalle.zona_entrega";       //new
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_serie";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_numero";
