@@ -89,6 +89,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mve_venta_detalle.moneda";             //new
     strSQL = strSQL + " ,mve_venta_detalle.porc_igv";           //new
     strSQL = strSQL + " ,mve_venta_detalle.cantidad";           //new
+    strSQL = strSQL + " ,mve_venta_detalle.unidad_medida";           //new
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_codigo";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_serie";
     strSQL = strSQL + " ,mve_venta_detalle.comprobante_original_numero";
