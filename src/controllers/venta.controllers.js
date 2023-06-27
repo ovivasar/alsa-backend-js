@@ -115,7 +115,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta_detalle.comprobante_original_numero = mve_venta.comprobante_original_numero and ";
     strSQL = strSQL + "     mve_venta_detalle.elemento = mve_venta.elemento ) ";
     strSQL = strSQL + " ) LEFT JOIN mad_correntistas";
-    strSQL = strSQL + " ON (mve_venta_detalle.documento_id = mad_correntistas.documento_id )";
+    strSQL = strSQL + " ON (mve_venta_detalle.ref_documento_id = mad_correntistas.documento_id )";
 
     strSQL = strSQL + " WHERE mve_venta_detalle.comprobante_original_fecemi BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     strSQL = strSQL + " ORDER BY comprobante_original_fecemi DESC, mve_venta_detalle.ctrl_insercion DESC, mve_venta_detalle.ref_razon_social";
