@@ -83,6 +83,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mve_venta.vendedor";
     strSQL = strSQL + " ,mve_venta.razon_social"; //mostramos cliente
     strSQL = strSQL + " ,mve_venta_detalle.descripcion";
+    strSQL = strSQL + " ,mad_correntistas.codigo";      //new pinche codigo_cliente por les gustara
     strSQL = strSQL + " ,mve_venta_detalle.ref_documento_id";   //new
     strSQL = strSQL + " ,mve_venta_detalle.ref_razon_social";   //new
     strSQL = strSQL + " ,mve_venta_detalle.precio_unitario";    //new
@@ -105,6 +106,7 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,cast(mve_venta_detalle.tr_fecha_carga as varchar)::varchar(20) as tr_fecha_carga";
     strSQL = strSQL + " ,mve_venta_detalle.estado";
     strSQL = strSQL + " FROM";
+    strSQL = strSQL + " (";
     strSQL = strSQL + " mve_venta_detalle INNER JOIN mve_venta";
     strSQL = strSQL + " ON (mve_venta_detalle.id_empresa = mve_venta.id_empresa and ";
     strSQL = strSQL + "     mve_venta_detalle.ano = mve_venta.ano and ";
@@ -112,6 +114,9 @@ const obtenerTodasVentasPlan = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta_detalle.comprobante_original_serie = mve_venta.comprobante_original_serie and ";
     strSQL = strSQL + "     mve_venta_detalle.comprobante_original_numero = mve_venta.comprobante_original_numero and ";
     strSQL = strSQL + "     mve_venta_detalle.elemento = mve_venta.elemento ) ";
+    strSQL = strSQL + " ) LEFT JOIN mad_correntistas";
+    strSQL = strSQL + " ON (mve_venta_detalle.documento_id = mad_correntistas.documento_id )";
+
     strSQL = strSQL + " WHERE mve_venta_detalle.comprobante_original_fecemi BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     strSQL = strSQL + " ORDER BY comprobante_original_fecemi DESC, mve_venta_detalle.ctrl_insercion DESC, mve_venta_detalle.ref_razon_social";
 
