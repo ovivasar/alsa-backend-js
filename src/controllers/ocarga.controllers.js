@@ -119,7 +119,7 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + "     mst_ocarga_detalle.ref_cod = mve_venta_detalle.comprobante_original_codigo and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_serie = mve_venta_detalle.comprobante_original_serie and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_numero = mve_venta_detalle.comprobante_original_numero and";
-    strSQL = strSQL + "     1 = mve_venta_detalle.comprobante_original_elemento and";
+    strSQL = strSQL + "     1 = mve_venta_detalle.elemento and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_item = mve_venta_detalle.item)";
 
     strSQL = strSQL + " WHERE mst_ocarga_detalle.fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
