@@ -77,19 +77,22 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,coalesce((mst_ocarga_detalle.ref_cod || '-' || mst_ocarga_detalle.ref_serie || '-' || mst_ocarga_detalle.ref_numero),'-')::varchar(50) as pedido";    
     strSQL = strSQL + " ,mst_ocarga_detalle.zona_entrega"; //usar coalesce(prioridad,secundario)
     strSQL = strSQL + " ,mst_ocarga_detalle.numero";
-    strSQL = strSQL + " ,mst_ocarga_detalle.estado"; //new
+    strSQL = strSQL + " ,mst_ocarga_detalle.estado"; 
     strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.ref_documento_id,'-')::varchar(20) as ref_documento_id"; //info cliente
     strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.ref_razon_social,'-')::varchar(200) as ref_razon_social"; //info cliente
     
     strSQL = strSQL + " ,coalesce(mve_venta_detalle.ref_documento_id,'-')::varchar(20) as fact_documento_id"; //fact
     strSQL = strSQL + " ,coalesce(mve_venta_detalle.ref_razon_social,'-')::varchar(200) as fact_razon_social"; //fact
+    strSQL = strSQL + " ,mad_correntistas.codigo";
+    strSQL = strSQL + " ,mve_venta.zona_venta";
+    strSQL = strSQL + " ,mve_venta.vendedor";
 
     strSQL = strSQL + " ,mst_ocarga_detalle.item";
-    strSQL = strSQL + " ,mst_ocarga_detalle.cantidad";      //new
-    strSQL = strSQL + " ,mst_ocarga_detalle.unidad_medida"; //new
+    strSQL = strSQL + " ,mst_ocarga_detalle.cantidad";      
+    strSQL = strSQL + " ,mst_ocarga_detalle.unidad_medida"; 
     strSQL = strSQL + " ,mst_ocarga_detalle.descripcion";
     strSQL = strSQL + " ,mst_ocarga_detalle.operacion";
-    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_real";    //new
+    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_real";    
     strSQL = strSQL + " ,mst_ocarga_detalle.lote_asignado";
     strSQL = strSQL + " ,mst_ocarga_detalle.lote_procedencia";
     strSQL = strSQL + " ,mst_ocarga_detalle.ticket";
@@ -108,19 +111,28 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mst_ocarga_detalle.e_estibadores";
     strSQL = strSQL + " ,mst_ocarga_detalle.e_observacion";
     strSQL = strSQL + " ,mst_ocarga_detalle.registrado";
-    strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
+    strSQL = strSQL + " ,'0'::varchar(1) tb"; 
     strSQL = strSQL + " ,mst_ocarga_detalle.tipo"; //neww
     strSQL = strSQL + " ,cast(date_part('year',mst_ocarga_detalle.fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
-    strSQL = strSQL + " mst_ocarga_detalle";
-    strSQL = strSQL + " LEFT JOIN mve_venta_detalle";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + " (";
+    strSQL = strSQL + " mst_ocarga_detalle LEFT JOIN mve_venta_detalle";
     strSQL = strSQL + " ON (mst_ocarga_detalle.id_empresa = mve_venta_detalle.id_empresa and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_cod = mve_venta_detalle.comprobante_original_codigo and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_serie = mve_venta_detalle.comprobante_original_serie and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_numero = mve_venta_detalle.comprobante_original_numero and";
     strSQL = strSQL + "     1 = mve_venta_detalle.elemento and";
     strSQL = strSQL + "     mst_ocarga_detalle.ref_item = mve_venta_detalle.item)";
+    strSQL = strSQL + " ) LEFT JOIN mad_correntistas";
+    strSQL = strSQL + " ON (mst_ocarga_detalle.ref_documento_id =  mad_correntistas.documento_id) ";
+    strSQL = strSQL + " ) LEFT JOIN mve_venta";
+    strSQL = strSQL + " ON (mst_ocarga_detalle.id_empresa = mve_venta.id_empresa and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_cod = mve_venta.comprobante_original_codigo and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_serie = mve_venta.comprobante_original_serie and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_numero = mve_venta.comprobante_original_numero and";
+    strSQL = strSQL + "     1 = mve_venta.elemento )";
 
     strSQL = strSQL + " WHERE mst_ocarga_detalle.fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     if (tipo==="P"){
