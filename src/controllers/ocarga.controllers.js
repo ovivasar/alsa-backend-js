@@ -73,49 +73,62 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     //strFechaIni = obtenerFechaInicialAnual(fecha_proceso);
 
     //console.log(strFechaIni);
-    strSQL = "SELECT cast(fecha as varchar)::varchar(50) as fecha";
-    strSQL = strSQL + " ,coalesce((ref_cod || '-' || ref_serie || '-' || ref_numero),'-')::varchar(50) as pedido";    
-    strSQL = strSQL + " ,zona_entrega"; //usar coalesce(prioridad,secundario)
-    strSQL = strSQL + " ,numero";
-    strSQL = strSQL + " ,estado"; //new
-    strSQL = strSQL + " ,coalesce(ref_razon_social,'-')::varchar(200) as ref_razon_social";
-    strSQL = strSQL + " ,item";
-    strSQL = strSQL + " ,cantidad";     //new
-    strSQL = strSQL + " ,unidad_medida";     //new
-    strSQL = strSQL + " ,descripcion";
-    strSQL = strSQL + " ,operacion";
-    strSQL = strSQL + " ,sacos_real";   //new
-    strSQL = strSQL + " ,lote_asignado";
-    strSQL = strSQL + " ,lote_procedencia";
-    strSQL = strSQL + " ,ticket";
-    strSQL = strSQL + " ,peso_ticket";
-    strSQL = strSQL + " ,sacos_ticket";
-    strSQL = strSQL + " ,ticket_tras";
-    strSQL = strSQL + " ,peso_ticket_tras";
-    strSQL = strSQL + " ,sacos_ticket_tras";
-    strSQL = strSQL + " ,guia01";
-    strSQL = strSQL + " ,e_peso01";
-    strSQL = strSQL + " ,e_monto01";
-    strSQL = strSQL + " ,e_razon_social";
-    strSQL = strSQL + " ,e_rh";
-    strSQL = strSQL + " ,e_hora_ini";
-    strSQL = strSQL + " ,e_hora_fin";
-    strSQL = strSQL + " ,e_estibadores";
-    strSQL = strSQL + " ,e_observacion";
-    strSQL = strSQL + " ,registrado";
+    strSQL = "SELECT cast(mst_ocarga_detalle.fecha as varchar)::varchar(50) as fecha";
+    strSQL = strSQL + " ,coalesce((mst_ocarga_detalle.ref_cod || '-' || mst_ocarga_detalle.ref_serie || '-' || mst_ocarga_detalle.ref_numero),'-')::varchar(50) as pedido";    
+    strSQL = strSQL + " ,mst_ocarga_detalle.zona_entrega"; //usar coalesce(prioridad,secundario)
+    strSQL = strSQL + " ,mst_ocarga_detalle.numero";
+    strSQL = strSQL + " ,mst_ocarga_detalle.estado"; //new
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.ref_documento_id,'-')::varchar(20) as ref_documento_id"; //info cliente
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.ref_razon_social,'-')::varchar(200) as ref_razon_social"; //info cliente
+    
+    strSQL = strSQL + " ,coalesce(mve_venta_detalle.ref_documento_id,'-')::varchar(20) as fact_documento_id"; //fact
+    strSQL = strSQL + " ,coalesce(mve_venta_detalle.ref_razon_social,'-')::varchar(200) as fact_razon_social"; //fact
+
+    strSQL = strSQL + " ,mst_ocarga_detalle.item";
+    strSQL = strSQL + " ,mst_ocarga_detalle.cantidad";      //new
+    strSQL = strSQL + " ,mst_ocarga_detalle.unidad_medida"; //new
+    strSQL = strSQL + " ,mst_ocarga_detalle.descripcion";
+    strSQL = strSQL + " ,mst_ocarga_detalle.operacion";
+    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_real";    //new
+    strSQL = strSQL + " ,mst_ocarga_detalle.lote_asignado";
+    strSQL = strSQL + " ,mst_ocarga_detalle.lote_procedencia";
+    strSQL = strSQL + " ,mst_ocarga_detalle.ticket";
+    strSQL = strSQL + " ,mst_ocarga_detalle.peso_ticket";
+    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_ticket";
+    strSQL = strSQL + " ,mst_ocarga_detalle.ticket_tras";
+    strSQL = strSQL + " ,mst_ocarga_detalle.peso_ticket_tras";
+    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_ticket_tras";
+    strSQL = strSQL + " ,mst_ocarga_detalle.guia01";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_peso01";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_monto01";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_razon_social";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_rh";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_hora_ini";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_hora_fin";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_estibadores";
+    strSQL = strSQL + " ,mst_ocarga_detalle.e_observacion";
+    strSQL = strSQL + " ,mst_ocarga_detalle.registrado";
     strSQL = strSQL + " ,'0'::varchar(1) tb"; //new
-    strSQL = strSQL + " ,tipo"; //neww
-    strSQL = strSQL + " ,cast(date_part('year',fecha) as varchar) as ano";
+    strSQL = strSQL + " ,mst_ocarga_detalle.tipo"; //neww
+    strSQL = strSQL + " ,cast(date_part('year',mst_ocarga_detalle.fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
-    strSQL = strSQL + " mst_ocarga_detalle ";
-    strSQL = strSQL + " WHERE fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
+    strSQL = strSQL + " mst_ocarga_detalle";
+    strSQL = strSQL + " LEFT JOIN mve_venta_detalle";
+    strSQL = strSQL + " ON (mst_ocarga_detalle.id_empresa = mve_venta_detalle.id_empresa and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_cod = mve_venta_detalle.comprobante_original_codigo and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_serie = mve_venta_detalle.comprobante_original_serie and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_numero = mve_venta_detalle.comprobante_original_numero and";
+    strSQL = strSQL + "     1 = mve_venta_detalle.comprobante_original_elemento and";
+    strSQL = strSQL + "     mst_ocarga_detalle.ref_item = mve_venta_detalle.item)";
+
+    strSQL = strSQL + " WHERE mst_ocarga_detalle.fecha BETWEEN '" + fecha_ini + "' and '" + fecha_proceso + "'";
     if (tipo==="P"){
-        strSQL = strSQL + " AND tipo = 'P'";
+        strSQL = strSQL + " AND mst_ocarga_detalle.tipo = 'P'";
     }
     else{//En caso sea ejecucion: Todos Programados sin ejecutar + Todos los ejecutados
-        strSQL = strSQL + " AND tipo = 'E'";
-        strSQL = strSQL + " OR (tipo = 'P' and ejecuta is null)";
+        strSQL = strSQL + " AND mst_ocarga_detalle.tipo = 'E'";
+        strSQL = strSQL + " OR (mst_ocarga_detalle.tipo = 'P' and mst_ocarga_detalle.ejecuta is null)";
     }
     
     strSQL = strSQL + " ORDER BY fecha DESC, numero DESC, item DESC";
