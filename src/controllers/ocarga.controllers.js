@@ -92,18 +92,26 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mst_ocarga_detalle.unidad_medida"; 
     strSQL = strSQL + " ,mst_ocarga_detalle.descripcion";
     strSQL = strSQL + " ,mst_ocarga_detalle.operacion";
-    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_real";    
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.sacos_real,0)::numeric(14,2) as sacos_real";    
     strSQL = strSQL + " ,mst_ocarga_detalle.lote_asignado";
     strSQL = strSQL + " ,mst_ocarga_detalle.lote_procedencia";
     strSQL = strSQL + " ,mst_ocarga_detalle.ticket";
-    strSQL = strSQL + " ,mst_ocarga_detalle.peso_ticket";
-    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_ticket";
-    strSQL = strSQL + " ,mst_ocarga_detalle.ticket_tras";
-    strSQL = strSQL + " ,mst_ocarga_detalle.peso_ticket_tras";
-    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_ticket_tras";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.peso_ticket,0)::numeric(14,2) as peso_ticket";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.sacos_ticket,0)::numeric(14,2) as sacos_ticket";
+    strSQL = strSQL + " ,mst_ocarga_detalle.ticket_tras"; //no sirve
+    strSQL = strSQL + " ,mst_ocarga_detalle.peso_ticket_tras";//no sirve
+    strSQL = strSQL + " ,mst_ocarga_detalle.sacos_ticket_tras";//no sirve
+    
     strSQL = strSQL + " ,mst_ocarga_detalle.guia01";
-    strSQL = strSQL + " ,mst_ocarga_detalle.e_peso01";
-    strSQL = strSQL + " ,mst_ocarga_detalle.e_monto01";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.e_peso01,0)::numeric(14,2) as e_peso01";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.e_monto01,0)::numeric(14,2) as e_monto01";
+    strSQL = strSQL + " ,mst_ocarga_detalle.guia02";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.e_peso02,0)::numeric(14,2) as e_peso02";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.e_monto02,0)::numeric(14,2) as e_monto02";
+    strSQL = strSQL + " ,mst_ocarga_detalle.guia03";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.e_peso03,0)::numeric(14,2) as e_peso03";
+    strSQL = strSQL + " ,coalesce(mst_ocarga_detalle.e_monto03,0)::numeric(14,2) as e_monto03";
+
     strSQL = strSQL + " ,mst_ocarga_detalle.e_razon_social";
     strSQL = strSQL + " ,mst_ocarga_detalle.e_rh";
     strSQL = strSQL + " ,mst_ocarga_detalle.e_hora_ini";
