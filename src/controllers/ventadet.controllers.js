@@ -354,7 +354,8 @@ const actualizarVentaDet = async (req,res,next)=> {
                 ref_observacion,    //10
                 ref_direccion,      //11
                 unidad_medida,      //12
-                fecha_entrega2      //13
+                fecha_entrega2,      //13
+                moneda      //14 new
             } = req.body        
  
         var strSQL;
@@ -372,12 +373,13 @@ const actualizarVentaDet = async (req,res,next)=> {
         strSQL = strSQL + " ,ref_direccion = $11";
         strSQL = strSQL + " ,unidad_medida = $12";
         strSQL = strSQL + " ,fecha_entrega = $13";
+        strSQL = strSQL + " ,moneda = $14";
 
-        strSQL = strSQL + " WHERE comprobante_original_codigo = $14";
-        strSQL = strSQL + " AND comprobante_original_serie = $15";
-        strSQL = strSQL + " AND comprobante_original_numero = $16";
-        strSQL = strSQL + " AND elemento = $17";
-        strSQL = strSQL + " AND item = $18";
+        strSQL = strSQL + " WHERE comprobante_original_codigo = $15";
+        strSQL = strSQL + " AND comprobante_original_serie = $16";
+        strSQL = strSQL + " AND comprobante_original_numero = $17";
+        strSQL = strSQL + " AND elemento = $18";
+        strSQL = strSQL + " AND item = $19";
  
         const result = await pool.query(strSQL,
         [   
@@ -394,12 +396,13 @@ const actualizarVentaDet = async (req,res,next)=> {
             ref_direccion,      //11
             unidad_medida,      //12
             fecha_entrega2,     //13
+            moneda,     //14 new
 
-            cod,    //14 param
-            serie,  //15 param
-            num,    //16 param
-            elem,   //17 param
-            item    //18 param
+            cod,    //15 param
+            serie,  //16 param
+            num,    //17 param
+            elem,   //18 param
+            item    //19 param
         ]
         );
 
