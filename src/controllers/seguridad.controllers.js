@@ -4,7 +4,10 @@ const obtenerTodosPermisoComandosVista = async (req,res,next)=> {
     try {
         const {id_usuario} = req.params;
         let strSQL;
-        strSQL = "SELECT mad_menucomando.*, mad_seguridad_comando.id_comando as id_permiso";
+        strSQL = "SELECT mad_menucomando.id_comando,";
+        strSQL = strSQL + " ,(mad_menucomando.id_comando || ' ' || mad_menucomando.nombre)::varchar(200) as nombre";
+        strSQL = strSQL + " ,mad_menucomando.descripcion";
+        strSQL = strSQL + " ,mad_seguridad_comando.id_comando as id_permiso";
         strSQL = strSQL + " FROM"; 
         strSQL = strSQL + " mad_menucomando LEFT JOIN mad_seguridad_comando";
         strSQL = strSQL + " ON (mad_menucomando.id_comando = mad_seguridad_comando.id_comando and";
