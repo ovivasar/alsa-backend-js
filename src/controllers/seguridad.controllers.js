@@ -1,18 +1,15 @@
 const pool = require('../db');
 
-const obtenerTodosMenuComandosVista = async (req,res,next)=> {
+const obtenerTodosPermisoComandosVista = async (req,res,next)=> {
     try {
-        const {id_usuario,id_menu} = req.params;
+        const {id_usuario} = req.params;
         let strSQL;
-        strSQL = "SELECT mad_menucomando.id_comando,";
-        strSQL = strSQL + " (lpad('',length(mad_menucomando.id_comando),' ')||mad_menucomando.nombre)::varchar(100) as nombre,mad_seguridad_comando.id_empresa";
-        strSQL = strSQL + " FROM";
+        strSQL = "SELECT mad_menucomando.*, mad_seguridad_comando.id_comando";
+        strSQL = strSQL + " FROM"; 
         strSQL = strSQL + " mad_menucomando LEFT JOIN mad_seguridad_comando";
         strSQL = strSQL + " ON (mad_menucomando.id_comando = mad_seguridad_comando.id_comando and";
-        strSQL = strSQL + " '" + id_usuario + "' = mad_seguridad_comando.id_usuario and";
-        strSQL = strSQL + " 1 = mad_seguridad_comando.id_empresa )";
-        strSQL = strSQL + " WHERE mad_menucomando.id_menu like '" + id_menu + "%'";
-        strSQL = strSQL + " GROUP BY mad_menucomando.id_comando,mad_menucomando.nombre,mad_seguridad_comando.id_empresa";
+        strSQL = strSQL + "     mad_seguridad_comando.id_usuario like '" + id_usuario + "%'";
+        strSQL = strSQL + "    )";
         strSQL = strSQL + " ORDER BY mad_menucomando.id_comando";
     
         const todosReg = await pool.query(strSQL);
@@ -24,7 +21,7 @@ const obtenerTodosMenuComandosVista = async (req,res,next)=> {
 
     //res.send('Listado de todas los zonas');
 };
-const obtenerTodosMenuComandos = async (req,res,next)=> {
+const obtenerTodosPermisoComandos = async (req,res,next)=> {
     try {
         const {id_usuario,id_menu} = req.params;
         let strSQL;
@@ -62,7 +59,7 @@ const obtenerTodosMenu = async (req,res,next)=> {
 
 };
 
-const registrarMenuComando = async (req,res,next)=> {
+const registrarPermisoComando = async (req,res,next)=> {
     const {
         id_empresa,     //01
         id_usuario,     //02    
@@ -112,20 +109,41 @@ const registrarUsuario = async (req,res,next)=> {
     }
 };
 
-const eliminarMenuComando = async (req,res,next)=> {
+const eliminarPermisoComando = async (req,res,next)=> {
     try {
         const {id_usuario,id_comando} = req.params;
         let strSQL;
-        strSQL = "delete from mad_seguridad_comando";
-        strSQL = strSQL + "where id_empresa = 1";
-        strSQL = strSQL + "and id_usuario = $1";
-        strSQL = strSQL + "and id_comando = $2";
+        strSQL = "DELETE FROM mad_seguridad_comando";
+        strSQL = strSQL + " WHERE id_empresa = 1";
+        strSQL = strSQL + " AND id_usuario = $1";
+        strSQL = strSQL + " AND id_comando = $2";
 
         const result = await pool.query(strSQL,[id_usuario,id_comando]);
 
         if (result.rowCount === 0)
             return res.status(404).json({
-                message:"Correntista no encontrado"
+                message:"Email Usuario no encontrado"
+            });
+
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const eliminarPermisoUsuario = async (req,res,next)=> {
+    try {
+        const {id_usuario} = req.params;
+        let strSQL;
+        strSQL = "DELETE FROM mad_seguridad_comando";
+        strSQL = strSQL + " WHERE id_empresa = 1";
+        strSQL = strSQL + " AND id_usuario = $1";
+
+        const result = await pool.query(strSQL,[id_usuario]);
+
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message:"Email Usuario no encontrado"
             });
 
         return res.sendStatus(204);
@@ -135,10 +153,11 @@ const eliminarMenuComando = async (req,res,next)=> {
 };
 
 module.exports = {
-    obtenerTodosMenuComandosVista,
-    obtenerTodosMenuComandos,
+    obtenerTodosPermisoComandosVista,
+    obtenerTodosPermisoComandos,
     obtenerTodosMenu,
-    registrarMenuComando,
+    registrarPermisoComando,
     registrarUsuario,
-    eliminarMenuComando,
+    eliminarPermisoComando,
+    eliminarPermisoUsuario
  }; 
