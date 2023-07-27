@@ -4,7 +4,7 @@ const obtenerTodosPermisoComandosVista = async (req,res,next)=> {
     try {
         const {id_usuario} = req.params;
         let strSQL;
-        strSQL = "SELECT mad_menucomando.id_comando,";
+        strSQL = "SELECT mad_menucomando.id_comando";
         strSQL = strSQL + " ,(mad_menucomando.id_comando || ' ' || mad_menucomando.nombre)::varchar(200) as nombre";
         strSQL = strSQL + " ,mad_menucomando.descripcion";
         strSQL = strSQL + " ,mad_seguridad_comando.id_comando as id_permiso";
