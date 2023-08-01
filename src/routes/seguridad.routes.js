@@ -6,7 +6,7 @@ const {obtenerTodosPermisoComandosVista,obtenerTodosPermisoComandos,obtenerTodos
 router.get('/seguridad/:id_usuario/vista', obtenerTodosPermisoComandosVista);
 router.get('/seguridad/:id_usuario/:id_menu', obtenerTodosPermisoComandos);
 router.get('/seguridad/:id_usuario', obtenerTodosMenu);
-router.get('/seguridad/email/lista', obtenerTodosEmail);
+router.get('/seguridademail', obtenerTodosEmail);
 
 router.post('/seguridad', registrarPermisoComando); //no parametros solo json
 router.post('/seguridad/:id_usuario/:nombre/nuevo', registrarUsuario); 
