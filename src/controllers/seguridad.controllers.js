@@ -62,6 +62,24 @@ const obtenerTodosMenu = async (req,res,next)=> {
     }
 
 };
+const obtenerTodosEmail = async (req,res,next)=> {
+    try {
+        let strSQL;
+        strSQL = "SELECT id_usuario";
+        strSQL = strSQL + " FROM"; 
+        strSQL = strSQL + " mad_seguridad_comando";
+        strSQL = strSQL + " GROUP BY id_usuario";
+        strSQL = strSQL + " ORDER BY id_usuario";
+    
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    }
+    catch(error){
+        console.log(error.message);
+    }
+
+    //res.send('Listado de todas los zonas');
+};
 
 const registrarPermisoComando = async (req,res,next)=> {
     const {
@@ -160,6 +178,7 @@ module.exports = {
     obtenerTodosPermisoComandosVista,
     obtenerTodosPermisoComandos,
     obtenerTodosMenu,
+    obtenerTodosEmail,
     registrarPermisoComando,
     registrarUsuario,
     eliminarPermisoComando,
