@@ -81,6 +81,39 @@ const obtenerTodosEmail = async (req,res,next)=> {
     //res.send('Listado de todas los zonas');
 };
 
+const clonarPermisoComando = async (req,res,next)=> {
+    const {
+        id_usuario2,     //01 nuevo 
+        id_usuario     //02 existente
+    } = req.body
+
+    try {
+        let strSQL;
+        var result;
+        var result2;
+
+        strSQL = "DELETE FROM mad_seguridad_comando ";
+        strSQL = strSQL + " WHERE id_usuario = $1";
+        result = await pool.query(strSQL,[id_usuario2]);
+
+        strSQL = "INSERT INTO mad_seguridad_comando (id_empresa, id_usuario, id_menu, id_comando)";
+        strSQL = strSQL + " SELECT id_empresa, $1, id_menu, id_comando";
+        strSQL = strSQL + " FROM mad_seguridad_comando";
+        strSQL = strSQL + " WHERE id_usuario = $2  RETURNING *";
+
+        result2 = await pool.query(strSQL, 
+        [   
+            id_usuario2,     //01
+            id_usuario     //02    
+        ]
+        );
+        res.json(result2.rows[0]);
+    }catch(error){
+        //res.json({error:error.message});
+        next(error)
+    }
+};
+
 const registrarPermisoComando = async (req,res,next)=> {
     const {
         id_empresa,     //01
@@ -180,6 +213,7 @@ module.exports = {
     obtenerTodosMenu,
     obtenerTodosEmail,
     registrarPermisoComando,
+    clonarPermisoComando, //new
     registrarUsuario,
     eliminarPermisoComando,
     eliminarPermisoUsuario
