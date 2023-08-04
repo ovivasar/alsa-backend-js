@@ -13,6 +13,6 @@ router.delete('/seguridadclonar', clonarPermisoComando); //new clonar todos de e
 router.post('/seguridad/:id_usuario/:nombre/nuevo', registrarUsuario); 
 //no actualizamos, solo insertamos y eliminamos
 router.delete('/seguridad/:id_usuario/:id_comando', eliminarPermisoComando);
-router.delete('/seguridad/:id_usuario/todo', eliminarPermisoUsuario);
+router.delete('/seguridadeliminar/:id_usuario', eliminarPermisoUsuario);
 
 module.exports = router;
