@@ -78,6 +78,7 @@ const crearOCargaDet = async (req,res,next)=> {
         registrado,         //14
         unidad_medida,      //15 ventas referencial
         tipo,               //16 'P' o 'E'
+        op_observacion,     //17 new para Datos Carga/Descarga
         pedido              //
         } = req.body
 
@@ -138,6 +139,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,estado";               // 'PENDIENTE'
     strSQL = strSQL + " ,e_estibadores";        // '-'
     strSQL = strSQL + " ,tipo";                 //16 neww
+    strSQL = strSQL + " ,op_observacion";       //17 neww 
     
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
@@ -177,6 +179,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,'PENDIENTE'";      //estado NEW
     strSQL = strSQL + " ,'-'";              //NEW estibadores, para no dejar en null al filtro principal
     strSQL = strSQL + " ,$16"; //new tipo
+    strSQL = strSQL + " ,$17"; //new op_observacion
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -201,7 +204,8 @@ const crearOCargaDet = async (req,res,next)=> {
             zona_entrega,       //13
             registrado,         //14
             unidad_medida,      //15
-            tipo                //16 new
+            tipo,               //16 new
+            op_observacion      //17 neww
             ]
         );
         res.json(result.rows[0]);
@@ -234,6 +238,7 @@ const agregarOCargaDet = async (req,res,next)=> {
         registrado,         //15
         unidad_medida,      //16
         tipo,               //17  NEW  P=Programacion  E=Ejecucion
+        op_observacion,     //18  new para Datos Carga/Descarga
         pedido              //
         } = req.body
 
@@ -286,9 +291,11 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,unidad_medida";           //16
 
     strSQL = strSQL + " ,ctrl_insercion";       //16
-    strSQL = strSQL + " ,estado";       //17 new
-    strSQL = strSQL + " ,e_estibadores";       //18 neww
-    strSQL = strSQL + " ,tipo";       //19 neww
+    strSQL = strSQL + " ,estado";           //17 
+    strSQL = strSQL + " ,e_estibadores";    //18 
+    strSQL = strSQL + " ,tipo";             //19 
+    strSQL = strSQL + " ,op_observacion";   //20 neww
+
     strSQL = strSQL + " )";
     strSQL = strSQL + " VALUES";
     strSQL = strSQL + " (";
@@ -326,11 +333,12 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,$13"; //id_zona
     strSQL = strSQL + " ,$14";  //entrega
     strSQL = strSQL + " ,$15"; //registrado
-    strSQL = strSQL + " ,$16"; //new unidad_medida
+    strSQL = strSQL + " ,$16"; //unidad_medida
     strSQL = strSQL + " ,current_timestamp";
     strSQL = strSQL + " ,'PENDIENTE'";
-    strSQL = strSQL + " ,'-'"; //new estibadores, para evitar el null en filtro principal
-    strSQL = strSQL + " ,$17"; //new tipo
+    strSQL = strSQL + " ,'-'"; //estibadores, para evitar el null en filtro principal
+    strSQL = strSQL + " ,$17"; //tipo
+    strSQL = strSQL + " ,$18"; //new op_observacion
 
     strSQL = strSQL + " ) RETURNING *";
     try {
@@ -355,7 +363,8 @@ const agregarOCargaDet = async (req,res,next)=> {
             zona_entrega,       //14
             registrado,          //15
             unidad_medida,       //16
-            tipo                 //17  NEWWW
+            tipo,                //17
+            op_observacion       //18 new
             ]
         );
         res.json(result.rows[0]);
@@ -396,8 +405,9 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " ,unidad_medida";         //16
     strSQL = strSQL + " ,ctrl_insercion";       //16
     strSQL = strSQL + " ,estado";               //17 new
-    strSQL = strSQL + " ,tipo";                  //19 neww
-    strSQL = strSQL + " ,e_estibadores";                  //19 neww
+    strSQL = strSQL + " ,tipo";                  //19
+    strSQL = strSQL + " ,e_estibadores";                  //20
+    strSQL = strSQL + " ,op_observacion";                  //21 neww
     strSQL = strSQL + " )";
     
     strSQL = strSQL + " SELECT";
@@ -426,7 +436,8 @@ const agregarOCargaDetEjec = async (req,res,next)=> {
     strSQL = strSQL + " ,ctrl_insercion";       //16
     strSQL = strSQL + " ,estado";               //17 new
     strSQL = strSQL + " ,'E'";                  //tipo = 'E' Ejecucion
-    strSQL = strSQL + " ,e_estibadores";        //19 neww
+    strSQL = strSQL + " ,e_estibadores";        //19 
+    strSQL = strSQL + " ,op_observacion";        //20 neww
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE ano = $1";
     strSQL = strSQL + " AND numero = $2";
@@ -633,8 +644,9 @@ const actualizarOCargaDet01 = async (req,res,next)=> {
         const {
                 operacion,      //1
                 tr_placacargado,//2
-                fecha2,          //3
-                cantidad          //4
+                fecha2,             //3
+                cantidad,           //4
+                op_observacion,     //5 new
                 } = req.body        
  
         var strSQL;
@@ -643,11 +655,12 @@ const actualizarOCargaDet01 = async (req,res,next)=> {
         strSQL = strSQL + " ,tr_placacargado = $2";
         strSQL = strSQL + " ,fecha = $3";
         strSQL = strSQL + " ,cantidad = $4";
+        strSQL = strSQL + " ,op_observacion = $5";
         strSQL = strSQL + " ,ctrl_modifica = current_timestamp";
 
-        strSQL = strSQL + " WHERE ano = $5";
-        strSQL = strSQL + " AND numero = $6";
-        strSQL = strSQL + " AND item = $7";
+        strSQL = strSQL + " WHERE ano = $6";
+        strSQL = strSQL + " AND numero = $7";
+        strSQL = strSQL + " AND item = $8";
 
         const result = await pool.query(strSQL,
         [   
@@ -655,10 +668,11 @@ const actualizarOCargaDet01 = async (req,res,next)=> {
             tr_placacargado, //2
             fecha2,          //3
             cantidad,          //4
-
-            ano,            //5
-            numero,         //6 
-            item            //7
+            op_observacion,    //5
+            //seccion parametros, deberia ir adelante, no crees ?
+            ano,            //6
+            numero,         //7 
+            item            //8
         ]
         );
 
