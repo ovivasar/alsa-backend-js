@@ -86,6 +86,10 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mad_correntistas.codigo";
     strSQL = strSQL + " ,mve_venta.zona_venta";
     strSQL = strSQL + " ,mve_venta.vendedor";
+    strSQL = strSQL +"  ,cast(mve_venta.comprobante_original_fecemi as varchar)::varchar(50) as fecha_venta"; //new
+    strSQL = strSQL + " ,mve_venta_detalle.precio_unitario";    //new
+    strSQL = strSQL + " ,mve_venta_detalle.moneda";             //new
+    strSQL = strSQL + " ,mve_venta_detalle.porc_igv";           //new
 
     strSQL = strSQL + " ,mst_ocarga_detalle.item";
     strSQL = strSQL + " ,mst_ocarga_detalle.cantidad";      
