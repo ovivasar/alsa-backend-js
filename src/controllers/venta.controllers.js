@@ -227,7 +227,10 @@ const crearVenta = async (req,res,next)=> {
     console.log("getMonth(): ",fechaArmada.getMonth());
 
     //sSerie = (fechaArmada.getMonth()+1).toString(); // ok, se aumenta +1, por pinche regla js
-    sSerie = (fechaArmada.getMonth()).toString(); // ok, pero para este caso no necesita
+    //Ahora los 31 de cada mes, se pasan para el getmonth() se jode y se pasa 1
+    //sSerie = (fechaArmada.getMonth()).toString(); // ok, pero para este caso no necesita
+    sSerie = datePieces[1].toString();
+    console.log("sSerie Mes Arreglado: ",sSerie);
     sSerie = sSerie.padStart(2,'0');
     let sAno = (fechaArmada.getFullYear()).toString(); // new 
 
