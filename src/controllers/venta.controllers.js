@@ -222,8 +222,9 @@ const crearVenta = async (req,res,next)=> {
     //cuidado con edicion manual de la fecha, se registra al reves, pero en caso de click va normal
     let datePieces = comprobante_original_fecemi.split("-");
     const fechaArmada = new Date(datePieces[0],datePieces[1],datePieces[2]); //ok con hora 00:00:00
-    //console.log(datePieces);
-    //console.log("getMonth(): ",fechaArmada.getMonth());
+    console.log(datePieces);
+    console.log("[1]",datePieces[1]);
+    console.log("getMonth(): ",fechaArmada.getMonth());
 
     //sSerie = (fechaArmada.getMonth()+1).toString(); // ok, se aumenta +1, por pinche regla js
     sSerie = (fechaArmada.getMonth()).toString(); // ok, pero para este caso no necesita
