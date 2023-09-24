@@ -124,7 +124,8 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
     strSQL = strSQL + " ,mst_ocarga_detalle.e_observacion";
     strSQL = strSQL + " ,mst_ocarga_detalle.registrado";
     strSQL = strSQL + " ,'0'::varchar(1) tb"; 
-    strSQL = strSQL + " ,mst_ocarga_detalle.tipo"; //neww
+    strSQL = strSQL + " ,mst_ocarga_detalle.tipo"; 
+    strSQL = strSQL + " ,TO_CHAR(EXTRACT(MONTH FROM fecha), 'FM00') AS mes"; //new
     strSQL = strSQL + " ,cast(date_part('year',mst_ocarga_detalle.fecha) as varchar) as ano";
     
     strSQL = strSQL + " FROM";
@@ -168,6 +169,78 @@ const obtenerTodasOCargasPlan = async (req,res,next)=> {
 
     //res.send('Listado de todas los zonas');
 };
+function obtenerMesesEntreFechas(fecha1, fecha2) {
+    // Parsea las fechas de texto a objetos Date
+    const fechaInicio = new Date(fecha1);
+    const fechaFin = new Date(fecha2);
+  
+    // Arreglo para almacenar los meses
+    const meses = [];
+  
+    // Itera desde la fecha de inicio hasta la fecha de fin
+    let fechaActual = new Date(fechaInicio);
+    while (fechaActual <= fechaFin) {
+      // Obtiene el año y el mes de la fecha actual
+      const anio = fechaActual.getFullYear();
+      const mes = fechaActual.getMonth() + 1; // Los meses en JavaScript son de 0 a 11
+  
+      // Formatea el mes con dos dígitos (por ejemplo, '05' en lugar de '5')
+      const mesFormateado = mes.toString().padStart(2, '0');
+  
+      // Construye el formato 'YYYY-MM' y lo agrega al arreglo de meses
+      meses.push(`${anio}-${mesFormateado}`);
+  
+      // Incrementa la fecha actual al siguiente mes
+      fechaActual.setMonth(mes);
+    }
+  
+    return meses;
+}
+const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
+    //Version analizado, similar formato excel manejado en administracion
+    let strSQL;
+    const { fecha_ini, fecha_proceso } = req.params;
+
+    // Utiliza la función para obtener los meses entre las fechas
+    const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
+
+    strSQL = "SELECT descripcion";
+    strSQL = strSQL + " ,ref_razon_social";
+
+    // Agrega los meses dinámicamente en la consulta
+    meses.forEach((mes) => {
+        strSQL = strSQL + ` ,"${mes}"`;
+    });
+
+    strSQL = strSQL + " FROM crosstab(";
+    strSQL = strSQL + " 'SELECT descripcion, ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, SUM(cantidad) AS cantidad";
+    strSQL = strSQL + " FROM mst_ocarga_detalle";
+    strSQL = strSQL + " WHERE fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
+    strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
+    strSQL = strSQL + " AND (NOT mst_ocarga_detalle.ref_cod is null)"; //Filtrar solo ventas
+    strSQL = strSQL + " GROUP BY mes, descripcion, ref_razon_social";
+    strSQL = strSQL + " ORDER BY mes, descripcion, ref_razon_social',";
+
+    // Agrega los valores de los meses dinámicamente
+    strSQL = strSQL + " $$VALUES " + meses.map((mes) => `('${mes}')`).join(', ') + "$$";
+    strSQL = strSQL + " ) AS ct (descripcion text, ref_razon_social text";
+
+    // Agrega las columnas de meses dinámicamente
+    meses.forEach((mes) => {
+        strSQL = strSQL + `, "${mes}" numeric`;
+    });
+
+    strSQL = strSQL + " );";
+
+    try {
+        console.log(strSQL);
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 const obtenerTodasOCargasPlanTransb = async (req,res,next)=> {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
@@ -366,6 +439,7 @@ const actualizarOCarga = async (req,res,next)=> {
 module.exports = {
     obtenerTodasOCargas,
     obtenerTodasOCargasPlan,
+    obtenerTodasOCargasPlanCrossTab,
     obtenerTodasOCargasPlanTransb,
     obtenerOCarga,
     crearOCarga,

@@ -1,10 +1,11 @@
 const {Router} = require('express');
 const pool = require('../db');
 const router = Router();
-const {obtenerTodasOCargas,obtenerTodasOCargasPlan,obtenerTodasOCargasPlanTransb,obtenerOCarga,crearOCarga,actualizarOCarga,eliminarOCarga} = require('../controllers/ocarga.controllers')
+const {obtenerTodasOCargas,obtenerTodasOCargasPlan,obtenerTodasOCargasPlanTransb,obtenerOCarga,crearOCarga,actualizarOCarga,eliminarOCarga, obtenerTodasOCargasPlanCrossTab} = require('../controllers/ocarga.controllers')
 
 router.get('/ocarga/:fecha_proceso', obtenerTodasOCargas); //formato resumido (ocarga_detalle)
 router.get('/ocargaplan/:fecha_ini/:fecha_proceso/:tipo', obtenerTodasOCargasPlan); //formato analizado
+router.get('/ocargaplancrosstab/:fecha_ini/:fecha_proceso', obtenerTodasOCargasPlanCrossTab); //new
 
 router.get('/ocargaplantransb/:fecha_proceso', obtenerTodasOCargasPlanTransb); //formato analizado (ocarga_detalle)
 router.get('/ocarga/:ano/:numero', obtenerOCarga);
