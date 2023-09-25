@@ -218,8 +218,8 @@ const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
     // Utiliza la función para obtener los meses entre las fechas
     const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
 
-    strSQL = "SELECT descripcion";
-    strSQL = strSQL + " ,ref_razon_social";
+    strSQL = "SELECT ";
+    strSQL = strSQL + " ref_razon_social";
 
     // Agrega los meses dinámicamente en la consulta
     meses.forEach((mes) => {
