@@ -219,7 +219,7 @@ const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
     const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
 
     strSQL = "SELECT ";
-    strSQL = strSQL + " ref_razon_social";
+    strSQL = strSQL + " ref_razon_social as descripcion";
 
     // Agrega los meses dinámicamente en la consulta
     meses.forEach((mes) => {
@@ -270,7 +270,7 @@ const obtenerTodasOCargasPlanCrossTab2 = async (req, res, next) => {
     const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
 
     strSQL = "SELECT ";
-    strSQL = strSQL + " ref_razon_social";
+    strSQL = strSQL + " ref_razon_social as descripcion";
 
     // Agrega los meses dinámicamente en la consulta
     meses.forEach((mes) => {
@@ -619,6 +619,7 @@ module.exports = {
     obtenerTodasOCargasPlanCrossTab,
     obtenerTodasOCargasPlanCrossTab2,
     obtenerTodasOCargasPlanCrossTab3,
+    obtenerTodasOCargasPlanCrossTab4,
     obtenerTodasOCargasPlanTransb,
     obtenerOCarga,
     crearOCarga,
