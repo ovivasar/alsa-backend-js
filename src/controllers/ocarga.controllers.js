@@ -418,6 +418,61 @@ const obtenerTodasOCargasPlanCrossTab4 = async (req, res, next) => {
     }
 };
 
+const obtenerTodasOCargasPlanCrossTab5 = async (req, res, next) => {
+    //Version analizado, similar formato excel manejado en administracion
+    let strSQL;
+    const { fecha_ini, fecha_proceso } = req.params;
+
+    // Utiliza la función para obtener los meses entre las fechas
+    const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
+
+    strSQL = "SELECT ";
+    strSQL = strSQL + " zona_venta as descripcion";
+
+    // Agrega los meses dinámicamente en la consulta
+    meses.forEach((mes) => {
+        strSQL = strSQL + ` ,"${mes}"`;
+    });
+    // Agrega la suma de meses dinámicamente en la consulta
+    strSQL = strSQL + ` ,(`;
+    meses.forEach((mes) => {
+        strSQL = strSQL + ` +coalesce("${mes}",0)`;
+    });
+    strSQL = strSQL + ` ) as total_cli`;
+
+    strSQL = strSQL + " FROM crosstab(";
+    strSQL = strSQL + " 'SELECT mve_venta.zona_venta, TO_CHAR(mst_ocarga_detalle.fecha, ''YYYY-MM'') AS mes, (coalesce(sum(mst_ocarga_detalle.e_peso01),0)+coalesce(sum(mst_ocarga_detalle.e_peso02),0)+coalesce(sum(mst_ocarga_detalle.e_peso03),0)) AS cantidad";
+    strSQL = strSQL + " FROM mst_ocarga_detalle INNER JOIN mve_venta";
+    strSQL = strSQL + " ON(mst_ocarga_detalle.ref_cod = mve_venta.comprobante_original_codigo and ";
+    strSQL = strSQL + "    mst_ocarga_detalle.ref_serie = mve_venta.comprobante_original_serie and ";
+    strSQL = strSQL + "    mst_ocarga_detalle.ref_numero = mve_venta.comprobante_original_numero ) ";
+
+    strSQL = strSQL + " WHERE mst_ocarga_detalle.fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
+    strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
+    strSQL = strSQL + " AND (NOT mst_ocarga_detalle.ref_cod is null)"; //Filtrar solo ventas
+    strSQL = strSQL + " GROUP BY mes, mve_venta.zona_venta";
+    strSQL = strSQL + " ORDER BY mve_venta.zona_venta',";
+
+    // Agrega los valores de los meses dinámicamente
+    strSQL = strSQL + " $$VALUES " + meses.map((mes) => `('${mes}')`).join(', ') + "$$";
+    strSQL = strSQL + " ) AS ct (zona_venta text";
+
+    // Agrega las columnas de meses dinámicamente
+    meses.forEach((mes) => {
+        strSQL = strSQL + `, "${mes}" numeric`;
+    });
+
+    strSQL = strSQL + " );";
+
+    try {
+        console.log(strSQL);
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 const obtenerTodasOCargasPlanTransb = async (req,res,next)=> {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
@@ -620,6 +675,7 @@ module.exports = {
     obtenerTodasOCargasPlanCrossTab2,
     obtenerTodasOCargasPlanCrossTab3,
     obtenerTodasOCargasPlanCrossTab4,
+    obtenerTodasOCargasPlanCrossTab5,
     obtenerTodasOCargasPlanTransb,
     obtenerOCarga,
     crearOCarga,
