@@ -260,6 +260,7 @@ const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
         console.log(error.message);
     }
 };
+
 const obtenerTodasOCargasPlanCrossTab2 = async (req, res, next) => {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
@@ -268,16 +269,22 @@ const obtenerTodasOCargasPlanCrossTab2 = async (req, res, next) => {
     // Utiliza la función para obtener los meses entre las fechas
     const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
 
-    strSQL = "SELECT descripcion";
-    strSQL = strSQL + " ,ref_razon_social";
+    strSQL = "SELECT ";
+    strSQL = strSQL + " ref_razon_social";
 
     // Agrega los meses dinámicamente en la consulta
     meses.forEach((mes) => {
         strSQL = strSQL + ` ,"${mes}"`;
     });
+    // Agrega la suma de meses dinámicamente en la consulta
+    strSQL = strSQL + ` ,(`;
+    meses.forEach((mes) => {
+        strSQL = strSQL + ` +coalesce("${mes}",0)`;
+    });
+    strSQL = strSQL + ` ) as total_cli`;
 
     strSQL = strSQL + " FROM crosstab(";
-    strSQL = strSQL + " 'SELECT ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, count(cantidad) AS cantidad";
+    strSQL = strSQL + " 'SELECT ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, (coalesce(sum(e_peso01),0)+coalesce(sum(e_peso02),0)+coalesce(sum(e_peso03),0)) AS cantidad";
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
     strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
