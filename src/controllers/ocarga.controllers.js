@@ -233,7 +233,7 @@ const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
     strSQL = strSQL + ` ) as total_cli`;
 
     strSQL = strSQL + " FROM crosstab(";
-    strSQL = strSQL + " 'SELECT ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, count(cantidad) AS cantidad";
+    strSQL = strSQL + " 'SELECT (ref_documento_id || '-' || ref_razon_social) as ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, count(cantidad) AS cantidad";
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
     strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
