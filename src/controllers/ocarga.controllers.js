@@ -210,7 +210,7 @@ function obtenerMesesEntreFechas(fecha1, fecha2) {
   return meses;
 }
 
-const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
+const obtenerTodasOCargasPlanCrossTab1 = async (req, res, next) => {
     //Version analizado, similar formato excel manejado en administracion
     let strSQL;
     const { fecha_ini, fecha_proceso } = req.params;
@@ -244,6 +244,57 @@ const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
     // Agrega los valores de los meses dinámicamente
     strSQL = strSQL + " $$VALUES " + meses.map((mes) => `('${mes}')`).join(', ') + "$$";
     strSQL = strSQL + " ) AS ct (ref_razon_social text";
+
+    // Agrega las columnas de meses dinámicamente
+    meses.forEach((mes) => {
+        strSQL = strSQL + `, "${mes}" numeric`;
+    });
+
+    strSQL = strSQL + " );";
+
+    try {
+        console.log(strSQL);
+        const todosReg = await pool.query(strSQL);
+        res.json(todosReg.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+const obtenerTodasOCargasPlanCrossTab1Det = async (req, res, next) => {
+    //Version analizado, similar formato excel manejado en administracion
+    let strSQL;
+    const { fecha_ini, fecha_proceso,codigo } = req.params;
+
+    // Utiliza la función para obtener los meses entre las fechas
+    const meses = obtenerMesesEntreFechas(fecha_ini, fecha_proceso);
+
+    strSQL = "SELECT ";
+    strSQL = strSQL + " descripcion";
+
+    // Agrega los meses dinámicamente en la consulta
+    meses.forEach((mes) => {
+        strSQL = strSQL + ` ,"${mes}"`;
+    });
+    // Agrega la suma de meses dinámicamente en la consulta
+    strSQL = strSQL + ` ,(`;
+    meses.forEach((mes) => {
+        strSQL = strSQL + ` +coalesce("${mes}",0)`;
+    });
+    strSQL = strSQL + ` ) as total_cli`;
+
+    strSQL = strSQL + " FROM crosstab(";
+    strSQL = strSQL + " 'SELECT descripcion, TO_CHAR(fecha, ''YYYY-MM'') AS mes, count(cantidad) AS cantidad";
+    strSQL = strSQL + " FROM mst_ocarga_detalle";
+    strSQL = strSQL + " WHERE fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
+    strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
+    strSQL = strSQL + " AND (NOT mst_ocarga_detalle.ref_cod is null)"; //Filtrar solo ventas
+    strSQL = strSQL + " AND mst_ocarga_detalle.ref_documento_id = ''" + codigo + "''";
+    strSQL = strSQL + " GROUP BY mes, descripcion";
+    strSQL = strSQL + " ORDER BY descripcion',";
+
+    // Agrega los valores de los meses dinámicamente
+    strSQL = strSQL + " $$VALUES " + meses.map((mes) => `('${mes}')`).join(', ') + "$$";
+    strSQL = strSQL + " ) AS ct (descripcion text";
 
     // Agrega las columnas de meses dinámicamente
     meses.forEach((mes) => {
@@ -671,7 +722,8 @@ const actualizarOCarga = async (req,res,next)=> {
 module.exports = {
     obtenerTodasOCargas,
     obtenerTodasOCargasPlan,
-    obtenerTodasOCargasPlanCrossTab,
+    obtenerTodasOCargasPlanCrossTab1,
+    obtenerTodasOCargasPlanCrossTab1Det,
     obtenerTodasOCargasPlanCrossTab2,
     obtenerTodasOCargasPlanCrossTab3,
     obtenerTodasOCargasPlanCrossTab4,
