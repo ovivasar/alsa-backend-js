@@ -238,7 +238,7 @@ const obtenerTodasOCargasPlanCrossTab = async (req, res, next) => {
     strSQL = strSQL + " WHERE fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
     strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
     strSQL = strSQL + " AND (NOT mst_ocarga_detalle.ref_cod is null)"; //Filtrar solo ventas
-    strSQL = strSQL + " GROUP BY mes, ref_razon_social";
+    strSQL = strSQL + " GROUP BY mes, ref_documento_id, ref_razon_social";
     strSQL = strSQL + " ORDER BY ref_razon_social',";
 
     // Agrega los valores de los meses dinámicamente
