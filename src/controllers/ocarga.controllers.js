@@ -335,12 +335,12 @@ const obtenerTodasOCargasPlanCrossTab2 = async (req, res, next) => {
     strSQL = strSQL + ` ) as total_cli`;
 
     strSQL = strSQL + " FROM crosstab(";
-    strSQL = strSQL + " 'SELECT ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, (coalesce(sum(e_peso01),0)+coalesce(sum(e_peso02),0)+coalesce(sum(e_peso03),0)) AS cantidad";
+    strSQL = strSQL + " 'SELECT (ref_documento_id || ''-'' || ref_razon_social)::varchar(300) as ref_razon_social, TO_CHAR(fecha, ''YYYY-MM'') AS mes, (coalesce(sum(e_peso01),0)+coalesce(sum(e_peso02),0)+coalesce(sum(e_peso03),0)) AS cantidad";
     strSQL = strSQL + " FROM mst_ocarga_detalle";
     strSQL = strSQL + " WHERE fecha BETWEEN ''" + fecha_ini + "'' and ''" + fecha_proceso + "''";
     strSQL = strSQL + " AND mst_ocarga_detalle.tipo = ''E''";
     strSQL = strSQL + " AND (NOT mst_ocarga_detalle.ref_cod is null)"; //Filtrar solo ventas
-    strSQL = strSQL + " GROUP BY mes, ref_razon_social";
+    strSQL = strSQL + " GROUP BY mes, ref_documento_id, ref_razon_social";
     strSQL = strSQL + " ORDER BY ref_razon_social',";
 
     // Agrega los valores de los meses dinámicamente
