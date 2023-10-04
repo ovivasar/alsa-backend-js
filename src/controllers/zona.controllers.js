@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const obtenerTodasZonas = async (req,res,next)=> {
     try {
-        const todasZonas = await pool.query("select id_zona, ( siglas || '-' || nombre )::varchar(50) as nombre from mve_zona order by id_zona");
+        const todasZonas = await pool.query("select id_zona, ( siglas || '-' || nombre )::varchar(50) as nombre, atendido from mve_zona order by id_zona");
         res.json(todasZonas.rows);
     }
     catch(error){
