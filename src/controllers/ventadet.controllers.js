@@ -32,7 +32,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     let strSQL;
     const {fecha} = req.params;
     strSQL = "    select ";
-    strSQL = strSQL + "     (fve_inventario_basico.cod ";
+    strSQL = strSQL + "     (fve_inventario_basico.ano "; //new
+    strSQL = strSQL + "     || '-' || fve_inventario_basico.cod";
     strSQL = strSQL + "     || '-' || fve_inventario_basico.serie";
     strSQL = strSQL + "     || '-' || fve_inventario_basico.numero";
     strSQL = strSQL + "     || '-' || fve_inventario_basico.item";
@@ -41,7 +42,7 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     mve_venta.razon_social as ref_razon_social,"; //usamos: (ref_) porque en ocarga se maneja esos nombres
     strSQL = strSQL + "     fve_inventario_basico.id_producto,";
     strSQL = strSQL + "     mst_producto.nombre,";
-    strSQL = strSQL + "     mve_venta_detalle.unidad_medida,"; //new
+    strSQL = strSQL + "     mve_venta_detalle.unidad_medida,"; 
     strSQL = strSQL + "     fve_inventario_basico.id_zona_entrega,";
     strSQL = strSQL + "     mve_zonadet.nombre as zona_entrega,";
     strSQL = strSQL + "     cast(mve_venta_detalle.comprobante_original_fecemi as varchar) as fecha,";
@@ -54,7 +55,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     (";
     //fecha formato = yyyy/mm/dd (porfavor) auunque para postgres, le llega ;)
     strSQL = strSQL + "     fve_inventario_basico(1,'','" + fecha + "')";
-    strSQL = strSQL + "     as ( cod varchar(5),";
+    strSQL = strSQL + "     as ( ano varchar(4),";
+    strSQL = strSQL + "         cod varchar(5),";
     strSQL = strSQL + "         serie varchar(5),";
     strSQL = strSQL + "         numero varchar(10),";
     strSQL = strSQL + "         item integer,";
@@ -63,7 +65,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "         ingresos numeric(14,3),";
     strSQL = strSQL + "         egresos numeric(14,3)";
     strSQL = strSQL + "     ) left join mve_venta";
-    strSQL = strSQL + "     on (fve_inventario_basico.cod = mve_venta.comprobante_original_codigo and";
+    strSQL = strSQL + "     on (fve_inventario_basico.ano = mve_venta.ano and";
+    strSQL = strSQL + "         fve_inventario_basico.cod = mve_venta.comprobante_original_codigo and";
     strSQL = strSQL + "         fve_inventario_basico.serie = mve_venta.comprobante_original_serie and";
     strSQL = strSQL + "         fve_inventario_basico.numero = mve_venta.comprobante_original_numero and";         
     strSQL = strSQL + "         1 = mve_venta.elemento)";
@@ -74,7 +77,8 @@ const obtenerTodasVentasDetPendientes = async (req,res,next)=> {
     strSQL = strSQL + "     ) inner join mve_zonadet";
     strSQL = strSQL + "     on (fve_inventario_basico.id_zona_entrega = mve_zonadet.id_zonadet)";
     strSQL = strSQL + "     ) left join mve_venta_detalle";
-    strSQL = strSQL + "     on (fve_inventario_basico.cod = mve_venta_detalle.comprobante_original_codigo and";
+    strSQL = strSQL + "     on (fve_inventario_basico.ano = mve_venta_detalle.ano and";
+    strSQL = strSQL + "         fve_inventario_basico.cod = mve_venta_detalle.comprobante_original_codigo and";
     strSQL = strSQL + "         fve_inventario_basico.serie = mve_venta_detalle.comprobante_original_serie and";
     strSQL = strSQL + "         fve_inventario_basico.numero = mve_venta_detalle.comprobante_original_numero and";         
     strSQL = strSQL + "         fve_inventario_basico.item = mve_venta_detalle.item)";

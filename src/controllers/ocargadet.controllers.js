@@ -93,6 +93,7 @@ const crearOCargaDet = async (req,res,next)=> {
     sAno = (fechaArmada.getFullYear()).toString(); // ok, se aumenta +1, por pinche regla js
     //console.log(sAno);
 
+    var sRefAno=""; //new new new 2024
     var sRefCod="";
     var sRefSerie="";
     var sRefNumero="";
@@ -101,10 +102,11 @@ const crearOCargaDet = async (req,res,next)=> {
     if ("pedido" in req.body) {
         if (pedido!=""){
             let pedidoPieces = pedido.split("-");
-            sRefCod=pedidoPieces[0];
-            sRefSerie=pedidoPieces[1];
-            sRefNumero=pedidoPieces[2];
-            sRefItem=pedidoPieces[3];
+            sRefAno=pedidoPieces[0]; //new new new 2024
+            sRefCod=pedidoPieces[1];
+            sRefSerie=pedidoPieces[2];
+            sRefNumero=pedidoPieces[3];
+            sRefItem=pedidoPieces[4];
         }
     }
 
@@ -117,6 +119,7 @@ const crearOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,numero";   //funcion postgres
     strSQL = strSQL + " ,item";     //funcion postgres
 
+    strSQL = strSQL + " ,ref_ano";      //ref pedido 3 columnas  NEW NEW NEW 2024
     strSQL = strSQL + " ,ref_cod";      //ref pedido 3 columnas
     strSQL = strSQL + " ,ref_serie";    //ref pedido 3 columnas
     strSQL = strSQL + " ,ref_numero";   //ref pedido 3 columnas
@@ -154,6 +157,7 @@ const crearOCargaDet = async (req,res,next)=> {
     //cuidado 2 modos: 
     //1ero: parametros fecha, item = 1 
     //2do: parametros ano, numero, item = genera
+    strSQL = strSQL + " ,'" + sRefAno + "'"; //NEW NEW NEW 2024
     strSQL = strSQL + " ,'" + sRefCod + "'";
     strSQL = strSQL + " ,'" + sRefSerie + "'";
     strSQL = strSQL + " ,'" + sRefNumero + "'";
@@ -251,16 +255,18 @@ const agregarOCargaDet = async (req,res,next)=> {
     sAno = (fechaArmada.getFullYear()).toString(); // ok, se aumenta +1, por pinche regla js
     //console.log(sAno); 
 
+    var sRefAno=""; //new new new 2024
     var sRefCod="";
     var sRefSerie="";
     var sRefNumero="";
     var sRefItem="";
     if ("pedido" in req.body) {
         let pedidoPieces = pedido.split("-");
-        sRefCod=pedidoPieces[0];
-        sRefSerie=pedidoPieces[1];
-        sRefNumero=pedidoPieces[2];
-        sRefItem=pedidoPieces[3];
+        sRefAno=pedidoPieces[0]; //new new new 2024
+        sRefCod=pedidoPieces[1];
+        sRefSerie=pedidoPieces[2];
+        sRefNumero=pedidoPieces[3];
+        sRefItem=pedidoPieces[4];
     }
 
     strSQL = "INSERT INTO mst_ocarga_detalle";
@@ -269,9 +275,10 @@ const agregarOCargaDet = async (req,res,next)=> {
     strSQL = strSQL + " ,id_punto_venta";   //2
     strSQL = strSQL + " ,fecha";            //3
     strSQL = strSQL + " ,ano";          //calculado de fecha
-    strSQL = strSQL + " ,numero";           //4 NEWWW
+    strSQL = strSQL + " ,numero";           //4 
     strSQL = strSQL + " ,item";         //calculado funcion postgres
     ///////////////////////////////////////////////////
+    strSQL = strSQL + " ,ref_ano";      //ref pedido 4 col  new new new 2024
     strSQL = strSQL + " ,ref_cod";      //ref pedido 4 col
     strSQL = strSQL + " ,ref_serie";    //ref pedido 4 col
     strSQL = strSQL + " ,ref_numero";   //ref pedido 4 col
@@ -309,6 +316,7 @@ const agregarOCargaDet = async (req,res,next)=> {
     //cuidado 2 modos: 
     //1ero: parametros fecha, item = 1 
     //2do: parametros ano, numero, item = genera
+    strSQL = strSQL + " ,'" + sRefAno + "'"; // new new new 2024
     strSQL = strSQL + " ,'" + sRefCod + "'";
     strSQL = strSQL + " ,'" + sRefSerie + "'";
     strSQL = strSQL + " ,'" + sRefNumero + "'";
